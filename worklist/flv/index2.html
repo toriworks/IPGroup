@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=1188px" />
+<link rel="shortcut icon" href="/outback.ico" />
+<title>Outback Steakhouse</title>
+
+<script type="text/javascript">
+	var mobileKeyWords = new Array('iPhone', 'iPod', 'BlackBerry', 'Android', 'Windows CE', 'LG', 'MOT', 'SAMSUNG', 'SonyEricsson');
+	  for (var word in mobileKeyWords) {
+	  if (navigator.userAgent.match(mobileKeyWords[word]) != null) {
+			if(navigator.userAgent.match('SHW-M380W') == null) {
+				location.href = "http://m.outback.co.kr/";
+				break;
+			}
+		}
+	}
+	//self.location.href = "/main.aspx"
+	//alert("현재 아웃백 사이트에 사용자가 폭주하여 간혹 사이트 접속이 지연되고 있습니다.\n이용에 불편을 드려 죄송한 말씀드리며 양해 부탁드립니다.\n행복한 크리스마스 되시길 바랍니다.");
+
+	//팝업
+	popItItem=function(url,name,w,h,center){
+		if(center)	{
+			var x = (screen.width - w) / 2;
+			var y = (screen.height - h) / 2;
+			center = ",top="+y+",left="+x;
+		}else  {center = ",top=0,left=0"}
+
+		return window.open(url,name,"width="+w+",height="+h+"status=1,resizable=0,scrollbars=0"+center);
+	}
+
+	// png 이미지
+	function setPng24(obj) { 
+		obj.width=obj.height=1; 
+		obj.style.width = obj.width + "px"; 
+		obj.style.height = obj.height + "px"; 
+		obj.className=obj.className.replace(/\bpng24\b/i,''); 
+		obj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+ obj.src +"',sizingMethod='image');" 
+		obj.src='';  
+		return ''; 
+	} 
+
+</script>
+
+</head>
+<body>
+
+<style type="text/css">
+	* {margin:0; padding:0;}
+	.png24 { tmp:expression(setPng24(this)); }
+	body {background-color:#E7F5FE;}
+
+	#intro {height:900px; min-width:1144px; background:url('./images/2012summer_bg.jpg') no-repeat center 0;}
+	.contents {position:relative; width:1144px;height:718px;margin:0 auto;}
+	.contents .image {position:absolute; left:623px; top:43px; z-index:1;}
+	.contents .link {position:absolute; left:623px; top:43px; z-index:2;}
+	.contents .link img {width:491px; height:365px; border:0;}
+	.contents .cf {position:absolute; left:604px; top:431px; z-index:3;}
+</style>
+
+<div id="intro">
+	<div class="contents">
+		<span class="image"><img src="./images/2012summer_contents.png" class="png24" alt="" /></span>
+		<span class="link"><img src="./images/blank.gif" alt="" usemap="#lMap" /></span>
+		<map id="lMap" name="lMap">
+			<area shape="rect" href="/main.aspx" onFocus="this.blur();" coords="34,312,221,358" alt="홈페이지 바로가기" />
+			<area shape="rect" href="/menu/2012summer_menu.aspx" onFocus="this.blur();" coords="228,312,415,358" alt="한정메뉴 보러가기" />
+		</map>
+		<div class="cf">
+			<video id="movie" width="480" height="320" preload controls>
+				<source src="http://www.outback.co.kr/intro/flv/2012_summer_intro.webm" type='video/webm; codecs="vp8, vorbis"' /><!--크롬-->
+				<source src="http://www.outback.co.kr/intro/flv/2012_summer_intro.ogv" type='video/ogg; codecs="theora, vorbis"' /><!--파이어폭스 -->
+				<source src="http://www.outback.co.kr/intro/flv/2012_summer_intro.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' /><!--아이패드,크롬-->
+
+				<object width="480" height="320" type="application/x-shockwave-flash"data="http://www.outback.co.kr/intro/intro.swf">
+					<param name="movie" value="http://www.outback.co.kr/intro/player_480x320.swf" />
+					<param name="allowfullscreen" value="true" />
+					<param name="flashvars" value='config={"clip":{"url":"http://www.outback.co.kr/intro/flv/2012_summer_intro.flv","autoPlay":false,"autoBuffering":true}}' />
+					<p>Download video as <a href=http://www.outback.co.kr/intro/flv/2012_summer_intro.mp4>MP4</a>, <a href=http://www.outback.co.kr/intro/flv/2012_summer_intro.webm>WebM</a>, or <a href=http://www.outback.co.kr/intro/flv/2012_summer_intro.ogv>Ogg</a>.</p>
+				</object>
+			</video>
+		</div>
+	</div>
+</div>
+
+<!-- 이 소스 꼭 넣어야함!!!!!!!!!!!!! -->
+<script type="text/javascript"> 
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); 
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E")); 
+</script> 
+<script type="text/javascript"> 
+	try{ 
+		var pageTracker = _gat._getTracker("UA-24697854-1"); 
+		pageTracker._trackPageview();
+	} 
+	catch(err) 
+	{}
+</script>
+<!-- //이 소스 꼭 넣어야함!!!!!!!!!!!!! -->
+
+</body>
+</html>

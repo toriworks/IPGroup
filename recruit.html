@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="/favicon.png"> -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write(unescape('%3Cscript src="http://jquery.com/jquery-wp-content/themes/jquery/js/jquery-1.9.1.min.js"%3E%3C/script%3E'))</script>
+	<script src="./js/jquery.mousewheel.js"></script>
+	<script src="./js/script.js"></script>
+
+	<!-- Google Fonts : Early Access [Nanum Gothic Coding (Korean)] http://www.google.com/fonts/earlyaccess -->
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+	<link rel="stylesheet" type="text/css" href="./css/default.css">
+	<!--[if lt IE 9]>
+		<script src="./js/respond.min.js"></script>
+	<![endif]-->
+
+	<title>아이피그룹</title>
+
+</head>
+<body>
+
+<div id="wrap">
+
+	<header>
+		<h1>IPGROUP</h1>
+		<nav class="gnb" role="navigation">
+			<ul>
+				<li class="a"><a href="index_new.html#about">About</a></li>
+				<li class="w"><a href="index_new.html#works">Works</a></li>
+				<li class="c"><a href="index_new.html#contact">Contact</a></li>
+			</ul>
+		</nav>
+		<div class="etc_links">
+			<a class="company" href="#">COMPANY BROCHURE</a>
+			<a class="recruit" href="recruit.html">RECRUIT</a>
+		</div>
+		<div class="top_link">
+			<a href="#wrap">Top</a>
+		</div>
+	</header>
+
+	<div id="container">
+
+		<!-- SECTION : RECRUIT -->
+		<section class="screen" id="recruit">
+			<div class="contents">
+				<h2>Recruit</h2>
+				<nav class="lnb">
+					<ul>
+						<li><a href="#recruit_recruit">Recruit</a></li>
+						<li><a href="#recruit_job_posting">Job Posting</a></li>
+					</ul>
+				</nav>
+				<div class="nav_controler">
+					<a class="prev" href="#">이전 메뉴</a>
+					<a class="next" href="#">다음 메뉴</a>
+				</div>
+
+				<!-- Recruit -->
+				<div id="recruit_recruit">
+					<p class="txt1">
+						적극적이고 긍정적인 마인드를 소유한 뛰어난 <strong>전문 인재</strong>를 기다립니다.
+					</p>
+
+					<h3>채용분야</h3>
+					<p class="txt2">
+						웹 기획실 / 웹 디자인실 / 웹 퍼블리싱팀 / 경영지원팀
+					</p>
+
+					<h3>입사지원</h3>
+					<div class="img_step">
+						<img src="./images/recruit/recruit_step.png" alt="STEP1. 지원서 접수 , STEP2. 서류전형 , STEP3 임원 및 실무자 면접 , STEP4 채용확정">
+					</div>
+					<ol class="step_desc">
+						<li>
+							<strong>STEP1. 지원서 접수</strong>
+							<p>
+								입사 지원서 접수는 당사 및 채용사이트에서 제공하는 양식에 맞춰 제출 되어야 합니다.<br>
+								포트폴리오의 경우 100%자기 산출물 위주로 분야 상관없이 zip파일로 취함하여 첨부해야 합니다.<br>
+								이력서는 사진과 희망연봉, 이름 및 연락처가 반드시 기재되어야 하며 경력 중심의 자기소개서도 첨부되어야 합니다.
+							</p>
+						</li>
+						<li>
+							<strong>STEP2. 서류 전형</strong>
+							<p>임원 및 관련 실무자가 서류전형을 실시하며 합격한 지원자에 한하여 개별 유선 및 e-mail로 통보합니다.</p>
+						</li>
+						<li>
+							<strong>STEP3. 임원 및 실무자 면접</strong>
+							<p>서류전형을 통과한 지원자에 한하여 면접을 진행하며 인성 및 실무경력 위주로 면접이 진행됩니다.</p>
+						</li>
+						<li>
+							<strong>STEP4. 채용확정</strong>
+							<p>
+								서류전형 및 면접을 모두 통과한 경우 합격한 지원자에게 개별 유선 및 e-mail로 통보하며<br>
+								아이피그룹 홈페이지 <strong>합격여부확인</strong>을 통해서도 확인이 가능합니다.
+							</p>
+						</li>
+					</ol>
+
+				</div>
+
+				<!-- Job Posting -->
+				<div id="recruit_job_posting">
+
+					<div class="posting_top">
+						<h3>현재 진행중인 채용정보 입니다.</h3>
+						<a href="#"><img src="./images/recruit/btn_recruit_check.png" alt="합격확인"></a>
+					</div>
+
+					<div class="posting_list">
+						<script type="text/javascript">
+							$(document).ready(function(){
+								$('dt.posting_title > a').bind('click',function(){
+									if ($(this).parent().next().is(':visible')) {
+										$(this).parent().next().slideUp(200);
+									} else {
+										$(this).parent().parent().find('.posting_detail').slideUp(200);
+										$(this).parent().next().slideDown(200);
+									}
+									return false;
+								});
+							});
+						</script>
+						
+						<dl class="list_container">
+							<!-- Job Posting -->
+							<dt class="posting_title">
+								<a href="#">
+									<span class="new">New</span>
+									<span class="number">003</span>
+									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
+									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
+									<span class="status"><img src="./images/recruit/posting_status_2.png" alt="채용마감"></span>
+								</a>
+							</dt>
+							<dd class="posting_detail">
+								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
+								<strong class="sub">모집안내</strong>
+								<div class="recruit_table">
+									<table>
+										<tr>
+											<th>모집안내</th>
+											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
+										</tr>
+										<tr>
+											<th>고용형태</th>
+											<td>정규직</td>
+											<th>모집인원</th>
+											<td>00명</td>
+										</tr>
+										<tr>
+											<th>근무부서</th>
+											<td>운영디자인</td>
+											<th>채용직급</th>
+											<td>과장</td>
+										</tr>
+										<tr>
+											<th>경력사항</th>
+											<td>5년이상</td>
+											<th>최종학력</th>
+											<td>고졸이상</td>
+										</tr>
+										<tr>
+											<th>성별</th>
+											<td>무관</td>
+											<th>나이</th>
+											<td>무관</td>
+										</tr>
+										<tr>
+											<th>복리후생</th>
+											<td colspan="3">
+												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
+												휴무/휴가 : 주5일근무, 연차<br>
+												보상제도 : 우수사원 표창/포상, 퇴직금<br>
+												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
+											</td>
+										</tr>
+										<tr>
+											<th>담당정보</th>
+											<td colspan="3">
+												홍길동 팀장 / 070-8730-0000
+											</td>
+										</tr>
+									</table>
+								</div>
+								<article>
+									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
+									입사지원 할 인재를 찾습니다.~<br>
+								</article>
+								<div class="btn_area">
+									<img src="./images/recruit/btn_recruit_end.png" alt="채용마감">									
+								</div>
+							</dd>
+							<!-- // Job Posting -->
+
+							<!-- Job Posting -->
+							<dt class="posting_title">
+								<a href="#">
+									<span class="new">New</span>
+									<span class="number">002</span>
+									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
+									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
+									<span class="status"><img src="./images/recruit/posting_status_1.png" alt="더보기"></span>
+								</a>
+							</dt>
+							<dd class="posting_detail">
+								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
+								<strong class="sub">모집안내</strong>
+								<div class="recruit_table">
+									<table>
+										<tr>
+											<th>모집안내</th>
+											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
+										</tr>
+										<tr>
+											<th>고용형태</th>
+											<td>정규직</td>
+											<th>모집인원</th>
+											<td>00명</td>
+										</tr>
+										<tr>
+											<th>근무부서</th>
+											<td>운영디자인</td>
+											<th>채용직급</th>
+											<td>과장</td>
+										</tr>
+										<tr>
+											<th>경력사항</th>
+											<td>5년이상</td>
+											<th>최종학력</th>
+											<td>고졸이상</td>
+										</tr>
+										<tr>
+											<th>성별</th>
+											<td>무관</td>
+											<th>나이</th>
+											<td>무관</td>
+										</tr>
+										<tr>
+											<th>복리후생</th>
+											<td colspan="3">
+												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
+												휴무/휴가 : 주5일근무, 연차<br>
+												보상제도 : 우수사원 표창/포상, 퇴직금<br>
+												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
+											</td>
+										</tr>
+										<tr>
+											<th>담당정보</th>
+											<td colspan="3">
+												홍길동 팀장 / 070-8730-0000
+											</td>
+										</tr>
+									</table>
+								</div>
+								<article>
+									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
+									입사지원 할 인재를 찾습니다.~<br>
+								</article>
+								<div class="btn_area">
+									<a href="#"><img src="./images/recruit/btn_recruit_write.png" alt="입사지원"></a>
+								</div>
+							</dd>
+							<!-- // Job Posting -->
+
+							<!-- Job Posting -->
+							<dt class="posting_title">
+								<a href="#">
+									
+									<span class="number">001</span>
+									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
+									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
+									<span class="status"><img src="./images/recruit/posting_status_2.png" alt="채용마감"></span>
+								</a>
+							</dt>
+							<dd class="posting_detail">
+								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
+								<strong class="sub">모집안내</strong>
+								<div class="recruit_table">
+									<table>
+										<tr>
+											<th>모집안내</th>
+											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
+										</tr>
+										<tr>
+											<th>고용형태</th>
+											<td>정규직</td>
+											<th>모집인원</th>
+											<td>00명</td>
+										</tr>
+										<tr>
+											<th>근무부서</th>
+											<td>운영디자인</td>
+											<th>채용직급</th>
+											<td>과장</td>
+										</tr>
+										<tr>
+											<th>경력사항</th>
+											<td>5년이상</td>
+											<th>최종학력</th>
+											<td>고졸이상</td>
+										</tr>
+										<tr>
+											<th>성별</th>
+											<td>무관</td>
+											<th>나이</th>
+											<td>무관</td>
+										</tr>
+										<tr>
+											<th>복리후생</th>
+											<td colspan="3">
+												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
+												휴무/휴가 : 주5일근무, 연차<br>
+												보상제도 : 우수사원 표창/포상, 퇴직금<br>
+												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
+											</td>
+										</tr>
+										<tr>
+											<th>담당정보</th>
+											<td colspan="3">
+												홍길동 팀장 / 070-8730-0000
+											</td>
+										</tr>
+									</table>
+								</div>
+								<article>
+									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
+									입사지원 할 인재를 찾습니다.~<br>
+								</article>
+								<div class="btn_area">
+									<img src="./images/recruit/btn_recruit_end.png" alt="채용마감">									
+								</div>
+							</dd>
+							<!-- // Job Posting -->
+						</dl>
+
+						<!-- 페이징 -->
+						<div class="paginate">
+							<a class="direction" href="#"><span>‹</span> 이전</a>
+							<a href="#">1</a>
+							<strong>2</strong>
+							<a href="#">3</a>
+							<a href="#">4</a>
+							<a href="#">5</a>
+							<a class="direction" href="#">다음 <span>›</span></a>
+						</div>
+						<!-- //페이징 -->
+
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+	</div>
+
+	<footer>
+		<p class="copyright"><span>COPYRIGHT 2013 IPGROUP All RIGHTS RESERVED.</span></p>
+	</footer>
+
+</div>
+
+</body>
+</html>

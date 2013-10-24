@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=9">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<title>IPGROUP</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./_old/css/style.css">
+	<style type="text/css">
+		body {background-color:;}
+
+		header {position:fixed;z-index:100;left:0;right:0;top:0;background-color:#00adeb;}
+		header h1 {padding:10px;box-shadow: 0 0 30px #000;}
+		header h1 img {width:110px;height:20px;}
+		header nav {position:absolute;right:5px;top:10px;}
+		header nav a {display:block;float:left;width:16px;height:16px;margin:3px;line-height:16px;font-size:10px;text-align:center;color:#fff;border:1px solid #000;background-color:#333;}
+		header nav a:hover,
+		header nav a:focus {color:#5CCBF9;text-decoration:none;}
+
+		footer {position:relative;z-index:20;height:5px;background-color:#00adeb;}
+
+		#container {position:relative;z-index:10;padding:70px 10px 10px;font-size:11px;line-height:1.4;letter-spacing:-0.03em;color:#B3B3B3;background-color:#252525;}
+		#container section {margin-bottom:40px;}
+		#container section h2 {padding-left:5px;border-left:4px solid #00adeb;margin-bottom:10px;color:#fff;line-height:1;}
+		#container section strong {color:#5CCBF9;}
+		#container section dl.what_we_do {}
+		#container section dl.what_we_do dt {font-size:12px;font-weight:bold;color:#eee;letter-spacing:0.3em;margin-bottom:5px;border-bottom:1px dashed #444;}
+		#container section dl.what_we_do dt strong {font-size:16px;}
+		#container section dl.what_we_do dd {padding-left:18px;margin-bottom:15px;}
+		#container .recruit {}
+		#container .recruit li {position:relative;padding:10px 10px 0px 10px;letter-spacing:-0.05em;border:1px solid #000;background-color:#222;margin-bottom:10px;box-shadow:0 0 3px #111;}
+		#container .recruit li .icon {width:20px;height:20px;}
+		#container .recruit li .contact {position:relative;}
+		#container .map address {display:block;color:#fff;margin:10px 0;}
+		#container .map .viewport {position:relative;height:250px;overflow:hidden;}
+		#container .map .viewport img {position:absolute;left:50%;top:50%;margin:-150px 0 0 -250px;width:500px;height:300px;}
+		#container .map .link {display:block;margin:5px;text-align:right;}
+		#container .map .link a {color:#fff;}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("header nav a").bind("click",function(){
+				$("body").animate({
+					scrollTop : $($(this).attr("href")).position().top - 70
+				},300);
+				return false;
+			});
+		});
+	</script>
+</head>
+
+<body class="mobile">
+
+<header>
+	<h1><img src="./_old/images/m_logo.png" alt="아이피그룹"></h1>
+	<nav>
+		<a href="#A">A</a>
+		<a href="#W">W</a>
+		<a href="#R">R</a>
+		<a href="#M">M</a>
+	</nav>
+</header>
+
+<section id="container">
+	
+	<section id="A">
+		<h2>ABOUT US</h2>
+		<div class="contents">
+			<strong>IPGROUP WEB AGENCY는 마케팅전략에 기반한 창의적이고 통합적인 e-Marketing Service를 제공하는 WEB AGENCY 입니다.</strong><br>
+			<br>
+			기업의 e-비지니스 가치창출을 위해 CONSULTING에서 웹사이트 구축, 운영, PROMOTION/ADVERTISING에 이르기까지 TOTAL MARKETING PROVIDER를 지향합니다.
+			국내 최고의 BRAND POWER를 가진 고객과 꾸준한 MARKETING PARTNER로 축적된 노하우는 IPGROUP WEB AGENCY의 자신감입니다.
+		</div>
+	</section>
+
+	<section id="W">
+		<h2>WHAT WE DO</h2>
+		<div class="contents">
+			<dl class="what_we_do">
+				<dt><strong>W</strong>EB/MOBILE DEVELOPMENT</dt>
+				<dd>
+					<ul>
+						<li>비지니스 환경 분석</li>
+						<li>경쟁사/소비자 벤치 마킹</li>
+						<li>비지니스 모델 수립</li>
+						<li>사이트 컨텐츠 계획 수립</li>
+						<li>유저 인터페이스 디자인</li>
+						<li>인터렉티브 디자인</li>
+						<li>웹 스타일 가이드</li>
+						<li>CI/BI 디자인</li>
+					</ul>
+				</dd>
+				<dt><strong>O</strong>N-LINE PROMOTION</dt>
+				<dd>
+					<ul>
+						<li>온라인 광고 대행</li>
+						<li>브랜드 프로모션</li>
+						<li>온라인 이벤트 프로모션</li>
+						<li>오프라인 관련 프로모션</li>
+						<li>온라인 프로모션 전략 수립</li>
+						<li>STP 설정, 매체선정</li>
+						<li>다양한 제작기법 수립</li>
+						<li>마케팅 결과에 대한 정성적/정량적 분석</li>
+					</ul>
+				</dd>
+				<dt><strong>M</strong>AINTENANCE</dt>
+				<dd>
+					<ul>
+						<li>비용/시간/인력 절감 효과</li>
+						<li>사이트 개선 컨설팅</li>
+						<li>비지니스 모델 제시</li>
+						<li>디자인 유지보수</li>
+						<li>방문자 접속통계 분석</li>
+						<li>웹진</li>
+						<li>프로모션 계획 수립</li>
+						<li>컨텐츠/데이터베이스 관리 및 유지보수</li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+	</section>
+
+	<section id="R">
+		<h2>RECRUIT</h2>
+		<div class="contents">
+			<ul class="recruit">
+				<li>
+					<strong>WEB DEVELOPMENT 웹사이트 구축 및 컨설팅 문의</strong><br>
+					"(주)아이피그룹의 웹사이트 구축에 대해서 궁금한 점이 있으십니까?"<br>
+					<div class="contact">
+						<a href="tel:070-8730-8065"><img class="icon" src="./_old/images/telephone_blue.png" alt="전화걸기"></a>
+						<a href="mailto:nhj@ipgroup.co.kr"><img class="icon" src="./_old/images/email_open.png" alt="메일보내기"></a>
+					</div>
+				</li>
+				<li>
+					<strong>MAINTENANCE 웹 사이트 유지/보수 문의</strong><br>
+					"귀사가 운영하는 사이트 개선을 위한 도움이 필요하십니까?"<br>
+					<div class="contact">
+						<a href="tel:070-8730-8065"><img class="icon" src="./_old/images/telephone_blue.png" alt="전화걸기"></a>
+						<a href="mailto:nhj@ipgroup.co.kr"><img class="icon" src="./_old/images/email_open.png" alt="메일보내기"></a>
+					</div>
+				</li>
+				<li>
+					<strong>ON-LINE PROMOTION 온라인 광고 문의</strong><br>
+					"귀사의 성공적인 온라인 광고를 위한 안내자가 필요하십니까?"<br>
+					<div class="contact">
+						<a href="tel:070-8730-8065"><img class="icon" src="./_old/images/telephone_blue.png" alt="전화걸기"></a>
+						<a href="mailto:nhj@ipgroup.co.kr"><img class="icon" src="./_old/images/email_open.png" alt="메일보내기"></a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</section>
+
+	<section id="M">
+		<h2>MAP</h2>
+		<div class="contents">
+			<div class="map">
+				<address>서울특별시 중구 을지로4가 310-68 삼풍넥서스 5층 520호/7층 710호</address>
+				<div class="viewport">
+					<img src="./_old/images/map.jpg" alt="아이피그룹 위치 지도">
+				</div>
+				<div class="link">
+					<a href="http://m.map.naver.com/map.nhn?lng=126.9955198&lat=37.5662354&pinType=site&pinId=18700093&dlevel=11" target="_blank">[네이버 지도로 보기]</a>
+				</div>
+			</div>			
+		</div>
+	</section>
+
+</section>
+
+<footer>
+
+</footer>
+
+
+</body>
+</html>

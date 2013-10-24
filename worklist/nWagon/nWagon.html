@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>nWagon demo</title>
+<style>
+*{margin:0;padding:0;}
+div{padding:20px; overflow: hidden; height: auto}
+a{display:block;margin:10px 0;}
+hgroup{padding:20px;background-color:#e9e9e9;}
+hgroup h1{font-family:Tahoma;}
+hgroup p{margin:10px 0;font-size:10px}
+h2{margin:0;padding:20px;border:1px solid #000;background-color:#f9f9f9;border-width:1px 0;font-family:Tahoma;}
+</style>
+</head>
+<body>
+
+<link rel="stylesheet" href="nWagon.css" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="nWagon.js"></script>
+
+<hgroup>
+	<h1>nWagon chart library demo</h1>
+	<p>Developed by Insook Choe, Hansol Kim</p>
+</hgroup>
+
+<h2>Column chart</h2>
+
+<div id="chart6"></div>
+<script>
+
+	var options = {
+		'legend':{
+			names: ['EunJeong', 'HanSol', 'InSook', 'Eom', 'Pearl', 'SeungMin', 'TJ', 'Taegyu', 'YongYong'],
+			hrefs: ['http://nuli.nhncorp.com/blog/1132444',
+					'http://nuli.nhncorp.com/blog/1132442',
+					'http://nuli.nhncorp.com/blog/1132439',
+					'http://nuli.nhncorp.com/blog/1132426',
+					'http://nuli.nhncorp.com/blog/1115205',
+					'http://nuli.nhncorp.com/blog/1111811',
+					'http://nuli.nhncorp.com/blog/1111181',
+					'http://nuli.nhncorp.com/blog/1096163',
+					'http://nuli.nhncorp.com/blog/1079940']
+				},
+		'dataset':{
+			title:'Playing time per day', 
+			values: [[5,7,2], [2,5,7], [7,2,3], [6,1,5], [5,3,8], [8,3,1], [6,3,9], [6,2,6], [8,2,4]],
+			colorset: ['#DC143C','#FF8C00', "#30a1ce"],
+			fields:['Working Time', 'Late count', 'Mail count']
+			},
+		'chartDiv' : 'chart6',
+		'chartType' : 'multi_column',
+		'chartSize' : {width:700, height:300},
+		'maxValue' : 10,
+		'increment' : 1
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<div id="chart5"></div>
+<script>
+	
+	var options = {
+		'legend': {
+			names: ['EunJeong', 'HanSol', 'InSook', 'Eom', 'Pearl', 'SeungMin', 'TJ', 'Taegyu', 'YongYong'],
+			hrefs: ['http://nuli.nhncorp.com/blog/1132444',
+					'http://nuli.nhncorp.com/blog/1132442',
+					'http://nuli.nhncorp.com/blog/1132439',
+					'http://nuli.nhncorp.com/blog/1132426',
+					'http://nuli.nhncorp.com/blog/1115205',
+					'http://nuli.nhncorp.com/blog/1111811',
+					'http://nuli.nhncorp.com/blog/1111181',
+					'http://nuli.nhncorp.com/blog/1096163',
+					'http://nuli.nhncorp.com/blog/1079940']
+				},
+		'dataset': {
+			title: 'Playing time per day', 
+			values: [[5,7,2], [2,5,7], [7,2,3], [6,1,5], [5,3,8], [8,3,1], [6,3,9], [6,2,6], [8,2,4]],
+			colorset: ['#DC143C', '#FF8C00', "#30a1ce"],
+			fields: ['Working Time', 'Late count', 'Mail count']
+			},
+		'chartDiv': 'chart5',
+		'chartType': 'stacked_column',
+		'chartSize': {width:700, height:300},
+		'maxValue': 20,
+		'increment': 2
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<div id="chart4"></div>
+<script>
+
+	var options = {
+		'legend': {
+			names: ['EunJeong', 'HanSol', 'InSook', 'Eom', 'Pearl', 'SeungMin', 'TJ', 'Taegyu', 'YongYong'],
+			hrefs: ['http://nuli.nhncorp.com/blog/1132444',
+					'http://nuli.nhncorp.com/blog/1132442',
+					'http://nuli.nhncorp.com/blog/1132439',
+					'http://nuli.nhncorp.com/blog/1132426',
+					'http://nuli.nhncorp.com/blog/1115205',
+					'http://nuli.nhncorp.com/blog/1111811',
+					'http://nuli.nhncorp.com/blog/1111181',
+					'http://nuli.nhncorp.com/blog/1096163',
+					'http://nuli.nhncorp.com/blog/1079940']
+				},
+		'dataset': {
+			title: 'Playing time per day', 
+			values: [5,7,2,4,6,3,5,2,10],
+			colorset: ['#DC143C', '#FF8C00', "#30a1ce"]
+			},
+		'chartDiv': 'chart4',
+		'chartType': 'column',
+		'chartSize': {width:700, height:300},
+		'maxValue': 10,
+		'increment': 1
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<h2>Spider chart</h2>
+
+<div id="chart3"></div>
+<script>
+
+	var options = {
+		'legend':{
+			names: ['Perceivable', 'Information Loss', 'Understandable', 'Enough Time', 'Epilepsy Prevent', 'Operable', 'Navigation', 'Error Prevent'],
+			hrefs: ['http://nuli.nhncorp.com/accessibility#k1',
+					'http://nuli.nhncorp.com/accessibility#k2',
+					'http://nuli.nhncorp.com/accessibility#k3',
+					'http://nuli.nhncorp.com/accessibility#k4',
+					'http://nuli.nhncorp.com/accessibility#k5',
+					'http://nuli.nhncorp.com/accessibility#k6',
+					'http://nuli.nhncorp.com/accessibility#k7',
+					'http://nuli.nhncorp.com/accessibility#k8']
+				},
+		'dataset': {
+			title: 'Web accessibility status',
+			values: [[34,53,67,23,78,45,69,98], [65,34,67,85,89,67,95]],
+			bgColor: '#f9f9f9',
+			fgColor: '#30a1ce',
+		},
+		'chartDiv': 'chart3',
+		'chartType': 'radar',
+		'chartSize': {width:500, height:300}
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<div id="chart2"></div>
+<script>
+
+	var options = {
+		'legend':{
+			names: ['Perceivable', 'Information Loss', 'Understandable', 'Enough Time', 'Epilepsy Prevent', 'Operable', 'Navigation', 'Error Prevent'],
+			hrefs: ['http://nuli.nhncorp.com/accessibility#k1',
+					'http://nuli.nhncorp.com/accessibility#k2',
+					'http://nuli.nhncorp.com/accessibility#k3',
+					'http://nuli.nhncorp.com/accessibility#k4',
+					'http://nuli.nhncorp.com/accessibility#k5',
+					'http://nuli.nhncorp.com/accessibility#k6',
+					'http://nuli.nhncorp.com/accessibility#k7',
+					'http://nuli.nhncorp.com/accessibility#k8']
+				},
+		'dataset': {
+			title: 'Web accessibility status',
+			values: [[34,53,67,23,'N/A',45,69,98]], 
+			bgColor: '#f9f9f9',
+			fgColor: '#30a1ce',
+		},
+		'chartDiv': 'chart2',
+		'chartType': 'radar',
+		'chartSize': {width:500, height:300}
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<div id="chart1"></div>
+<script>
+
+	var options = {
+		'legend':{
+			names: ['Perceivable', 'Information Loss', 'Understandable', 'Enough Time'],
+			hrefs: ['http://nuli.nhncorp.com/accessibility#k1',
+					'http://nuli.nhncorp.com/accessibility#k2',
+					'http://nuli.nhncorp.com/accessibility#k3',
+					'http://nuli.nhncorp.com/accessibility#k4']
+				},
+		'dataset': {
+			title: 'Web accessibility status',
+			values: [[34,53,67,100]], 
+			bgColor: '#f9f9f9',
+			fgColor: '#30a1ce',
+		},
+		'chartDiv': 'chart1',
+		'chartType': 'radar',
+		'chartSize': {width:500, height:300}
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+<div id="chart0"></div>
+<script>
+
+	var options = {
+		'legend':{
+			names: ['Perceivable', 'Information Loss', 'Understandable', 'Enough Time', 'Epilepsy Prevent', 'Operable', 'Navigation', 'Error Prevent'],
+			hrefs: ['http://nuli.nhncorp.com/accessibility#k1',
+					'http://nuli.nhncorp.com/accessibility#k2',
+					'http://nuli.nhncorp.com/accessibility#k3',
+					'http://nuli.nhncorp.com/accessibility#k4',
+					'http://nuli.nhncorp.com/accessibility#k5',
+					'http://nuli.nhncorp.com/accessibility#k6',
+					'http://nuli.nhncorp.com/accessibility#k7',
+					'http://nuli.nhncorp.com/accessibility#k8']
+				},
+		'dataset': {
+			title: 'Web accessibility status',
+			values: [[34,53,67,23,78,45,69,98]], 
+			bgColor: '#f9f9f9',
+			fgColor: '#30a1ce',
+		},
+		'chartDiv': 'chart0',
+		'chartType': 'radar',
+		'chartSize': {width:500, height:300}
+	};
+
+	nWagon.chart(options);
+
+</script>
+
+
+
+</body>
+</html>

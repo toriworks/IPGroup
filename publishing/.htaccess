@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|static-root|robots\.txt)
+RewriteRule ^(.*)$ /publishing\/index.php/$1 [L]

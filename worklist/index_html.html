@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>디자인팀 멀티미디어 파트 작업일지</title>
+	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	<link type="text/css" rel="stylesheet" href="css/selectBox.css" />
+	<script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+	<!-- <script type="text/javascript" src="js/script.js"></script> -->
+	<script type="text/javascript" src="js/selectBox.js"></script>
+</head>
+<body>
+
+<div id="Wrap">
+
+	<div id="Header">
+		<div id="groupList">
+			<ul>
+				<li class="on"><a href="#">코딩</a></li>
+				<li class="off"><a href="#">플래시</a></li>
+			</ul>
+		</div>
+		<div id="configButton">
+			<a href="#">설정</a>
+			<style type="text/css">
+				#configButton {position:absolute; right:10px; top:10px;}
+			</style>
+			<script type="text/javascript">
+				$('#configButton a').click(function(){
+					$('#Config').animate({
+						opacity : 1,
+						height : 'toggle'
+					}, 500, function() {});
+					return false;
+				});
+			</script>
+		</div>
+		<div class="groupListBottom"></div>
+	</div>
+
+	<!------------------------------------------------ 설정 영역 ---------------------------------------------------->
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#sortable").sortable();
+			$("#sortable").selectable({ 
+				tolerance : "fit",
+				selected : function(e,ui) {
+					console.log(e);
+					console.log($(ui.selected).attr('pid'));
+				}
+			});
+			$(".sortOn").bind('click',function(){
+				$("#sortable").sortable({ disabled : false });
+			});
+			$(".sortOff").bind('click',function(){
+				$("#sortable").sortable({ disabled : true });
+			});
+
+
+			/* 관리 탭 */
+			$('.configTab li a').bind('click',function(){
+				$('.configTab li').removeClass('on');
+				$(this).parent().addClass('on');
+				return false;
+			});
+
+			/* 스위치 */
+			$('a.sw').addClass('on').bind('click',function(){
+				var t = $(this);
+				if (t.hasClass('off')) {
+					t.find('span.bg').animate({
+						left : 0
+					},200, function() {
+						t.addClass('on');
+						t.removeClass('off');
+					});
+				} else {
+					t.find('span.bg').animate({
+						left : -100
+					},200, function() {
+						t.removeClass('on');
+						t.addClass('off');
+					});
+				}
+				return false;
+			});
+		});
+	</script>
+	<style type="text/css">
+		#Config {/*display:none;*/ height:1500px; overflow:hidden; background-color:#4B4F5C; font:normal 11px dotum;color:#fff;}
+		.configTab {margin:70px 30px 30px;}
+		.configTab ul {height:35px; border-bottom:1px solid #24262C; list-style:none; margin:0; padding:0;}
+		.configTab ul li {float:left; background-color:#31343C; border:1px solid #24262C; margin-right:-1px; margin-top:5px; }
+		.configTab ul li a {display:block; width:100px; height:22px; padding:7px 0 0 0; text-align:center; font-size:12px; color:#CCC; text-decoration:none;}
+		.configTab ul li.on {float:left; background-color:#646B78; margin-top:0;}
+		.configTab ul li.on a {color:#fff; width:120px; height:27px; font-size:14px;}
+
+		.configBox {margin:30px;}
+		.configBox .itemList {width:200px; list-style:none; margin:0; padding:0;}
+		.configBox .itemList li {padding:8px 8px 5px 8px; margin:1px; background-color:#31343C;}
+		.configBox .itemList li.ui-selecting { background: silver; }
+		.configBox .itemList li.ui-selected { background: gray; }
+
+		a.sw {position:relative; display:block; width:152px; height:54px; overflow:hidden;}
+		a.sw span.cover {position:absolute; z-index:2; left:0; top:0; display:block; width:152px; height:54px; background:url('./img/sw_cover.png') no-repeat 0 0;}
+		a.sw span.bg {position:absolute; z-index:1; left:0; top:0; display:block; width:254px; height:54px; background:url('./img/sw_bg.png') no-repeat 0 0;}
+		a.sw {}
+	</style>
+	<div id="Config">
+		<div class="configTab">
+			<ul>
+				<li class="on"><a href="#">그룹</a></li>
+				<li><a href="#">프로잭트</a></li>
+				<li><a href="#">작업자</a></li>
+				<li><a href="#">유형</a></li>
+			</ul>
+		</div>
+		<div class="configBox">
+			<a class="sw" href="#"><span class="cover"></span><span class="bg"></span></a>
+
+			<br><br><br><br>
+			<a class="sortOn">순서변경 ON</a>
+			<a class="sortOff">순서변경 OFF</a>
+			<ul class="itemList" id="sortable">
+				<li>롯데백화점</li>
+				<li>롯데인터넷면세점</li>
+				<li pid="3">부산롯데인터넷면세점</li>
+				<li>롯데코엑스인터넷면세점</li>
+				<li>롯데면세점</li>
+				<li>롯데마트</li>
+			</ul>
+		</div>
+	</div>
+	<!------------------------------------------------ 설정 영역 ---------------------------------------------------->
+
+	<div id="Middle">
+		<div id="Left">
+			<div class="searchTop"></div>
+
+			<div class="searchBox">
+				<div class="monthSet">
+					<span class="prev"><a href="#">&lt; 이전달</a></span>
+					<span class="setValue">2011.01</span>
+					<span class="next"><span>다음달 &gt;</span></span>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="searchBox" id="projectList">
+				<h2>사이트</h2>
+				<ul>
+					<li class="on"><a href="#">전체</a></li>
+					<li class="off"><a href="#">롯데백화점</a></li>
+					<li class="off"><a href="#">롯데인터넷면세점</a></li>
+					<li class="off"><a href="#">부산롯데인터넷면세점</a></li>
+					<li class="off"><a href="#">롯데코엑스인터넷면세점</a></li>
+					<li class="off"><a href="#">롯데면세점</a></li>
+					<li class="off"><a href="#">롯데인터넷슈퍼</a></li>
+					<li class="off"><a href="#">롯데마트</a></li>
+					<li class="off"><a href="#">롯데아울렛</a></li>
+					<li class="off"><a href="#">토이저러스</a></li>
+					<li class="off"><a href="#">플레어</a></li>
+					<li class="off"><a href="#">롯데쇼핑 IR</a></li>
+					<li class="off"><a href="#">롯데백화점 상품본부</a></li>
+					<li class="off"><a href="#">에비뉴엘</a></li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+
+			<div class="searchBox" id="workerList">
+				<h2>작업자</h2>
+				<ul>
+					<li class="on"><a href="#">전체</a></li>
+					<li class="off"><a href="#">황철민</a></li>
+					<li class="off"><a href="#">이슬비</a></li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+
+			<div class="searchBox" id="typeList">
+				<h2>유형</h2>
+				<ul>
+					<li class="on"><a href="#">전체</a></li>
+					<li class="off"><a href="#">운영</a></li>
+					<li class="off"><a href="#">비경상</a></li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+
+		</div>
+		<div id="Container">
+
+			<div class="topStatusBar">
+				<div id="loadImg">
+					<img class="icon" src="img/load.gif" alt="" />
+					<span class="message"></span>
+				</div>
+
+				<fieldset class="writeContainer">
+					<legend class="none">작업내역 추가</legend>
+					<div class="layer_1">
+						
+						<input type="text" class="inputText date" value="날짜" />
+						<div class="select worker">
+							<span class="ctrl"><span class="arrow"></span></span>
+							<div class="my_value">작업자 선택</div>
+							<ul class="i_list">
+							<li><input name="d" id="d1" type="radio" value="" class="option"><label for="d1">황철민</label></li>
+							<li><input name="d" id="d2" type="radio" value="" class="option"><label for="d2">이슬비</label></li>
+							</ul>
+						</div>
+
+						<input type="radio" class="inputRadio" id="r1" name="a" checked="checked" /><label for="r1" class="withRadio">운영</label>
+						<input type="radio" class="inputRadio" id="r2" name="a" /><label for="r2" class="withRadio">비경상</label>
+
+					</div>
+					<div class="layer_2">
+
+						<div class="select site">
+							<span class="ctrl"><span class="arrow"></span></span>
+							<div class="my_value">사이트 선택</div>
+							<ul class="i_list">
+							<li><input name="s" id="s1" type="radio" value="" class="option"><label for="s1">롯데백화점</label></li>
+							<li><input name="s" id="s2" type="radio" value="" class="option"><label for="s2">롯데인터넷면세점</label></li>
+							<li><input name="s" id="s3" type="radio" value="" class="option"><label for="s3">부산롯데인터넷면세점</label></li>
+							<li><input name="s" id="s4" type="radio" value="" class="option"><label for="s4">롯데코엑스인터넷면세점</label></li>
+							<li><input name="s" id="s5" type="radio" value="" class="option"><label for="s5">롯데면세점</label></li>
+							</ul>
+						</div>
+						<input type="text" class="inputText subject" value="작업명" />
+						<input type="text" class="inputText worktime" value="작업시간" />
+
+						<a class="btnSave" href="#">저장</a>
+
+					</div>
+				</fieldset>
+
+			</div>
+
+			<div id="workList">
+			<table class="workList" cellpadding="0" cellspacing="0" border="0">
+				<colgroup>
+					<col class="date" />
+					<col class="week" />
+					<col class="project" />
+					<col class="subject" />
+					<col class="button" />
+					<col class="worker" />
+					<col class="worktime" />
+					<col class="type" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">날짜</th>
+						<th scope="col">요일</th>
+						<th scope="col">프로젝트</th>
+						<th scope="col" class="r">작업명</th>
+						<th scope="col">&nbsp;</th>
+						<th scope="col">작업자</th>
+						<th scope="col">작업시간</th>
+						<th scope="col" class="r">유형</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+					<tr>
+						<td class="date">2011-01-03</td>
+						<td class="week">월</td>
+						<td class="project ellipsis">롯데백화점</td>
+						<td class="subject ellipsis">롯데카드 사은행사 페이지 코딩요청</td>
+						<td class="button"><div class="icoSet"><a class="icoMod" href="#"><span class="none">수정</span></a><a class="icoDel" href="#"><span class="none">삭제</span></a></div></td>
+						<td class="worker">이슬비</td>
+						<td class="worktime">1.5 H</td>
+						<td class="type">운영</td>
+					</tr>
+				</body>
+			</table>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+
+</body>
+</html>

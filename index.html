@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>IPGROUP</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./_old/css/style.css" />
+	<script type="text/javascript">
+	//<![CDATA[
+		$(document).ready(function(){
+			$('.i1, .i2, .i3, .i4, .i5').fadeTo(0,0.01);
+		});
+		$(window).load(function(){
+			$('.i1').delay(100).fadeTo(300,1);
+			$('.i2').delay(200).fadeTo(300,1);
+			$('.i3').delay(300).fadeTo(300,1);
+			$('.i4').delay(400).fadeTo(300,1);
+			$('.i5').delay(500).fadeTo(300,1);
+		});
+	//]]>
+	</script>
+</head>
+
+<body>
+
+<div id="header">
+	<div class="align">
+		<h1><img src="./_old/images/logo.gif" alt="IPGROUP" /></h1>
+	</div>
+</div>
+
+<div id="middle">
+	<div class="section i1">
+		<img src="./_old/images/img_1.jpg" alt="" usemap="#map1" />
+		<map id="map1" name="map1">
+			<area shape="rect" href="./_old/workshop.html" onclick="window.open(this.href,'workshop','width=917,height=1000,scrollbars=yes');return false;" coords="693,54,854,82" alt="" />
+			<area shape="rect" href="./_old/exhibition.html" onclick="window.open(this.href,'exhibition','width=917,height=1000,scrollbars=yes');return false;" coords="693,84,854,112" alt="" />
+		</map>
+	</div>
+	<div class="section i2">
+		<img src="./_old/images/img_2.jpg" alt="" />
+	</div>
+	<div class="section i3">
+		<img src="./_old/images/img_3.jpg" alt="" />
+	</div>
+	<div class="section i4">
+		<img src="./_old/images/img_4.jpg" alt="" border="0" usemap="#eMap" />
+        <map name="eMap" id="eMap">
+          <area shape="rect" coords="623,72,663,86" href="mailto:nhj@ipgroup.co.kr" alt="" />
+          <area shape="rect" coords="623,148,663,162" href="mailto:nhj@ipgroup.co.kr" alt="" />
+          <area shape="rect" coords="621,230,661,244" href="mailto:nhj@ipgroup.co.kr" alt="" />
+        </map>
+    </div>
+	<div class="section i5">
+		<img src="./_old/images/img_5.jpg" alt="" />
+	</div>
+</div>
+
+<div id="footer">
+	<address><img src="./_old/images/copy.gif" alt="COPYRIGHT &copy; 2012 IPGROUP. ALL RIGHTS RESERVED" /></address>
+</div>
+
+
+
+</body>
+</html>

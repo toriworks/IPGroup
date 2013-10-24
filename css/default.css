@@ -1,0 +1,585 @@
+@charset "utf-8";
+
+/* Reset */
+html, body {height:100%;}
+html {overflow-y:scroll;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, p, input, textarea, select, button, label, pre, table, th, td {margin:0; padding:0;}
+/* body, input, textarea, select, button {font-size:12px; line-height:1.3; font-family:'나눔고딕',NanumGothic,'Nanum Gothic','돋움',Dotum,Arial,Helvetica,sans-serif; color:#333;} */
+body, input, textarea, select, button {font-size:12px; line-height:1.3; font-family:'Malgun Gothic','돋움',Dotum,Arial,Helvetica,sans-serif; color:#333;}
+body {background-color:#fff; /* *word-break:break-all; -ms-word-break:break-all; */ -webkit-text-size-adjust:none;}
+img, fieldset, iframe {border:0 none;}
+img {-ms-interpolation-mode:bicubic !important;}
+header, footer, nav, aside, section, article {display:block;}
+ul, ol {list-style:none;}
+label, button {cursor:pointer;}
+input, select, button {vertical-align:middle;}
+table {border-collapse:collapse;}
+a {color:#666; text-decoration:none;}
+a:hover {color:#333; text-decoration:underline;}
+hr, .hide {display:none;}
+legend, caption, .blind {position:absolute; left:0; top:0; overflow:hidden; visibility:hidden; width:1px; height:1px; font-size:0; line-height:0;}
+
+
+
+
+
+
+#wrap {height:100%;}
+
+/* Header */
+header h1 {position:fixed; z-index:1000; left:0; top:0; width:180px; height:180px; text-indent:-10000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat 0 0;}
+header nav.gnb {position:fixed; z-index:1000; right:25px; top:25px;}
+header nav.gnb li {margin-bottom:10px;}
+header nav.gnb li a {display:block; width:45px; height:45px; text-indent:-10000px; overflow:hidden; background-image:url("../images/common/sp_ipgroup_v1.png"); background-repeat:no-repeat;}
+header nav.gnb li.a a {background-position:-190px 0;}
+header nav.gnb li.w a {background-position:-240px 0;}
+header nav.gnb li.c a {background-position:-290px 0;}
+header nav.gnb li.a.on a {background-position:-190px -50px;}
+header nav.gnb li.w.on a {background-position:-240px -50px;}
+header nav.gnb li.c.on a {background-position:-290px -50px;}
+header div.top_link {position:fixed; z-index:1000; right:24px; top:273px;}
+header div.top_link a {display:block; width:47px; height:47px; text-indent:-10000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat -190px -100px;}
+header div.etc_links {position:fixed; z-index:1000; left:45px; bottom:75px;}
+header div.etc_links a {display:block; width:91px; height:91px; text-indent:-10000px; overflow:hidden; background-image:url("../images/common/sp_ipgroup_v1.png"); background-repeat:no-repeat;}
+header div.etc_links a.company {background-position:0 -190px; margin-bottom:13px;}
+header div.etc_links a.recruit {background-position:-100px -190px;}
+
+/* Footer */
+footer p.copyright {position:fixed; z-index:1000; right:25px; bottom:15px;}
+footer p.copyright span {display:block; width:233px; height:8px; text-indent:-10000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat 0 -290px;}
+
+/* Container */
+#container {height:100%;}
+section.screen {position:relative; z-index:10; overflow:hidden; height:100%;}
+section#about {background:#009ADA url("../images/common/bg_section_about.gif") repeat 47px -70px; background-attachment:fixed;}
+section#works {background:#B7AC12 url("../images/common/bg_section_works.gif") repeat center center; background-attachment:fixed;}
+section#contact {background:#EA1849 url("../images/common/bg_section_contact.jpg") repeat center center; background-attachment:fixed;}
+section#recruit {background:#9B00DA url("../images/common/bg_section_recruit.gif") repeat center center; background-attachment:fixed; min-height:100%; height:auto;}
+
+/* Contents */
+.contents {position:relative; z-index:100; width:100%; max-width:1220px; margin:0 auto; /* background:blue; */}
+.contents h2 {height:162px; padding-left:37px; overflow:hidden; margin-top:-20px; font:bold 180px/1 helvetica; letter-spacing:-11px; color:#fff; /* background:green; */}
+.contents nav.lnb {height:67px; padding:33px 30px 0; /* background:brown; */}
+.contents nav.lnb ul {height:37px; overflow:hidden;}
+.contents nav.lnb li {float:left;padding:0 15px;}
+.contents nav.lnb li a {font-weight:bold; font-size:24px; color:#001c25; letter-spacing:-1px;}
+.contents nav.lnb li.on a {color:#fff;}
+.contents .nav_controler a {position:absolute; top:325px; width:54px; height:109px; text-indent:-1000px; overflow:hidden; background-image:url('../images/common/sp_ipgroup_v1.png'); background-repeat:no-repeat;}
+.contents .nav_controler a.prev {left:-70px; background-position:-240px -160px;}
+.contents .nav_controler a.next {right:-70px; background-position:-300px -160px;}
+
+
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| About > Overview
+|--------------------------------------------------------------------------
+*/
+	#about_overview {padding-left:45px;}
+	#about_overview h3 {margin-top:-18px; margin-bottom:50px; font-weight:bold; font-size:100px; color:#fff; letter-spacing:-7px;}
+	#about_overview p.txt1 {width:100%; max-width:1045px; margin-bottom:65px; font-weight:bold; font-size:40px; line-height:49px; color:#fff; letter-spacing:-2px;}
+	#about_overview p.txt1 strong {color:#000;}
+	#about_overview p.txt2 {width:100%; max-width:890px; font-weight:normal; font-size:18px; line-height:27px; color:#fff; letter-spacing:0; word-break:word-wrap;}
+	#about_overview p.txt2 strong {font-weight:normal; color:#000;}
+		/*
+		| Media Query
+		*/
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#about_overview h3 {margin-bottom:25px; font-size:60px; letter-spacing:-3px;}
+			#about_overview p.txt1 {max-width:900px; font-size:30px; line-height:35px;}
+		}
+
+/*
+|--------------------------------------------------------------------------
+| About > Future direction
+|--------------------------------------------------------------------------
+*/
+	#about_direction {padding-left:45px;}
+	#about_direction h3 {margin-top:-18px; margin-bottom:50px; font-weight:bold; font-size:100px; color:#fff; letter-spacing:-7px;}
+		/*
+		| Media Query
+		*/
+		
+
+/*
+|--------------------------------------------------------------------------
+| About > Business direction
+|--------------------------------------------------------------------------
+*/
+	#about_business {padding-left:45px;}
+	#about_business h3 {margin-top:-18px; margin-bottom:50px; font-weight:bold; font-size:100px; color:#fff; letter-spacing:-7px;}
+		/*
+		| Media Query
+		*/
+		
+
+/*
+|--------------------------------------------------------------------------
+| About > Clients/Partner direction
+|--------------------------------------------------------------------------
+*/
+	#about_partner {padding-left:45px;}
+	#about_partner h3 {margin-top:-18px; margin-bottom:0; font-weight:bold; font-size:100px; color:#fff; letter-spacing:-3px;}
+	#about_partner h3 strong {color:#000000;}
+	#about_partner p.txt1 {width:100%; max-width:1045px; margin-bottom:50px; font-weight:normal; font-size:18px; color:#fff; letter-spacing:0; }
+	#about_partner p.txt1 strong {font-weight:normal; color:#000;}
+	#about_partner dl {float:left; width:494px; margin:0 30px; overflow:hidden;}
+	#about_partner dl dt {width:107px; height:107px; margin:0 auto 25px; text-indent:-10000px; overflow:hidden; background-image:url("../images/about/sp_about.png"); background-repeat:no-repeat;}
+	#about_partner dl.clients dt {background-position:0 0;}
+	#about_partner dl.partners dt {background-position:-110px 0;}
+	#about_partner dl ul {width:498px;}
+	#about_partner dl ul:after {visibility:hidden;display:block;content:"";clear:both;height:0;}
+	#about_partner dl ul li {float:left; margin:0 4px 3px 0;}
+	#about_partner dl ul li img {display:block; width:162px; height:78px;}
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+			#about_partner h3 {font-size:80px; letter-spacing:-3px;}
+			#about_partner p.txt1 {margin-bottom:45px;}
+			#about_partner dl {width:446px; margin:0 10px;}
+			#about_partner dl dt {width:92px; height:92px; margin:0 auto 15px; background-size:425px 425px;}
+			#about_partner dl.clients dt {background-position:0 0;}
+			#about_partner dl.partners dt {background-position:-93px 0;}
+			#about_partner dl ul {width:450px;}
+			#about_partner dl ul li {float:left; margin:0 4px 2px 0;}
+			#about_partner dl ul li img {width:146px; height:70px;}
+		}
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#about_partner h3 {font-size:60px; letter-spacing:-3px;}
+			#about_partner p.txt1 {margin-bottom:30px;}
+			#about_partner dl {width:343px; margin:0;}
+			#about_partner dl dt {width:75px; height:75px; margin:0 auto 15px; background-size:350px 350px;}
+			#about_partner dl.clients {margin-right:10px;}
+			#about_partner dl.clients dt {background-position:0 0;}
+			#about_partner dl.partners dt {background-position:-77px 0;}
+			#about_partner dl ul {width:345px;}
+			#about_partner dl ul li {float:left; margin:0 2px 2px 0;}
+			#about_partner dl ul li img {width:113px; height:55px;}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Works
+|--------------------------------------------------------------------------
+*/
+	#works div.works_check {padding:15px 0 15px 25px;}
+	#works div.works_check ul {/* height:37px; */margin-bottom:5px; overflow:hidden;}
+	#works div.works_check li {float:left;padding:0 15px;}
+	#works div.works_check li input {position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden;}
+	#works div.works_check li label {font-weight:bold; font-size:24px; color:#001c25; letter-spacing:-1px;}
+	#works div.works_check li label.on {color:#fff;}
+	#works div.works_list {position:relative; width:1219px; height:731px; /* margin:0 auto; */ /* border:1px solid #CDC65A; background-color:#B7AC12; */}
+	#works div.works_list li {position:absolute; left:0; top:0; margin:0; border:1px solid #CDC65A; background-color:#B7AC12;}
+	#works div.works_list li a {display:block; text-align:center; color:#1f1d00;}
+	#works div.works_list li a .thumb {display:block;}
+	#works div.works_list li a .title {display:block; height:27px; padding-top:7px; font-size:18px; line-height:1; font-weight:bold;}
+	#works div.works_list li a .desc  {display:block; height:25px; font-size:13px; line-height:1; font-weight:normal;}
+	#works div.works_list li a .date  {display:block; font-size:12px; line-height:1; font-weight:bold;}
+	#works div.works_list li a .cover {display:none; position:absolute; left:0; top:0; right:0; bottom:0; background:url("../images/works/cover.png") no-repeat center center;}
+	#works div.works_list li a:hover .cover {display:block;}
+	#works div.works_list li.type_a a {width:243px; height:243px;}
+	#works div.works_list li.type_a .thumb {width:243px; height:163px;}
+	#works div.works_list li.type_b a {width:243px; height:487px;}
+	#works div.works_list li.type_b .thumb {width:243px; height:407px;}
+	#works div.works_list li.row_1 {left:0;}
+	#works div.works_list li.row_2 {left:244px;}
+	#works div.works_list li.row_3 {left:488px;}
+	#works div.works_list li.row_4 {left:732px;}
+	#works div.works_list li.row_5 {left:976px;}
+	#works div.works_list li.col_1 {top:0;}
+	#works div.works_list li.col_2 {top:244px;}
+	#works div.works_list li.col_3 {top:488px;}
+
+	#works .contents .works_list_controler a {position:absolute; top:50%; width:54px; height:109px; margin-top:-55px; text-indent:-1000px; overflow:hidden; background-image:url('../images/common/sp_ipgroup_v1.png'); background-repeat:no-repeat;}
+	#works .contents .works_list_controler a.prev {left:-70px; background-position:-240px -160px;}
+	#works .contents .works_list_controler a.next {right:-70px; background-position:-300px -160px;}
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+			#works div.works_list {width:984px; height:590px;}
+			#works div.works_list li a .title {height:20px; padding-top:7px; font-size:14px; line-height:1; font-weight:bold;}
+			#works div.works_list li a .desc  {height:18px; font-size:12px; line-height:1; font-weight:normal;}
+			#works div.works_list li a .date  {font-size:11px; line-height:1; font-weight:bold;}
+			#works div.works_list li.type_a a {width:196px; height:196px;}
+			#works div.works_list li.type_a .thumb {width:196px; height:131px;}
+			#works div.works_list li.type_b a {width:196px; height:393px;}
+			#works div.works_list li.type_b .thumb {width:196px; height:328px;}
+			#works div.works_list li.row_1 {left:0;}
+			#works div.works_list li.row_2 {left:197px;}
+			#works div.works_list li.row_3 {left:394px;}
+			#works div.works_list li.row_4 {left:591px;}
+			#works div.works_list li.row_5 {left:788px;}
+			#works div.works_list li.col_1 {top:0;}
+			#works div.works_list li.col_2 {top:197px;}
+			#works div.works_list li.col_3 {top:394px;}
+		}
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#works div.works_check li {padding:0 10px;}
+			#works div.works_check li label {font-size:20px;}
+			#works div.works_list {width:734px; height:440px;}
+			#works div.works_list li a .title {height:16px; padding-top:2px; font-size:12px; letter-spacing:-1px;}
+			#works div.works_list li a .desc  {height:14px; font-size:11px; letter-spacing:-2px;}
+			#works div.works_list li a .date  {font-size:11px; letter-spacing:0;}
+			#works div.works_list li a .cover {background-image:url("../images/works/cover2.png");}
+			#works div.works_list li.type_a a {width:146px; height:146px;}
+			#works div.works_list li.type_a .thumb {width:146px; height:98px;}
+			#works div.works_list li.type_b a {width:146px; height:293px;}
+			#works div.works_list li.type_b .thumb {width:146px; height:244px;}
+			#works div.works_list li.row_1 {left:0;}
+			#works div.works_list li.row_2 {left:147px;}
+			#works div.works_list li.row_3 {left:294px;}
+			#works div.works_list li.row_4 {left:441px;}
+			#works div.works_list li.row_5 {left:588px;}
+			#works div.works_list li.col_1 {top:0;}
+			#works div.works_list li.col_2 {top:147px;}
+			#works div.works_list li.col_3 {top:294px;}
+		}
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Works - view
+|--------------------------------------------------------------------------
+*/
+	#works_view {/* display:none; */ position:fixed; z-index:10000; left:0; top:0; right:0; bottom:0; background:url("../images/common/bg_black.png") repeat 0 0;}
+	#works_view .view_container {position:absolute; left:50%; top:50%; width:872px; height:703px; margin:-350px 0 0 -436px;}
+	#works_view .area {position:relative; top:33px; width:600px; height:610px; overflow:auto; padding:0 20px; margin:0 auto; border-top:30px solid #fff; border-bottom:30px solid #fff; background:#fff;}
+	#works_view .view_contents {width:600px; color:#1f1d00;}
+	#works_view .view_contents h3.title {padding:14px 23px 30px;border-top:3px solid #000; border-bottom:1px solid #000;}
+	#works_view .view_contents h3.title strong {display:block; font-size:50px;}
+	#works_view .view_contents h3.title span {display:block; font-size:35px;}
+	#works_view .view_contents div.info {padding:12px 27px; border-bottom:1px solid #000; font-size:13px; line-height:20px;}
+	#works_view .view_contents div.info a {color:#1f1d00;}
+	#works_view .view_contents article {padding:35px 0 10px;}
+	#works_view .view_contents article img {display:block; max-width:520px; margin:0 auto 15px;}
+	#works_view .view_contents article p {width:520px; margin:0 auto;}
+	#works_view a.prev {position:absolute; left:0; top:50%; width:56px; height:110px; margin-top:-28px; text-indent:-1000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat -360px -160px;}
+	#works_view a.next {position:absolute; right:0; top:50%; width:56px; height:110px; margin-top:-28px; text-indent:-1000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat -420px -160px;}
+	#works_view a.close {position:absolute; right:116px; top:0; width:30px; height:30px; text-indent:-1000px; overflow:hidden; background:url("../images/common/sp_ipgroup_v1.png") no-repeat 0 -310px;}
+
+		/*
+		| Media Query
+		*/
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#works_view .view_container {width:872px; height:603px; margin:-300px 0 0 -436px;}
+			#works_view .area {top:33px; width:600px; height:510px; overflow:auto; padding:0 20px; margin:0 auto;}
+			#works_view .view_contents h3.title {padding:9px 23px 20px;border-top:3px solid #000; border-bottom:1px solid #000;}
+			#works_view .view_contents h3.title strong {display:block; font-size:30px;}
+			#works_view .view_contents h3.title span {display:block; font-size:20px;}
+		}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Contact > Location
+|--------------------------------------------------------------------------
+*/
+	#contact_location {padding-left:45px;}
+	#contact_location h3 {margin-top:-18px; margin-bottom:4px; font-weight:bold; font-size:100px; color:#fff; letter-spacing:-5px;}
+	#contact_location h3 strong {color:#000000;}
+	#contact_location p.txt1 {width:100%; max-width:1045px; font-weight:normal; font-size:18px; line-height:27px; color:#fff; letter-spacing:0;}
+	#contact_location p.txt1 strong {color:#000;}
+	#contact_location p.txt2 {width:100%; max-width:890px; font-weight:bold; font-size:18px; line-height:27px; color:#fff; letter-spacing:0; word-break:word-wrap;}
+	#contact_location p.txt2 strong {color:#000;}
+	#contact_location div.map_area {position:relative; width:100%; max-width:1128px; height:487px; margin:35px 0 0; border:1px solid #F0466D; background:#EA1849;}
+	#contact_location aside.map_side {position:absolute; z-index:20; left:0; top:0; bottom:0; width:198px; background-color:#000;}
+	#contact_location aside.map_side strong {display:block; width:198px; height:44px; text-indent:-10000px; overflow:hidden; border-bottom:1px solid #4D4D4D; background:url("../images/contact/sp_contact.png") no-repeat 0 0;}
+	#contact_location aside.map_side .line_link li {border-bottom:1px solid #1A1A1A;}
+	#contact_location aside.map_side .line_link li+li+li {border-bottom:0;}
+	#contact_location aside.map_side .line_link li a {display:block; width:204px; height:102px; background:url("../images/contact/sp_contact.png") no-repeat -10000px 0;}
+	#contact_location aside.map_side .line_link li a.on {background-position:0 -50px;}
+	#contact_location aside.map_side .line_link li a img {display:block; width:198px; height:102px;}
+	#contact_location div.map_image {position:absolute; z-index:10; left:198px; right:0; top:0; bottom:0; overflow:hidden;}
+	#contact_location div.map_image .imgwrap {display:none; position:absolute; left:50%; top:50%; margin:-244px 0 0 -465px;}
+	#contact_location div.map_image .imgwrap img.map {display:block; position:relative;  z-index:10;}
+	#contact_location div.map_image .imgwrap .photo {display:none; position:absolute; left:0; top:0; z-index:20;}
+	#contact_location div.map_image .imgwrap .photo .close {position:absolute; right:0; top:0; }
+	#contact_location div.map_image .imgwrap .photo .close img {display:block; width:58px; height:58px;}
+	#contact_location div.map_image .imgwrap .photo ul li {}
+
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+			#contact_location div.map_area {width:100%; max-width:802px; height:420px; margin:30px 0 0;}
+			#contact_location div.map_image .imgwrap {left:50%; top:50%; margin:-210px 0 0 -401px;}
+			#contact_location div.map_image .imgwrap img.map {width:802px; height:420px;}
+		}
+
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#contact_location h3 {margin-bottom:15px; font-size:60px; letter-spacing:-3px;}
+			#contact_location p.txt1 {font-size:14px; line-height:20px;}
+			#contact_location p.txt2 {font-size:14px; line-height:20px;}
+			#contact_location div.map_area {width:100%; max-width:674px; height:353px; margin:20px 0 0;}
+			#contact_location div.map_image .imgwrap {left:50%; top:50%; margin:-176px 0 0 -337px;}
+			#contact_location div.map_image .imgwrap img.map {width:674px; height:353px;}
+		}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Contact > Request
+|--------------------------------------------------------------------------
+*/
+	#contact_request {padding-left:45px;}
+	#contact_request p.txt1 {width:100%; max-width:940px; margin-bottom:25px; font-weight:normal; font-size:18px; line-height:27px; color:#fff; letter-spacing:0; word-break:word-wrap;}
+	#contact_request table.form {width:100%; margin-bottom:10px; border-collapse:collapse;}
+	#contact_request table.form th {width:290px; font-size:14px; color:#D1CCCD; text-align:left; background-color:#1B0006;}
+	#contact_request table.form th strong {display:block; margin-left:24px; padding-left:15px; background:url("../images/contact/bul_1.gif") no-repeat 0 9px;}
+	#contact_request table.form td {padding:0 7px; background-color:#590014; color:#270000;}
+	#contact_request table.form td label {font:normal 11px dotum; color:#FFFFFF;}
+	#contact_request table.form td label.bul {padding-left:7px;background:url("../images/contact/bul_2.gif") no-repeat 0 3px;}
+	#contact_request table.form td label.ml {margin-left:5%;}
+	#contact_request table.form td label.ck {margin-right:3%;margin-left:5px;}
+	#contact_request table.form td .area {margin:0; padding:10px 25px; background:url("../images/contact/bg_line.gif") repeat-x 0 bottom;}
+	#contact_request table.form td .ck_area {padding:10px 25px 17px;}
+	#contact_request table.form td .area .i_text {position:relative;height:21px;margin:2px;padding:3px 4px;color:#A18080;border:1px solid #2F0000;background:#420000;}
+	#contact_request table.form td .area select.select {height:27px;border:1px solid #2F0000; background-color:#420000; color:#A18080;}
+	#contact_request table.form td .area .i_file {position:relative;height:29px;margin:2px;padding:3px 4px;color:#A18080;border:1px solid #2F0000;background:#420000;}
+	#contact_request table.form td .area textarea.textarea {width:95%; height:50px;border:1px solid #2F0000; color:#A18080;border:1px solid #2F0000;background:#420000;}
+	#contact_request table.form td .area #txt_company {width:35%;}
+	#contact_request table.form td .area #txt_name {width:35%;}
+	#contact_request table.form td .area #txt_site {width:70%;}
+	#contact_request table.form td .area #num_phone_1,
+	#contact_request table.form td .area #num_phone_2,
+	#contact_request table.form td .area #num_phone_3,
+	#contact_request table.form td .area #num_hphone_1,
+	#contact_request table.form td .area #num_hphone_2,
+	#contact_request table.form td .area #num_hphone_3 {width:8%;}
+	#contact_request table.form td .area #txt_email_1,
+	#contact_request table.form td .area #txt_email_2 {width:30%;}
+	#contact_request table.form td .area #txt_file {width:50%;}
+	#contact_request table.form td .area .t {padding-left:1%; color:#fff; font-size:11px; font-family:dotum;}
+	#contact_request table.form td .area .agree_text {width:95%; height:50px; margin-bottom:10px; overflow:auto; border:1px solid #2F0000; background-color:#420000;}
+	#contact_request table.form td .area .agree_text .inner {padding:5px; color:#A18080;}
+	#contact_request .button_confirm {text-align:right;}
+		
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+		}
+
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#contact_request p.txt1 {margin-bottom:15px; font-weight:normal; font-size:14px; line-height:18px;}
+			#contact_request table.form th {width:150px; font-size:12px;}
+			#contact_request table.form th strong {margin-left:10px; padding-left:10px;}
+			#contact_request table.form td label.ck {margin-right:1%;margin-left:3px;}
+			#contact_request table.form td .area {padding:5px 10px;}
+			#contact_request table.form td .area .i_text {height:16px;}
+			#contact_request table.form td .area select.select {height:22px;}
+			#contact_request .button_confirm img {width:80px; height:22px;}
+		}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Recruit > recruit
+|--------------------------------------------------------------------------
+*/
+	#recruit_recruit {padding-left:45px;}
+	#recruit_recruit h3 {font-size:40px; color:#000; padding-left:30px; margin-bottom:10px; background:url("../images/recruit/bul_1.png") no-repeat 7px 11px;}
+	#recruit_recruit p.txt1 {margin-bottom:25px; font-weight:bold; font-size:30px; color:#fff; letter-spacing:0; word-break:word-wrap;}
+	#recruit_recruit p.txt1 strong {color:#000;}
+	#recruit_recruit p.txt2 {padding-left:30px; margin-bottom:25px; font-size:20px; color:#fff; letter-spacing:0; word-break:word-wrap;}
+	#recruit_recruit p.txt2 strong {color:#000;}
+	#recruit_recruit .img_step {padding:10px 0 20px 30px;}
+	#recruit_recruit ol.step_desc {padding-left:30px;}
+	#recruit_recruit ol.step_desc li {margin-bottom:20px;}
+	#recruit_recruit ol.step_desc li strong {font-size:20px; color:#000;}
+	#recruit_recruit ol.step_desc li p {padding-left:65px; font-size:14px; color:#fff;}
+	#recruit_recruit ol.step_desc li p strong {font-size:14px; color:#000;}
+
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+			#recruit_recruit h3 {font-size:35px;}
+			#recruit_recruit p.txt1 {font-size:25px; margin-bottom:15px;}
+			#recruit_recruit p.txt2 {font-size:15px; margin-bottom:15px;}
+			#recruit_recruit .img_step {padding:5px 0 10px 30px;}
+			#recruit_recruit .img_step img {width:600px;}
+			#recruit_recruit ol.step_desc li {margin-bottom:15px;}
+			#recruit_recruit ol.step_desc li strong {font-size:15px;}
+			#recruit_recruit ol.step_desc li p {padding-left:50px; font-size:13px;}
+		}
+
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#recruit_recruit h3 {font-size:30px; margin-bottom:5px;}
+			#recruit_recruit p.txt1 {font-size:20px; margin-bottom:10px;}
+			#recruit_recruit p.txt2 {font-size:14px; margin-bottom:10px;}
+			#recruit_recruit .img_step {padding:5px 0 5px 30px;}
+			#recruit_recruit .img_step img {width:500px;}
+			#recruit_recruit ol.step_desc li {margin-bottom:10px;}
+			#recruit_recruit ol.step_desc li strong {font-size:14px;}
+			#recruit_recruit ol.step_desc li p {padding-left:50px; font-size:12px;}
+		}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Recruit > Job Posting
+|--------------------------------------------------------------------------
+*/
+	#recruit_job_posting {padding-left:30px;}
+	#recruit_job_posting .posting_top {padding-left:15px; margin-bottom:30px;}
+	#recruit_job_posting .posting_top h3 {display:inline;font-size:30px; color:#fff; vertical-align:middle;}
+	#recruit_job_posting .posting_top img {vertical-align:middle; margin:0 0 -5px 5px;}
+	#recruit_job_posting .posting_title {position:relative;}
+	#recruit_job_posting .posting_title a {display:block; padding:15px 0 20px 100px; text-decoration:none;}
+	#recruit_job_posting .posting_title a:hover {background:url("../images/recruit/bg_black.png") repeat 0 0;}
+	#recruit_job_posting .posting_title span.new {position:absolute; left:15px; top:24px; font-size:13px; color:#000; font-weight:bold;}
+	#recruit_job_posting .posting_title span.number {position:absolute; left:15px; top:38px; font-size:26px; color:#fff; font-weight:bold;}
+	#recruit_job_posting .posting_title span.title {display:block; font-size:48px; max-width:590px; height:112px; margin-bottom:10px; overflow:hidden; line-height:1.1; color:#fff; font-weight:bold; letter-spacing:-4px;}
+	#recruit_job_posting .posting_title span.info {font-size:16px; color:#fff;}
+	#recruit_job_posting .posting_title span.status {position:absolute; left:695px; top:25px;}
+	#recruit_job_posting .posting_detail {display:none; padding:30px 30px 30px 100px; background-color:#5B097D;}
+	#recruit_job_posting .posting_detail h4.title {font-size:35px; margin-bottom:50px; color:#fff;}
+	#recruit_job_posting .posting_detail strong.sub {font-size:30px; color:#fff;}
+	#recruit_job_posting .posting_detail .recruit_table {margin:15px 20px 25px 0;border:1px solid #2B003D;}
+	#recruit_job_posting .posting_detail .recruit_table table {width:100%; border-collapse:collapse;}
+	#recruit_job_posting .posting_detail .recruit_table table th {width:20%; padding:11px 0 14px; border-bottom:1px solid #A263BC; background-color:#C18AD7; font-size:15px; color:#000;}
+	#recruit_job_posting .posting_detail .recruit_table table td {padding:11px 25px 14px; border-bottom:1px solid #CDB5D8; background-color:#FFFFFF; font-size:15px; color:#000;}
+	#recruit_job_posting .posting_detail article {font-size:20px; color:#fff;}
+	#recruit_job_posting .posting_detail .btn_area {text-align:center; padding:30px 0 0;}
+	/* 페이징 */
+	#recruit_job_posting .paginate {clear:both;padding:15px 0;margin-bottom:30px;text-align:center;line-height:normal}
+	#recruit_job_posting .paginate a,
+	#recruit_job_posting .paginate strong{display:inline-block;position:relative;margin:0 -2px;padding:2px 8px;font-weight:bold;font-size:12px;font-family:Tahoma, Sans-serif;color:#000;line-height:normal;text-decoration:none;vertical-align:middle}
+	#recruit_job_posting .paginate a:hover,
+	#recruit_job_posting .paginate a:active,
+	#recruit_job_posting .paginate a:focus{background-color:#eee;}
+	#recruit_job_posting .paginate strong{color:#FFF;}
+	#recruit_job_posting .paginate .direction{font-weight:normal;color:#000;white-space:nowrap}
+	#recruit_job_posting .paginate .direction span{font-weight:bold;font-size:14px}
+	#recruit_job_posting .paginate .direction:hover,
+	#recruit_job_posting .paginate .direction:active,
+	#recruit_job_posting .paginate .direction:focus{background-color:#fff;color:#000}						
+
+		/*
+		| Media Query
+		*/
+		@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+			#recruit_job_posting .posting_top {padding-left:15px; margin-bottom:20px;}
+			#recruit_job_posting .posting_top h3 {font-size:25px;}
+			#recruit_job_posting .posting_top img {width:140px;}
+
+			#recruit_job_posting .posting_title span.title {font-size:40px; max-width:580px; height:90px; letter-spacing:-3px;}
+			#recruit_job_posting .posting_title span.info {font-size:16px;}
+			#recruit_job_posting .posting_title span.status img {width:80px;}
+
+			#recruit_job_posting .posting_detail {padding:25px 30px 25px 100px;}
+			#recruit_job_posting .posting_detail h4.title {font-size:30px; margin-bottom:35px;}
+			#recruit_job_posting .posting_detail strong.sub {font-size:25px;}
+			#recruit_job_posting .posting_detail .recruit_table {margin:10px 20px 20px 0;}
+			#recruit_job_posting .posting_detail article {font-size:16px;}
+			#recruit_job_posting .posting_detail .btn_area {padding:20px 0 0;}
+		}
+
+		@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+			#recruit_job_posting .posting_top {padding-left:15px; margin-bottom:10px;}
+			#recruit_job_posting .posting_top h3 {font-size:20px;}
+			#recruit_job_posting .posting_top img {width:100px;}
+
+			#recruit_job_posting .posting_title a {padding:10px 0 15px 80px;}
+			#recruit_job_posting .posting_title span.new {top:19px; font-size:12px; color:#000; font-weight:bold;}
+			#recruit_job_posting .posting_title span.number {top:33px; font-size:20px; color:#fff; font-weight:bold;}
+			#recruit_job_posting .posting_title span.title {font-size:28px; max-width:480px; height:65px; letter-spacing:-1px;}
+			#recruit_job_posting .posting_title span.info {font-size:14px;}
+			#recruit_job_posting .posting_title span.status {left:595px;}
+			#recruit_job_posting .posting_title span.status img {width:60px;}
+
+			#recruit_job_posting .posting_detail {padding:15px 30px 15px 80px;}
+			#recruit_job_posting .posting_detail h4.title {font-size:20px; margin-bottom:25px;}
+			#recruit_job_posting .posting_detail strong.sub {font-size:15px;}
+			#recruit_job_posting .posting_detail .recruit_table {margin:10px 20px 20px 0;}
+			#recruit_job_posting .posting_detail .recruit_table table th {width:20%; padding:6px 0 9px; font-size:13px;}
+			#recruit_job_posting .posting_detail .recruit_table table td {padding:6px 15px 9px; font-size:13px;}
+			#recruit_job_posting .posting_detail article {font-size:14px;}
+			#recruit_job_posting .posting_detail .btn_area {padding:10px 0 0;}
+		}
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Media Query
+|--------------------------------------------------------------------------
+*/
+/* @media (min-width:1024px) and (max-width:1580px) { */
+@media (min-width:0) and (max-width:1580px) {
+	.contents {width:auto; max-width:auto; margin:0 90px 0 180px; }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Media Query : 웹 - 중간
+|--------------------------------------------------------------------------
+*/
+@media (min-width:1280px) and (max-width:1919px) , (min-height:904px) and (max-height:959px) {
+	.contents h2 {height:126px; margin-top:-16px; font-size:140px; letter-spacing:-7px;}
+	.contents nav.lnb {height:55px; padding:25px 0 0 30px;}
+	.contents nav.lnb li a {font-size:22px;}
+}
+
+/*
+|--------------------------------------------------------------------------
+| Media Query : 웹 - 최소
+|--------------------------------------------------------------------------
+*/
+@media (min-width:1024px) and (max-width:1279px) , (min-height:648px) and (max-height:903px) {
+	.contents h2 {height:92px; margin-top:-12px; font-size:100px; letter-spacing:-7px;}
+	.contents nav.lnb {height:45px; padding:15px 0 0 30px;}
+	.contents nav.lnb li a {font-size:20px;}
+}
+
+/*
+|--------------------------------------------------------------------------
+| Media Query : 모바일
+|--------------------------------------------------------------------------
+*/
+@media (min-width:0) and (max-width:1023px) {
+	header {display:none;}
+	footer {display:none;}
+	* {font-size:16px !important; line-height:1.3 !important; padding:0 !important; margin:0 !important;letter-spacing:0 !important; height:auto !important;}
+}
+
+/*
+@media (min-width:1281px) and (max-width:1920px) , (min-height:905px) and (max-height:960px) {
+
+}
+
+@media (min-width:1025px) and (max-width:1280px) , (min-height:649px) and (max-height:904px) {
+
+}
+
+@media (max-width:1024px) , (max-height:648px) {
+
+}
+*/

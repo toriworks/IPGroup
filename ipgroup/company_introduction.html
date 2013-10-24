@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<title>IPGROUP 관리자페이지</title>
+	<link rel="stylesheet" type="text/css" href="./css/admin.css" />
+	<link rel="stylesheet" type="text/css" href="../css/smoothness/jquery-ui-1.10.3.custom.css" />
+	<script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
+	<script type="text/javascript" src="./js/admin.js"></script>
+</head>
+<body>
+
+<div id="admin_wrap">
+
+	<div id="admin_left">
+		<h1>IPGROUP</h1>
+		
+		<p class="username">
+			<span>홍길동</span><br />
+			<a href="login.html">[로그아웃]</a>
+		</p>
+
+		<ul class="menu">
+			<li><a href="work_list.html">Work</a></li>
+			<li><a href="request_list.html">Request</a></li>
+			<li><a href="recruit_list.html">Recruit</a></li>
+			<li><a href="job_posting_list.html">Job Posting</a></li>
+			<li class="active"><a href="company_introduction.html">Company Introduction</a></li>
+			<li><a href="member_list.html">Member</a></li>
+		</ul>
+	</div>
+
+	<div id="admin_contents">
+		<div class="page_top">
+			<h2>Company Introduction</h2>
+		</div>
+		<div class="container">
+			<!-- 본문 영역 -->
+
+				<div class="section">
+					<h3>회사소개서 관리</h3>
+					<div class="form_table">
+						<table class="tbl" border="1" cellspacing="0">
+							<colgroup>
+								<col width="15%" />
+								<col width="85%" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th class="tit" scope="row"><label for="f1_2">회사소개서</label></th>
+									<td class="val">
+										<div class="item">
+											<input id="f1_2" class="i_file" type="file" value="" style="width:400px;" />
+											<p class="savefile">
+												<span class="file_name"><strong>현재파일 : </strong>ipgroup.pdf</span>
+												<a class="file_view" href="ipgroup.pdf" target="_blank" title="새창">[다운로드]</a>
+											</p>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="button_area">
+						<div class="center">
+							<a class="txt_button" href="#">등록하기</a>
+						</div>
+					</div>
+				</div>
+
+			<!-- //본문 영역 -->
+		</div>
+	</div>
+
+</div>
+
+</body>
+</html>
