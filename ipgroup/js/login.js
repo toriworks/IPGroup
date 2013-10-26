@@ -9,6 +9,7 @@ var try_login = function() {
     var keeper_id = form.keeper_id.value;
     if(keeper_id == '' || keeper_id.length == 0) {
         // if user input fill with blank, no action
+        alert(BLANK_FILED_USER_ID);
         return;
     }
 
@@ -18,7 +19,7 @@ var try_login = function() {
         async : true,
         url : "./process.php",
         data : "call_type=login&keeper_id=" + keeper_id,
-        dataType : "html",
+        dataType : "json",
         success : onSuccess,
         error : onError
     });
@@ -26,7 +27,15 @@ var try_login = function() {
 
 var onSuccess = function(data) {
     // success event callback
-
+    var form = document.forms[0];
+    var ret_cnt = data.ipg.result;
+    if(parseInt("" + ret_cnt) > 0) {
+        form.action = "work_list.html";
+        form.submit();
+    } else {
+        form.keeper_id.value = "";
+        alert(NOT_AUTHORIZED_USER);
+    }
 };
 
 var onError = function(request, status, error) {

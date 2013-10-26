@@ -5,8 +5,9 @@
  * Time: 오후 1:39
  */
 
-require_once("/classes/dao/ICommons.php");
-require_once("/classes/dao/IKeeperDao.php");
+@define('class_path', '/home/host01/ipgroup');
+require_once(class_path."/classes/dao/ICommons.php");
+require_once(class_path."/classes/dao/IKeeperDao.php");
 
 class KeeperDaoImpl {
 
@@ -51,7 +52,7 @@ class KeeperDaoImpl {
     public function listsCount( $conn, $wParam ) {
         $sql = "SELECT COUNT(0) cnt FROM keeper";
         if($wParam != "") {
-            $sql .= "WHERE ".$wParam;
+            $sql .= " WHERE ".$wParam;
         }
 
         $result = mysql_query($sql) or die("KeeperDaoImple listsCount error : ".mysql_error());

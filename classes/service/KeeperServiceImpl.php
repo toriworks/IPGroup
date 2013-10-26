@@ -5,8 +5,9 @@
  * Time: 오후 2:55
  */
 
-require_once("/class/service/IKeeperService.php");
-require_once("/class/dao/KeeperDaoImpl.php");
+@define('class_path', '/home/host01/ipgroup');
+require_once(class_path."/classes/service/IKeeperService.php");
+require_once(class_path."/classes/dao/KeeperDaoImpl.php");
 error_reporting(0);
 session_start();
 class KeeperServiceImpl implements IKeeperService {
@@ -43,7 +44,7 @@ class KeeperServiceImpl implements IKeeperService {
 
     public function listsCount($conn, $wParam)
     {
-        // TODO: Implement listsCount() method.
+        return $this->keeperDao->listsCount($conn, $wParam);
     }
 
     public function tryLogin($conn, Keeper $obj)
