@@ -10,58 +10,75 @@
  */
 class Attaches
 {
-    private $id = '';
-    private $target_id = '';
-    private $original_file_name = '';
-    private $break_file_name = '';
+    private $ref_id = '';
+    private $stypes = '';
+    private $mtypes = '';
+    private $original_filename = '';
+    private $transfer_filename = '';
     private $regdate = '';
 
     /**
-     * @param string $break_file_name
+     * @param string $stypes
      */
-    public function setBreakFileName($break_file_name)
+    public function setStypes($stypes)
     {
-        $this->break_file_name = $break_file_name;
+        $this->stypes = $stypes;
     }
 
     /**
      * @return string
      */
-    public function getBreakFileName()
+    public function getStypes()
     {
-        return $this->break_file_name;
+        return $this->stypes;
     }
 
     /**
-     * @param string $id
+     * @param string $mtypes
      */
-    public function setId($id)
+    public function setMtypes($mtypes)
     {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $original_file_name
-     */
-    public function setOriginalFileName($original_file_name)
-    {
-        $this->original_file_name = $original_file_name;
+        $this->mtypes = $mtypes;
     }
 
     /**
      * @return string
      */
-    public function getOriginalFileName()
+    public function getMtypes()
     {
-        return $this->original_file_name;
+        return $this->mtypes;
+    }
+
+    /**
+     * @param string $original_filename
+     */
+    public function setOriginalFilename($original_filename)
+    {
+        $this->original_filename = $original_filename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalFilename()
+    {
+        return $this->original_filename;
+    }
+
+    /**
+     * @param string $ref_id
+     */
+    public function setRefId($ref_id)
+    {
+        $this->ref_id = $ref_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefId()
+    {
+        return $this->ref_id;
     }
 
     /**
@@ -81,19 +98,19 @@ class Attaches
     }
 
     /**
-     * @param string $target_id
+     * @param string $transfer_filename
      */
-    public function setTargetId($target_id)
+    public function setTransferFilename($transfer_filename)
     {
-        $this->target_id = $target_id;
+        $this->transfer_filename = $transfer_filename;
     }
 
     /**
      * @return string
      */
-    public function getTargetId()
+    public function getTransferFilename()
     {
-        return $this->target_id;
+        return $this->transfer_filename;
     }
 
 }

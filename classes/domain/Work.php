@@ -1,6 +1,6 @@
 <?php
 /**
- * User: Work (toriworks@gmail.com)
+ * User: Hyoseok Kim (toriworks@gmail.com)
  * Date: 13. 10. 22
  * Time: 오후 5:13
  */
@@ -14,6 +14,8 @@ class Work
     private $regdate = '';
     private $moddate = '';
     private $keeper_id = '';
+    private $mod_id = '';
+
     private $is_shop = '';
 
     // 썸네일 부분
@@ -23,11 +25,9 @@ class Work
     private $open_date_y = '';
     private $open_date_m = '';
     private $open_date_d = '';
-    private $thumb_attach_1 = '';
-    private $thumb_attach_2 = '';
 
     // 상세등록
-    private $types = '';        // Project, Promotion, UX/UI, Mobile, Offer, Consulting, AD
+    private $wtypes = '';        // Project, Promotion, UX/UI, Mobile, Offer, Consulting, AD
     private $name = '';
     private $client_name = '';
     private $start_date_y = '';
@@ -39,23 +39,26 @@ class Work
     private $url = '';
     private $descriptions = '';
 
-    // 첨부파일
-    private $arrAttaches = null;
+    private $thumb_attach1 = '';
+    private $thumb_attach2 = '';
+
+    private $work_attach = '';
+    private $work_attach_cnt = '';
 
     /**
-     * @param null $arrAttaches
+     * @param string $mod_id
      */
-    public function setArrAttaches($arrAttaches)
+    public function setModId($mod_id)
     {
-        $this->arrAttaches = $arrAttaches;
+        $this->mod_id = $mod_id;
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getArrAttaches()
+    public function getModId()
     {
-        return $this->arrAttaches;
+        return $this->mod_id;
     }
 
     /**
@@ -331,38 +334,6 @@ class Work
     }
 
     /**
-     * @param string $thumb_attach_1
-     */
-    public function setThumbAttach1($thumb_attach_1)
-    {
-        $this->thumb_attach_1 = $thumb_attach_1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getThumbAttach1()
-    {
-        return $this->thumb_attach_1;
-    }
-
-    /**
-     * @param string $thumb_attach_2
-     */
-    public function setThumbAttach2($thumb_attach_2)
-    {
-        $this->thumb_attach_2 = $thumb_attach_2;
-    }
-
-    /**
-     * @return string
-     */
-    public function getThumbAttach2()
-    {
-        return $this->thumb_attach_2;
-    }
-
-    /**
      * @param string $thumb_sub_title
      */
     public function setThumbSubTitle($thumb_sub_title)
@@ -411,22 +382,6 @@ class Work
     }
 
     /**
-     * @param string $types
-     */
-    public function setTypes($types)
-    {
-        $this->types = $types;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTypes()
-    {
-        return $this->types;
-    }
-
-    /**
      * @param string $url
      */
     public function setUrl($url)
@@ -441,4 +396,85 @@ class Work
     {
         return $this->url;
     }
+
+    /**
+     * @param string $wtypes
+     */
+    public function setWtypes($wtypes)
+    {
+        $this->wtypes = $wtypes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWtypes()
+    {
+        return $this->wtypes;
+    }
+
+    /**
+     * @param string $thumb_attach1
+     */
+    public function setThumbAttach1($thumb_attach1)
+    {
+        $this->thumb_attach1 = $thumb_attach1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbAttach1()
+    {
+        return $this->thumb_attach1;
+    }
+
+    /**
+     * @param string $thumb_attach2
+     */
+    public function setThumbAttach2($thumb_attach2)
+    {
+        $this->thumb_attach2 = $thumb_attach2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbAttach2()
+    {
+        return $this->thumb_attach2;
+    }
+
+    /**
+     * @param string $work_attach
+     */
+    public function setWorkAttach($work_attach)
+    {
+        $this->work_attach = $work_attach;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkAttach()
+    {
+        return $this->work_attach;
+    }
+
+    /**
+     * @param string $work_attach_cnt
+     */
+    public function setWorkAttachCnt($work_attach_cnt)
+    {
+        $this->work_attach_cnt = $work_attach_cnt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkAttachCnt()
+    {
+        return $this->work_attach_cnt;
+    }
+
 }

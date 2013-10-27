@@ -7,10 +7,11 @@
 
 interface IKeeperDao {
     public function add( $conn, Keeper $obj );
-    public function update( $conn, Keeeper $obj );
+    public function update( $conn, Keeper $obj );
     public function delete( $conn, Keeper $obj );
     public function lists( $conn, $wParam, $orderBy, $curPage, $pageMax );
     public function listsCount( $conn, $wParam );
+    public function detail( $conn, Keeper $obj );
 
     // 로그인 수 증가
     public function addLoginCnt( $conn, Keeper $obj );

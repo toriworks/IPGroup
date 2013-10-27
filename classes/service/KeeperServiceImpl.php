@@ -8,8 +8,6 @@
 @define('class_path', '/home/host01/ipgroup');
 require_once(class_path."/classes/service/IKeeperService.php");
 require_once(class_path."/classes/dao/KeeperDaoImpl.php");
-error_reporting(0);
-session_start();
 class KeeperServiceImpl implements IKeeperService {
 
     private $keeperDao;
@@ -39,7 +37,7 @@ class KeeperServiceImpl implements IKeeperService {
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
     {
-        // TODO: Implement lists() method.
+        return $this->keeperDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)
@@ -47,22 +45,20 @@ class KeeperServiceImpl implements IKeeperService {
         return $this->keeperDao->listsCount($conn, $wParam);
     }
 
-    public function tryLogin($conn, Keeper $obj)
+    public function tryLogin( $conn,  Keeper $obj )
     {
-        $result = 0;
-
         $keeperId = $obj->getId();
 
         // 아이디가 존재하는 지 여부 판단
         $wParam = " id='".$keeperId."' ";
         $countOfId = $this->keeperDao->listsCount($conn, $wParam);
+
         if($countOfId > 0) {
             // 정상 로그인 처리
-            $_SESSION["keeper_id"] = $keeperId;
+            $this->keeperDao->addLoginCnt($conn, $obj);
             $result = 1;
         } else {
             // 아이디 자체가 없음
-            session_destroy();
             $result = 2;
         }
 
@@ -73,5 +69,11 @@ class KeeperServiceImpl implements IKeeperService {
     {
         // 세션정보 삭제
 
+    }
+
+    public function detail($conn, Keeper $obj)
+    {
+        $obj = $this->keeperDao->detail($conn, $obj);
+        return $obj;
     }
 }
