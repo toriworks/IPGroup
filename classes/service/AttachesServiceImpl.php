@@ -34,7 +34,7 @@ class AttachesServiceImpl implements IAttachesService {
 
     public function delete($conn, Attaches $obj)
     {
-        $this->attachesDao->delete($conn, $obj);
+        return $this->attachesDao->delete($conn, $obj);
     }
 
     public function lists($conn, $id)

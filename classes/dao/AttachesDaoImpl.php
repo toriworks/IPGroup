@@ -31,9 +31,11 @@ class AttachesDaoImpl implements IAttachesDao {
     {
         $resultOfQuery = 0;
         $id = $obj->getRefId();
+        $stypes = $obj->getStypes();
+        $mtypes = $obj->getMtypes();
 
         $sql = "DELETE FROM attaches ";
-        $sql .= " WHERE ref_id='".$id."'";
+        $sql .= " WHERE ref_id='".$id."' AND stypes='".$stypes."' AND mtypes='".$mtypes."'";
 
         $resultOfQuery = mysql_query($sql) or die("AttachesDaoImpl delete error : ".mysql_error());
         return $resultOfQuery;

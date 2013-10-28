@@ -12,6 +12,11 @@ require_once('../classes/dao/KeeperDaoImpl.php');
 require_once('../classes/service/KeeperServiceImpl.php');
 require_once('../classes/domain/Keeper.php');
 
+require_once('../classes/dao/AttachesDaoImpl.php');
+require_once('../classes/service/AttachesServiceImpl.php');
+require_once('../classes/domain/Attaches.php');
+
+
 // get parameter from previous page
 $call_type = $_REQUEST['call_type'];
 if ($call_type == 'login') {
@@ -53,6 +58,24 @@ if ($call_type == 'login') {
     setcookie("keeper_kor_name");
 
     $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"1\"}}";
+    echo $ret;
+} else if ($call_type == 'del_attach') {
+    $work_id = $_REQUEST['work_id'];
+    $stypes = $_REQUEST['stypes'];
+    $mtypes = $_REQUEST['mtypes'];
+
+    $conn = ConnectionFactory::create();
+    $attacheObj = new Attaches();
+    $attacheObj->setRefId($work_id);
+    $attacheObj->setMtypes($mtypes);
+    $attacheObj->setStypes($stypes);
+
+    $attacheDao = new AttachesDaoImpl();
+    $attacheService = new AttachesServiceImpl();
+    $attacheService->setAttachesDao($attacheDao);
+
+    $result = $attacheService->delete($conn, $attacheObj);
+    $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"".$result."\"}}";
     echo $ret;
 }
 ?>

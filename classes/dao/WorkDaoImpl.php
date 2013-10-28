@@ -30,15 +30,16 @@ class WorkDaoImpl implements IWorkDao {
     public function update($conn, Work $obj)
     {
         $resultOfQuery = 0;
-        $sql = "UPDATE work SET moddate=now(), keeper_id='".$obj->getKeeperId()."' mod_id='".$obj->getModId()."', is_shop='".$obj->getIsShop()."', thumb_types='".$obj->getThumbTypes()."'";
+        $sql = "UPDATE work SET moddate=now(), mod_id='".$obj->getModId()."', is_shop='".$obj->getIsShop()."', thumb_types='".$obj->getThumbTypes()."'";
         $sql .= ", thumb_title='".$obj->getThumbTitle()."', thumb_sub_title='".$obj->getThumbSubTitle()."', open_date_y='".$obj->getOpenDateY()."'";
         $sql .= ", open_date_m='".$obj->getOpenDateM()."', open_date_d='".$obj->getOpenDateD()."'";
-        $sql .= ", thumb_attach_1='".$obj->getThumbAttach1()."', thumb_attach_2='".$obj->getThumbAttach2()."'";
         $sql .= ", wtypes='".$obj->getWtypes()."', name='".$obj->getName()."', client_name='".$obj->getClientName()."'";
         $sql .= ", start_date_y='".$obj->getStartDateY()."', start_date_m='".$obj->getStartDateM()."', start_date_d='".$obj->getStartDateD()."'";
         $sql .= ", end_date_y='".$obj->getEndDateY()."', end_date_m='".$obj->getEndDateM()."', end_date_d='".$obj->getEndDateD()."'";
         $sql .= ", url='".$obj->getUrl()."', descriptions='".$obj->getDescriptions()."'";
         $sql .= " WHERE id='".$obj->getId()."'";
+
+        echo $sql;
 
         $resultOfQuery = mysql_query($sql) or die("WorkDaoImpl update error : ".mysql_error());
         return $resultOfQuery;

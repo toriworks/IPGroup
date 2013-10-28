@@ -11,4 +11,5 @@ var CONFIRM_LOGOUT = "로그아웃 하시겠습니까?";
 var PLZ_SELECT = "를(을) 선택해주세요.";
 var PLZ_INPUT = "를(을) 입력해주세요.";
 var CONFIRM_DELETE = "정말 삭제하시겠습니까?";
+var ERROR_DELFILE = "파일을 삭제하지 못했습니다.";
 

@@ -91,6 +91,7 @@ if(($wtypes & 32) == 32) {
 if(($wtypes & 64) == 64) {
     $strWT = $strWT.'AD ';
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -151,7 +152,7 @@ if(($wtypes & 64) == 64) {
     </div>
     <div class="right">
         <a class="txt_button" href="work_list.php">리스트 가기</a>
-        <a class="txt_button" href="work_revise.php">수정하기</a>
+        <a class="txt_button" href="work_revise.php?work_id=<?= $work_id ?>&order_by=<?= $orderBy ?>&order_dir=<?= $orderDir ?>wParam=<?= $wParam ?>">수정하기</a>
     </div>
 </div>
 

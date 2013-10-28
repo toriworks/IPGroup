@@ -38,7 +38,8 @@ class WorkServiceImpl implements IWorkService {
 
     public function update($conn, Work $obj)
     {
-        // TODO: Implement update() method.
+        $retValue = $this->workDao->update($conn, $obj);
+        return $retValue;
     }
 
     public function delete($conn, Work $obj)
