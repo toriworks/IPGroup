@@ -13,4 +13,5 @@ interface IRequestsService {
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Requests $obj);
+    public function updateMemos($conn, Requests $obj);
 }

@@ -4,6 +4,18 @@
  * Date: 13. 10. 29
  * Time: 오전 11:40
  */
+require_once('./auth.php');
+
+require_once('../classes/dao/ICommons.php');
+require_once('../classes/ConnectionFactory.php');
+require_once('../classes/dao/RequestsDaoImpl.php');
+require_once('../classes/service/RequestsServiceImpl.php');
+require_once('../classes/domain/Requests.php');
+
+$conn = ConnectionFactory::create();
+$requestsDaoImpl = new RequestsDaoImpl();
+$requestsServiceImpl = new RequestsServiceImpl();
+$requestsServiceImpl->setRequestsDao($requestsDaoImpl);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -17,6 +29,32 @@
     <script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
+    <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
+    <script type="text/javascript">
+        del_checked = function() {
+            var checkVObj = document.getElementsByName("check_v");
+            var checkCnt = checkVObj.length;
+            var cCnt = 0;
+            var sChecked = "";
+            for(var k=0; k<checkCnt; k++) {
+                if(checkVObj[k].checked == true) {
+                    cCnt++;
+                    sChecked = sChecked + checkVObj[k].value + "^";
+                }
+            }
+            if(cCnt == 0) {
+                alert(DEL_NO_CHECKED);
+                return;
+            }
+
+            if(confirm("정말 삭제하시겠습니까?")) {
+                location.href = "./requests_delete_post.php?rids=" + sChecked;
+            } else {
+                return;
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -26,17 +64,17 @@
     <h1>IPGROUP</h1>
 
     <p class="username">
-        <span>홍길동</span><br />
-        <a href="login.html">[로그아웃]</a>
+        <span><?= $_COOKIE["keeper_kor_name"] ?></span><br />
+        <a href="javascript:try_logout();">[로그아웃]</a>
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.html">Work</a></li>
-        <li class="active"><a href="request_list.html">Request</a></li>
-        <li><a href="recruit_list.html">Recruit</a></li>
-        <li><a href="job_posting_list.html">Job Posting</a></li>
-        <li><a href="company_introduction.html">Company Introduction</a></li>
-        <li><a href="member_list.html">Member</a></li>
+        <li><a href="work_list.php">Work</a></li>
+        <li class="active"><a href="request_list.php">Request</a></li>
+        <li><a href="recruit_list.php">Recruit</a></li>
+        <li><a href="job_posting_list.php">Job Posting</a></li>
+        <li><a href="company_introduction.php">Company Introduction</a></li>
+        <li><a href="member_list.php">Member</a></li>
     </ul>
 </div>
 
@@ -101,7 +139,7 @@
         </select>
     </div>
     <div class="right">
-        <a class="txt_button" href="request_list.html">삭제</a>
+        <a class="txt_button" href="javascript:del_checked();">삭제</a>
     </div>
 </div>
 <!-- //상단 영역 -->
@@ -148,154 +186,114 @@
         </tr>
         </thead>
         <tbody>
+<?
+$rowCountPerPage = 7;
+$wParam = '';
+$orderBy = $_REQUEST['orderBy'];
+$orderDir = $_REQUEST['orderDir'];
+if($orderBy == '') {
+    $orderBy = ' regdate_r DESC ';
+}
+
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+$totalCnt = $requestsServiceImpl->listsCount($conn, $wParam);
+$result = $requestsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
+
+if($totalCnt > 0) {
+$bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
+
+        // 유형선택을 문자열로 변경
+        $wtypes = (int) $row['types'];
+        $strWT = '';
+
+        if(($wtypes & 1) == 1) {
+            $strWT .= 'Project ';
+        }
+        if(($wtypes & 2) == 2) {
+            $strWT = $strWT.'Promotion ';
+        }
+        if(($wtypes & 4) == 4) {
+            $strWT = $strWT.'UX/UI ';
+        }
+        if(($wtypes & 8) == 8) {
+            $strWT = $strWT.'Mobile ';
+        }
+        if(($wtypes & 16) == 16) {
+            $strWT = $strWT.'Offer ';
+        }
+        if(($wtypes & 32) == 32) {
+            $strWT = $strWT.'Consulting ';
+        }
+        if(($wtypes & 64) == 64) {
+            $strWT = $strWT.'AD ';
+        }
+?>
         <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>10</td>
+            <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
+            <td><?= $bPage - 1 ?></td>
             <td>
                 <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-                <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
+                <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
             </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
+            <td class="company"><a href="request_view.php?requests_id=<?= $row['id'] ?>"><?= $row['company_name'] ?></a></td>
+            <td><?= $row['contact_tel'] ?><br /><?= $row['contact_mobile'] ?></td>
+            <td><?= $row['email'] ?></td>
+            <td><?= $strWT ?></td>
+            <td><?= $row['manager_name'] ?></td>
+            <td><?= $row['regdate'] ?></td>
         </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>9</td>
-            <td>
-                <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Mobile</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>8</td>
-            <td>
-                <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-                <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project, Mobile</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>7</td>
-            <td>
-                <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project, Mobile, UX/UI</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>6</td>
-            <td>
-                <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>5</td>
-            <td>
-                <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>4</td>
-            <td>
-                <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-            </td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project, Mobile, UX/UI, Mobile, Offer, Consulting, AD</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>3</td>
-            <td></td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>2</td>
-            <td></td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>1</td>
-            <td></td>
-            <td class="company"><a href="request_view.html">(주)아이피그룹</a></td>
-            <td>070-8730-8080<br />/ 010-1216-8888</td>
-            <td>abcduser@ipgroup.co.kr</td>
-            <td>Project</td>
-            <td>홍길동</td>
-            <td>2012.12.25</td>
-        </tr>
+    <?
+    }
+}
+?>
         </tbody>
     </table>
 </div>
 <!-- //데이터 테이블 -->
 
-<!-- 페이징 -->
-<div class="paginate">
-    <a class="direction" href="#"><span>‹</span> 이전페이지</a>
-    <a href="#">11</a>
-    <strong>12</strong>
-    <a href="#">13</a>
-    <a href="#">14</a>
-    <a href="#">15</a>
-    <a href="#">16</a>
-    <a href="#">17</a>
-    <a href="#">18</a>
-    <a href="#">19</a>
-    <a href="#">20</a>
-    <a class="direction" href="#">다음페이지 <span>›</span></a>
-</div>
-<!-- //페이징 -->
-</div>
+    <!-- 페이징 -->
+    <?
+    $divPage = (int) ($totalCnt / $rowCountPerPage);
+    $modPage = $totalCnt % $rowCountPerPage;
+
+    $totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+    ?>
+    <div class="paginate">
+        <?
+        // Prev block
+        if($curPage > 1) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+        } else {
+            echo '<span>‹</span> 이전페이지';
+        }
+
+        $strPage = '';
+        for($k = 1; $k <= $totalPage; $k++) {
+            if($curPage == $k) {
+                $strPage = '<a href=><strong>'.$k.'</strong></a>';
+            } else {
+                $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+            }
+
+            // 1, 2, 3, 4, 5, 6 ...
+            echo $strPage;
+        }
+
+        // Next block
+        if($curPage < $totalPage) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+        } else {
+            echo '다음페이지 <span>›</span>';
+        }
+        ?>
+        <!-- //페이징 -->
+    </div>
 
 <!-- //본문 영역 -->
 </div>

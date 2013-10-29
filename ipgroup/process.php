@@ -16,6 +16,10 @@ require_once('../classes/dao/AttachesDaoImpl.php');
 require_once('../classes/service/AttachesServiceImpl.php');
 require_once('../classes/domain/Attaches.php');
 
+require_once('../classes/dao/RequestsDaoImpl.php');
+require_once('../classes/service/RequestsServiceImpl.php');
+require_once('../classes/domain/Requests.php');
+
 
 // get parameter from previous page
 $call_type = $_REQUEST['call_type'];
@@ -76,6 +80,21 @@ if ($call_type == 'login') {
 
     $result = $attacheService->delete($conn, $attacheObj);
     $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"".$result."\", \"stypes\":\"".$stypes."\"}}";
+    echo $ret;
+} else if($call_type == 'save_memos') {
+    $requests_id = $_REQUEST['requests_id'];
+    $memos = $_REQUEST['memos'];
+
+    $conn = ConnectionFactory::create();
+    $reqDao = new RequestsDaoImpl();
+    $reqService = new RequestsServiceImpl();
+    $reqService->setRequestsDao($reqDao);
+    $reqObj = new Requests();
+    $reqObj->setId($requests_id);
+    $reqObj->setMemos($memos);
+
+    $result = $reqService->updateMemos($conn, $reqObj);
+    $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\": \"".$result."\"}}";
     echo $ret;
 }
 ?>

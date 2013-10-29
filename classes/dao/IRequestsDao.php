@@ -5,7 +5,7 @@
  * Time: 오후 7:11
  */
 
-interface IRequests {
+interface IRequestsDao {
     public function add( $conn, Requests $obj );
     public function update( $conn, Requests $obj );
     public function delete( $conn, Requests $obj );
@@ -13,4 +13,5 @@ interface IRequests {
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Requests $obj);
+    public function updateMemos($conn, Requests $obj);
 }

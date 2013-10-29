@@ -12,4 +12,7 @@ var PLZ_SELECT = "를(을) 선택해주세요.";
 var PLZ_INPUT = "를(을) 입력해주세요.";
 var CONFIRM_DELETE = "정말 삭제하시겠습니까?";
 var ERROR_DELFILE = "파일을 삭제하지 못했습니다.";
+var DEL_NO_CHECKED = "삭제할 항목을 체크해주십시오.";
+var CONFIRM_DEL_ATTACH = "첨부파일을 삭제하시겠습니까?";
+var MSG_SAVE_MEMOS = "메모가 입력되었습니다.";
 

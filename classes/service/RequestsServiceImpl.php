@@ -50,4 +50,9 @@ class RequestsServiceImpl implements IRequestsService {
         $result = $this->requestsDao->detail($conn, $obj);
         return $result;
     }
+
+    public function updateMemos($conn, Requests $obj)
+    {
+         return $this->requestsDao->updateMemos($conn, $obj);
+    }
 }

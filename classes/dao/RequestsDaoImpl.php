@@ -5,7 +5,11 @@
  * Time: 오후 7:16
  */
 
-class RequestsDaoImpl implements IRequests {
+@define('class_path', '/home/host01/ipgroup');
+require_once(class_path."/classes/dao/ICommons.php");
+require_once(class_path."/classes/dao/IRequestsDao.php");
+
+class RequestsDaoImpl implements IRequestsDao {
 
     public function add($conn, Requests $obj)
     {
@@ -45,7 +49,10 @@ class RequestsDaoImpl implements IRequests {
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
     {
-        $sql = "SELECT id, company_name, contact_tel, contact_mobile, email, url, types FROM requests ";
+        $sql = "SELECT id, company_name, contact_tel, contact_mobile, email, url, types";
+        $sql .= ", manager_name, manager_id, descriptions, memos, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r ";
+        $sql .= ", datediff(now(), regdate) as is_old ";
+        $sql .= " FROM requests ";
         if(!empty($wParam)) {
             $sql .= " WHERE ".$wParam;
         }
@@ -78,11 +85,23 @@ class RequestsDaoImpl implements IRequests {
     public function detail($conn, Requests $obj)
     {
         $sql = "SELECT company_name, contact_tel, contact_mobile, email, url, types";
-        $sql .= ", manager_name, manager_id, descriptions, memos, regdate FROM requests ";
+        $sql .= ", manager_name, manager_id, descriptions, memos, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r FROM requests ";
         $sql .= " WHERE id='".$obj->getId()."' ";
 
         $result = mysql_query($sql) or die("RequestsDaoImpl detail error : ".mysql_error());
 
         return $result;
+    }
+
+    public function updateMemos($conn, Requests $obj)
+    {
+        $memos = $obj->getMemos();
+        $rid = $obj->getId();
+
+        $resultOfQuery = 0;
+        $sql = "UPDATE requests SET memos='".$memos."' WHERE id='".$rid."'";
+        $resultOfQuery = mysql_query($sql) or die("RequestsDaoImpl updateMemos error : ".mysql_error());
+
+        return $resultOfQuery;
     }
 }
