@@ -75,7 +75,7 @@ if ($call_type == 'login') {
     $attacheService->setAttachesDao($attacheDao);
 
     $result = $attacheService->delete($conn, $attacheObj);
-    $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"".$result."\"}}";
+    $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"".$result."\", \"stypes\":\"".$stypes."\"}}";
     echo $ret;
 }
 ?>

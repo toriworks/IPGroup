@@ -106,71 +106,71 @@ $workObj->setWorkAttachCnt($work_attach_cnt);
 $retSuccess = $workServiceImpl->update($conn, $workObj);
 //echo "<p>retSuccess:".$retSuccess."<p/>";
 
-//if($retSuccess == 1) {
-//    // 성공인 경우에 업로드 수행
-//    $ta1 = $workObj->getThumbAttach1();
-//    $ta2 = $workObj->getThumbAttach2();
-//
-//    $target_path = class_path.'/uploaded/work/';
-//    if($ta1) {
-//        $ext = pathinfo($_FILES["thumb_attach1"]["name"], PATHINFO_EXTENSION);
-//        $new_filename = randomString($validChars, 20).'.'.$ext;
-//
-//        // 썸네일 첨부 1
-//        move_uploaded_file($_FILES["thumb_attach1"]["tmp_name"],  $target_path.$new_filename);
-//
-//        $aObj = new Attaches();
-//        $aObj->setRefId($key);
-//        $aObj->setStypes('T1');
-//        $aObj->setMtypes('WK');
-//        $aObj->setOriginalFilename($thumb_attach1);
-//        $aObj->setTransferFilename($new_filename);
-//
-//        $attachesServiceImpl->add($conn, $aObj);
-//    }
-//
-//    if($ta2) {
-//        $ext = pathinfo($_FILES["thumb_attach2"]["name"], PATHINFO_EXTENSION);
-//        $new_filename = randomString($validChars, 20).'.'.$ext;
-//
-//        // 썸네일 첨부 1
-//        move_uploaded_file($_FILES["thumb_attach2"]["tmp_name"],  $target_path.$new_filename);
-//
-//        $aObj = new Attaches();
-//        $aObj->setRefId($key);
-//        $aObj->setStypes('T2');
-//        $aObj->setMtypes('WK');
-//        $aObj->setOriginalFilename($thumb_attach2);
-//        $aObj->setTransferFilename($new_filename);
-//
-//        $attachesServiceImpl->add($conn, $aObj);
-//    }
-//
-//
-//    // 첨부파일
-//    $work_attach_cnt = $_REQUEST['work_attach_cnt'];
-//    $work_attach = '';
-//    for($i=0; $i<$work_attach_cnt; $i++) {
-//        //echo $_FILES['work_attach'.($i+1)]['name'].'<br/>';
-//
-//        if($_FILES['work_attach'.($i+1)]['name'] != "") {
-//            $ext = pathinfo($_FILES['work_attach'.($i+1)]["name"], PATHINFO_EXTENSION);
-//            $new_filename = randomString($validChars, 20).'.'.$ext;
-//
-//            move_uploaded_file($_FILES['work_attach'.($i+1)]["tmp_name"],  $target_path.$new_filename);
-//
-//            $aObj = new Attaches();
-//            $aObj->setRefId($key);
-//            $aObj->setStypes('A'.($i+1));
-//            $aObj->setMtypes('WK');
-//            $aObj->setOriginalFilename($_FILES['work_attach'.($i+1)]['name']);
-//            $aObj->setTransferFilename($new_filename);
-//
-//            $attachesServiceImpl->add($conn, $aObj);
-//        }
-//    }
-//
-//}
+if($retSuccess == 1) {
+    // 성공인 경우에 업로드 수행
+    $ta1 = $workObj->getThumbAttach1();
+    $ta2 = $workObj->getThumbAttach2();
+
+    $target_path = class_path.'/uploaded/work/';
+    if($ta1) {
+        $ext = pathinfo($_FILES["thumb_attach1"]["name"], PATHINFO_EXTENSION);
+        $new_filename = randomString($validChars, 20).'.'.$ext;
+
+        // 썸네일 첨부 1
+        move_uploaded_file($_FILES["thumb_attach1"]["tmp_name"],  $target_path.$new_filename);
+
+        $aObj = new Attaches();
+        $aObj->setRefId($key);
+        $aObj->setStypes('T1');
+        $aObj->setMtypes('WK');
+        $aObj->setOriginalFilename($thumb_attach1);
+        $aObj->setTransferFilename($new_filename);
+
+        $attachesServiceImpl->add($conn, $aObj);
+    }
+
+    if($ta2) {
+        $ext = pathinfo($_FILES["thumb_attach2"]["name"], PATHINFO_EXTENSION);
+        $new_filename = randomString($validChars, 20).'.'.$ext;
+
+        // 썸네일 첨부 1
+        move_uploaded_file($_FILES["thumb_attach2"]["tmp_name"],  $target_path.$new_filename);
+
+        $aObj = new Attaches();
+        $aObj->setRefId($key);
+        $aObj->setStypes('T2');
+        $aObj->setMtypes('WK');
+        $aObj->setOriginalFilename($thumb_attach2);
+        $aObj->setTransferFilename($new_filename);
+
+        $attachesServiceImpl->add($conn, $aObj);
+    }
+
+
+    // 첨부파일
+    $work_attach_cnt = $_REQUEST['work_attach_cnt'];
+    $work_attach = '';
+    for($i=0; $i<$work_attach_cnt; $i++) {
+        //echo $_FILES['work_attach'.($i+1)]['name'].'<br/>';
+
+        if($_FILES['work_attach'.($i+1)]['name'] != "") {
+            $ext = pathinfo($_FILES['work_attach'.($i+1)]["name"], PATHINFO_EXTENSION);
+            $new_filename = randomString($validChars, 20).'.'.$ext;
+
+            move_uploaded_file($_FILES['work_attach'.($i+1)]["tmp_name"],  $target_path.$new_filename);
+
+            $aObj = new Attaches();
+            $aObj->setRefId($key);
+            $aObj->setStypes('A'.($i+1));
+            $aObj->setMtypes('WK');
+            $aObj->setOriginalFilename($_FILES['work_attach'.($i+1)]['name']);
+            $aObj->setTransferFilename($new_filename);
+
+            $attachesServiceImpl->add($conn, $aObj);
+        }
+    }
+
+}
 
 
 // 키 생성
@@ -189,5 +189,5 @@ function randomString($valid_chars, $length)
 }
 ?>
 <script type="text/javascript">
-    //location.href = "./redirect.php?page=work_list.php";
+    location.href = "./redirect.php?page=work_list_view.php?work_id=<?= $_REQUEST['work_id'] ?>";
 </script>

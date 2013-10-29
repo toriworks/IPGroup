@@ -106,6 +106,7 @@ if(($wtypes & 64) == 64) {
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
         del_data = function(wi) {
             if(confirm(CONFIRM_DELETE)) {

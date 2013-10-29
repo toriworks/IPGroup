@@ -18,6 +18,7 @@
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
         enroll_form = function() {
             var work_form = document.forms.work_form;

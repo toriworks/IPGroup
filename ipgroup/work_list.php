@@ -30,6 +30,7 @@ $workServiceImpl->setWorkDao($workDaoImpl);
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
         goDetail = function(id, ob, od, wp) {
             location.href = "work_list_view.php?work_id=" + id + "&orderBy=" + ob + "&orderDir=" + od + "&wParam=" + wp;

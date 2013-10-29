@@ -1,11 +1,11 @@
 <?php
 /**
- * User: IRequests (toriworks@gmail.com)
- * Date: 13. 10. 25
- * Time: 오후 7:11
+ * User: IRequestsService (toriworks@gmail.com)
+ * Date: 13. 10. 29
+ * Time: 오후 12:21
  */
 
-interface IRequests {
+interface IRequestsService {
     public function add( $conn, Requests $obj );
     public function update( $conn, Requests $obj );
     public function delete( $conn, Requests $obj );

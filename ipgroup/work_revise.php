@@ -106,6 +106,7 @@ if(($wtypes & 64) == 64) {
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
         del_attach = function(wi, st, mt) {
             if(confirm("첨부파일을 삭제하시겠습니까?")) {
@@ -130,7 +131,11 @@ if(($wtypes & 64) == 64) {
             if(ret != "") {
                 var iRet = parseInt(ret);
                 if(iRet == 1) {
-
+                    var stypes = "" + jsonObj.ipg.stypes;
+                    var dObj = document.getElementById(stypes);
+                    var dObj_v = document.getElementById(stypes + "_v");
+                    dObj.innerHTML = "";
+                    dObj_v.innerHTML = "";
                 } else {
                     alert(ERROR_DELFILE);
                 }
@@ -328,11 +333,13 @@ while($row2 = mysql_fetch_array($result2)) {
                 <th class="tit" scope="row"><label for="f1_1">썸네일 첨부 1단</label></th>
                 <td class="val">
                     <div class="item">
-                        <input id="f1_1" class="i_file" type="file" value="" style="width:400px;" />
+                        <input id="f1_1" name="thumb_attach1" class="i_file" type="file" value="" style="width:400px;" />
                         <p class="savefile">
-                            <span class="file_name"><strong>현재파일 : </strong><?= ($ta1 != "") ? $ta1 : "" ?></span>
+                            <span class="file_name" id="T1"><strong>현재파일 : </strong><?= ($ta1 != "") ? $ta1 : "" ?></span>
+                            <span id="T1_v">
                             <? if($ta1_transfer != "") { ?><a href="/uploaded/work/<?= $ta1_transfer ?>" class="file_view" target="_blank">[보기]</a><? } ?>
                             <? if($ta1_transfer != "") { ?><a class="file_dele" href="javascript:del_attach('<?= $work_id ?>', 'T1', 'WK');">[삭제]</a><? } ?>
+                            </span>
                         </p>
                     </div>
                 </td>
@@ -341,11 +348,13 @@ while($row2 = mysql_fetch_array($result2)) {
                 <th class="tit" scope="row"><label for="f1_2">썸네일 첨부 2단</label></th>
                 <td class="val">
                     <div class="item">
-                        <input id="f1_2" class="i_file" type="file" value="" style="width:400px;" />
+                        <input id="f1_2" name="thumb_attach2" class="i_file" type="file" value="" style="width:400px;" />
                         <p class="savefile">
-                            <span class="file_name"><strong>현재파일 : </strong><?= ($ta2 != "") ? $ta2 : "" ?></span>
+                            <span class="file_name" id="T2"><strong>현재파일 : </strong><?= ($ta2 != "") ? $ta2 : "" ?></span>
+                            <span id="T2_v">
                             <? if($ta2_transfer != "") { ?><a href="/uploaded/work/<?= $ta2_transfer ?>" class="file_view" target="_blank">[보기]</a><? } ?>
                             <? if($ta2_transfer != "") { ?><a class="file_dele" href="javascript:del_attach('<?= $work_id ?>', 'T2', 'WK');">[삭제]</a><? } ?>
+                            </span>
                         </p>
                     </div>
                 </td>
@@ -433,7 +442,8 @@ while($row2 = mysql_fetch_array($result2)) {
                             $('.detail_file_add').bind('click',function(){
                                 var c = $(this).parents('.item');
                                 var n = c.find('input[type="file"]').length;
-                                c.append('<input id="f2_'+(n+1)+'" class="i_file" type="file" name="detail_file_'+(n+1)+'" value="" style="width:400px;" />');
+                                document.forms.work_form.work_attach_cnt.value = parseInt(document.forms.work_form.work_attach_cnt.value) + 1;
+                                c.append('<input id="f2_'+(n+1)+'" class="i_file" type="file"  name="work_attach'+(n+1)+'" value="" style="width:400px;" />');
 
                                 return false;
                             });
@@ -449,9 +459,11 @@ while($row3 = mysql_fetch_array($result2)) {
 ?>
                         <input id="f2_1" class="i_file" type="file" name="work_attach<?= $idx ?>" value="" style="width:400px;" /><br />
                         <p class="savefile">
-                            <span class="file_name"><strong>현재파일 : </strong><?= ($wa != "") ? $wa : "" ?></span>
+                            <span class="file_name" id="<?= $row3['stypes'] ?>"><strong>현재파일 : </strong><?= ($wa != "") ? $wa : "" ?></span>
+                            <span id="<?= $row3['stypes'] ?>_v">
                             <? if($wa_t != "") { ?><a class="file_view" href="/uploaded/work/<?= $wa_t ?>" target="_blank">[보기]</a><? } ?>
-                            <a class="file_dele" href="#">[삭제]</a>
+                            <? if($wa_t != "") { ?><a class="file_dele" href="javascript:del_attach('<?= $work_id ?>', '<?= $row3['stypes'] ?>', 'WK');">[삭제]</a><? } ?>
+                            </span>
                         </p>
     <?
     }

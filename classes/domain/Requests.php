@@ -23,25 +23,6 @@ class Requests
     private $memos = '';
     private $regdate = '';
 
-    // 첨부파일
-    private $arrAttaches = null;
-
-    /**
-     * @param null $arrAttaches
-     */
-    public function setArrAttaches($arrAttaches)
-    {
-        $this->arrAttaches = $arrAttaches;
-    }
-
-    /**
-     * @return null
-     */
-    public function getArrAttaches()
-    {
-        return $this->arrAttaches;
-    }
-
     /**
      * @param string $company_name
      */
@@ -88,6 +69,22 @@ class Requests
     public function getContactTel()
     {
         return $this->contact_tel;
+    }
+
+    /**
+     * @param string $descriptions
+     */
+    public function setDescriptions($descriptions)
+    {
+        $this->descriptions = $descriptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescriptions()
+    {
+        return $this->descriptions;
     }
 
     /**
@@ -155,6 +152,22 @@ class Requests
     }
 
     /**
+     * @param string $memos
+     */
+    public function setMemos($memos)
+    {
+        $this->memos = $memos;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMemos()
+    {
+        return $this->memos;
+    }
+
+    /**
      * @param string $regdate
      */
     public function setRegdate($regdate)
@@ -200,38 +213,6 @@ class Requests
     public function getUrl()
     {
         return $this->url;
-    }
-
-    /**
-     * @param string $descriptions
-     */
-    public function setDescriptions($descriptions)
-    {
-        $this->descriptions = $descriptions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
-     * @param string $memos
-     */
-    public function setMemos($memos)
-    {
-        $this->memos = $memos;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMemos()
-    {
-        return $this->memos;
     }
 
 }

@@ -15,6 +15,11 @@ class AttachesDaoImpl implements IAttachesDao {
     public function add($conn, Attaches $obj)
     {
         $resultOfQuery = 0;
+
+        // 기존에 있는 파일을 업데이트 하는지 여부 체크
+        $sql = "DELETE FROM attaches WHERE ref_id='".$obj->getRefId()."' AND stypes='".$obj->getStypes()."'";
+        mysql_query($sql);
+
         $sql = "INSERT INTO attaches (ref_id, stypes, mtypes, original_filename, transfer_filename, regdate) VALUES ";
         $sql .= "('".$obj->getRefId()."', '".$obj->getStypes()."','".$obj->getMtypes()."', '".$obj->getOriginalFilename()."', '".$obj->getTransferFilename()."', now())";
 
