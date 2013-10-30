@@ -5,6 +5,9 @@
  * Time: 오후 6:29
  */
 
+@define('class_path', '/home/hosting_users/ipgroup1/www');
+require_once(class_path."/classes/dao/ICommons.php");
+require_once(class_path."/classes/dao/IJobsDao.php");
 class JobsDaoImpl implements IJobsDao {
 
     public function add($conn, Jobs $obj)

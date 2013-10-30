@@ -37,17 +37,40 @@
             }
 
             // 고용형태
-            for(var x=0; x<job_form.hire_types.length; x++) {
-
+            var hire_types = (job_form.hire_types.options[job_form.hire_types.selectedIndex].value);
+            if(hire_types == '') {
+                alert("고용형태" + PLZ_SELECT);
+                return;
             }
 
-            ///////////////////////////////////////////////////////////
-            return;
+            var job_department = (job_form.job_department.options[job_form.job_department.selectedIndex].value);
+            if(job_department == '') {
+                alert("근무부서" + PLZ_SELECT);
+                return;
+            }
+
+            var position = (job_form.position.options[job_form.position.selectedIndex].value);
+            if(position == '') {
+                alert("채용직급" + PLZ_SELECT);
+                return;
+            }
+
+            var school_types = (job_form.school_types.options[job_form.school_types.selectedIndex].value);
+            if(school_types == '') {
+                alert("최종학력" + PLZ_SELECT);
+                return;
+            }
+
+            var gender = (job_form.gender.options[job_form.gender.selectedIndex].value);
+            if(gender == '') {
+                alert("성별" + PLZ_SELECT);
+                return;
+            }
 
             // 전시여부
             for(var i=0; i<2; i++) {
-                if(job_form.is_shop_t[i].checked == true) {
-                    job_form.is_shop.value = job_form.is_shop_t[i].value;
+                if(job_form.is_show_t[i].checked == true) {
+                    job_form.is_show.value = job_form.is_show_t[i].value;
                 }
             }
 
@@ -72,7 +95,8 @@
                 }
             }
 
-
+            job_form.action = "./job_posting_write_post.php";
+            job_form.submit();
         }
     </script>
 </head>
@@ -179,7 +203,7 @@
                 <th class="tit" scope="row"><label for="job_type">고용형태</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_type" name="hire_types" class="select">
+                        <select id="job_type" name="hire_types" class="select">
                             <option value="">선택해주세요</option>
                             <option value="RG">정규직</option>
                             <option value="PT">계약직</option>
@@ -237,7 +261,7 @@
                         <input id="job_year" class="i_text" name="career_years" type="text" value="" style="width:30px;" />
                         년
                         <script type="text/javascript">
-                            $('input[name="career_types"]').bind('change',function(){
+                            $('input[name="career_types_t"]').bind('change',function(){
                                 if ($('#r3_2').prop('checked')) {
                                     $('#job_year').prop('disabled',false);
                                     $('#job_year').css('background','#fff');
@@ -281,7 +305,7 @@
                         <input id="r4_2" class="i_radio" value="YS" type="radio" name="old_types_t" /><label for="r4_2">제한</label>
                         <input id="job_age" class="i_text" name="how_old" type="text" value="" style="width:100px;" />
                         <script type="text/javascript">
-                            $('input[name="how_old"]').bind('change',function(){
+                            $('input[name="old_types_t"]').bind('change',function(){
                                 if ($('#r4_2').prop('checked')) {
                                     $('#job_age').prop('disabled',false);
                                     $('#job_age').css('background','#fff');
