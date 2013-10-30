@@ -28,6 +28,8 @@ class Jobs
     private $hire_part = '';        // 기획팀, 디자인팀, 퍼블리싱팀, 경영지원팀
     private $position = '';
 
+    private $gender;
+    private $old_types;
     private $how_old;       // 0이면 무관
     private $descriptions = '';
     private $add_descriptions = '';
@@ -421,6 +423,38 @@ class Jobs
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @param mixed $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param mixed $old_types
+     */
+    public function setOldTypes($old_types)
+    {
+        $this->old_types = $old_types;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOldTypes()
+    {
+        return $this->old_types;
     }
 
 }
