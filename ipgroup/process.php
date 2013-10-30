@@ -29,6 +29,7 @@ if ($call_type == 'login') {
 
     // process login
     $conn = ConnectionFactory::create();
+
     $keeperDaoImpl = new KeeperDaoImpl();
     $keeperServiceImpl = new KeeperServiceImpl();
     $keeperServiceImpl->setKeeperDao($keeperDaoImpl);

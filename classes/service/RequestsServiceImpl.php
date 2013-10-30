@@ -5,7 +5,7 @@
  * Time: 오후 12:22
  */
 
-@define('class_path', '/home/host01/ipgroup');
+@define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once(class_path."/classes/service/IRequestsService.php");
 require_once(class_path."/classes/dao/RequestsDaoImpl.php");
 class RequestsServiceImpl implements IRequestsService {

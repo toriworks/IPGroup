@@ -11,9 +11,9 @@ class ConnectionFactory {
     static $SERVERS = array(
         array(
             'host' => 'localhost',
-            'username' => 'ipgroup',
-            'password' => 'ipgroup1',
-            'database' => 'ipgroup'
+            'username' => 'ipgroup1',
+            'password' => 'ipgroup123',
+            'database' => 'ipgroup1'
         )
     );
 
@@ -21,7 +21,7 @@ class ConnectionFactory {
         $cons = array();
         for ($i = 0, $n = count(ConnectionFactory::$SERVERS); $i < $n; $i++) {
             $server = ConnectionFactory::$SERVERS[$i];
-            $con = mysql_pconnect($server['host'], $server['username'], $server['password']);
+            $con = mysql_connect($server['host'], $server['username'], $server['password']);
             if (!($con === false)) {
                 if (mysql_select_db($server['database'], $con) === false) {
                     echo('Could not select database: ' . mysql_error());

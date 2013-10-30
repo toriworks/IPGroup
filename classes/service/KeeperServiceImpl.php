@@ -5,7 +5,7 @@
  * Time: 오후 2:55
  */
 
-@define('class_path', '/home/host01/ipgroup');
+@define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once(class_path."/classes/service/IKeeperService.php");
 require_once(class_path."/classes/dao/KeeperDaoImpl.php");
 class KeeperServiceImpl implements IKeeperService {

@@ -5,7 +5,7 @@
  * Time: 오후 1:39
  */
 
-@define('class_path', '/home/host01/ipgroup');
+@define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once(class_path."/classes/dao/ICommons.php");
 require_once(class_path."/classes/dao/IKeeperDao.php");
 
@@ -58,7 +58,7 @@ class KeeperDaoImpl implements IKeeperDao {
             $sql .= " WHERE ".$wParam;
         }
 
-        $result = mysql_query($sql, $conn) or die("KeeperDaoImple listsCount error : ".mysql_error());
+        $result = mysql_query($sql, $conn) or die("KeeperDaoImple listsCount error : ".mysql_error().":".mysql_errno());
         $tCnt = 0;
         if($result) {
             $tCntArray = mysql_fetch_array($result);

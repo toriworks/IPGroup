@@ -5,7 +5,7 @@
  * Time: 오후 11:45
  */
 
-@define('class_path', '/home/host01/ipgroup');
+@define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once('../classes/ConnectionFactory.php');
 require_once('../classes/domain/Work.php');
 require_once('../classes/dao/WorkDaoImpl.php');

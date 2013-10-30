@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-@define('class_path', '/home/host01/ipgroup');
+@define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once(class_path."/classes/service/IWorkService.php");
 require_once(class_path."/classes/dao/WorkDaoImpl.php");
 class WorkServiceImpl implements IWorkService {
