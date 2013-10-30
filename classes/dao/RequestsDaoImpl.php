@@ -49,10 +49,10 @@ class RequestsDaoImpl implements IRequestsDao {
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
     {
-        $sql = "SELECT id, company_name, contact_tel, contact_mobile, email, url, types";
-        $sql .= ", manager_name, manager_id, descriptions, memos, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r ";
-        $sql .= ", datediff(now(), regdate) as is_old ";
-        $sql .= " FROM requests ";
+        $sql = "SELECT a.id, a.company_name, a.contact_tel, a.contact_mobile, a.email, a.url, a.types";
+        $sql .= ", a.manager_name, a.manager_id, a.descriptions, a.memos, date_format(a.regdate, '%Y.%m.%d') regdate, a.regdate as regdate_r ";
+        $sql .= ", datediff(now(), a.regdate) as is_old, b.original_filename ";
+        $sql .= " FROM requests a LEFT OUTER JOIN attaches b ON a.id=b.ref_id ";
         if(!empty($wParam)) {
             $sql .= " WHERE ".$wParam;
         }

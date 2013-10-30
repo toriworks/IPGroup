@@ -56,6 +56,14 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
             return this.replace(/(^\s*)|(\s*$)/gi, "");
         }
 
+        del_requests = function() {
+            if(confirm(CONFIRM_DELETE)) {
+                location.href = "./requests_delete_post.php?rids=<?= $requests_id ?>^";
+            } else {
+                return;
+            }
+        }
+
         save_memos = function() {
             var form = document.forms.requests_form;
             var memos = "" + form.memos.value;
@@ -125,7 +133,7 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
 
 <div class="button_area">
     <div class="left">
-        <a class="txt_button" href="request_list.php">삭제하기</a>
+        <a class="txt_button" href="javascript:del_requests();">삭제하기</a>
     </div>
     <div class="right">
         <a class="txt_button" href="request_list.php">리스트 가기</a>
@@ -172,7 +180,7 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
             </tr>
             <tr>
                 <th class="tit" scope="row">문의 내용</th>
-                <td class="val" colspan="3"><?= $row['descriptions'] ?></td>
+                <td class="val" colspan="3"><?= nl2br("".$row['descriptions']) ?></td>
             </tr>
             <tr>
                 <th class="tit" scope="row">첨부파일</th>

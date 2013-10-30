@@ -238,7 +238,9 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
             <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
             <td><?= $bPage - 1 ?></td>
             <td>
+                <? if($row['original_filename'] != "") { ?>
                 <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
+                <? } ?>
                 <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
             </td>
             <td class="company"><a href="request_view.php?requests_id=<?= $row['id'] ?>"><?= $row['company_name'] ?></a></td>
