@@ -250,7 +250,7 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
             <td><?= $row['manager_name'] ?></td>
             <td><?= $row['regdate'] ?></td>
         </tr>
-    <?
+<?
     }
 }
 ?>

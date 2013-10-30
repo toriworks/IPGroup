@@ -32,16 +32,16 @@ class JobsServiceImpl implements IJobsService {
 
     public function delete($conn, Jobs $obj)
     {
-        // TODO: Implement delete() method.
+        return $this->jobsDao->delete($conn, $obj);
     }
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
     {
-        // TODO: Implement lists() method.
+        return $this->jobsDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)
     {
-        // TODO: Implement listsCount() method.
+        return $this->jobsDao->listsCount($conn, $wParam);
     }
 }

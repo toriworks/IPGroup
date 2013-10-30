@@ -32,7 +32,7 @@ $requests_ids = $_REQUEST['rids'];
 $arrRequests = explode("^", $requests_ids);
 
 for($i = 0; $i<count($arrRequests); $i++) {
-    echo $arrRequests[$i]."<br/>";
+    //echo $arrRequests[$i]."<br/>";
 
     // 첨부파일 먼저 삭제
     $attachObj = new Attaches();

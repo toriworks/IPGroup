@@ -19,6 +19,8 @@
     <script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
+    <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
 </head>
 <body>
 
@@ -28,17 +30,17 @@
     <h1>IPGROUP</h1>
 
     <p class="username">
-        <span>홍길동</span><br />
-        <a href="login.html">[로그아웃]</a>
+        <span><?= $_COOKIE["keeper_kor_name"] ?></span><br />
+        <a href="javascript:try_logout();">[로그아웃]</a>
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.html">Work</a></li>
-        <li><a href="request_list.html">Request</a></li>
-        <li class="active"><a href="recruit_list.html">Recruit</a></li>
-        <li><a href="job_posting_list.html">Job Posting</a></li>
-        <li><a href="company_introduction.html">Company Introduction</a></li>
-        <li><a href="member_list.html">Member</a></li>
+        <li><a href="work_list.php">Work</a></li>
+        <li><a href="request_list.php">Request</a></li>
+        <li class="active"><a href="recruit_list.php">Recruit</a></li>
+        <li><a href="job_posting_list.php">Job Posting</a></li>
+        <li><a href="company_introduction.php">Company Introduction</a></li>
+        <li><a href="member_list.php">Member</a></li>
     </ul>
 </div>
 
@@ -122,7 +124,7 @@
         </select>
     </div>
     <div class="right">
-        <a class="txt_button" href="recruit_list.html">삭제</a>
+        <a class="txt_button" href="recruit_list.php">삭제</a>
     </div>
 </div>
 <!-- //상단 영역 -->
@@ -180,7 +182,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -196,7 +198,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -212,7 +214,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>디자인실</td>
@@ -228,7 +230,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>경영지원팀</td>
@@ -244,7 +246,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>퍼블리싱팀</td>
@@ -260,7 +262,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -276,7 +278,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -292,7 +294,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -308,7 +310,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>
@@ -324,7 +326,7 @@
         <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
         <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
     </td>
-    <td class="name"><a href="recruit_view.html">홍길동</a></td>
+    <td class="name"><a href="recruit_view.php">홍길동</a></td>
     <td>070-8730-8080<br />/ 010-1216-8888</td>
     <td>abcduser@ipgroup.co.kr</td>
     <td>기획실</td>

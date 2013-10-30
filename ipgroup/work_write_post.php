@@ -15,6 +15,8 @@ require_once('../classes/domain/Attaches.php');
 require_once('../classes/dao/AttachesDaoImpl.php');
 require_once('../classes/service/AttachesServiceImpl.php');
 
+require_once('../classes/utils/CommonUtils.php');
+
 
 $conn = ConnectionFactory::create();
 $workDaoImpl = new WorkDaoImpl();
@@ -72,7 +74,6 @@ $descriptions = $_REQUEST['descriptions'];
 $validChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $key = randomString($validChars, 6);
 $key = 'WRK-'.$key;
-//echo 'key value :'.$key.'<p/>';
 
 
 // 객체 생성 후, 값 설정

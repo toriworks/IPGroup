@@ -4,6 +4,21 @@
  * Date: 13. 10. 30
  * Time: 오후 3:06
  */
+
+require_once('./auth.php');
+
+require_once('../classes/dao/ICommons.php');
+require_once('../classes/ConnectionFactory.php');
+require_once('../classes/dao/JobsDaoImpl.php');
+require_once('../classes/service/JobsServiceImpl.php');
+require_once('../classes/domain/Jobs.php');
+
+require_once('../classes/utils/CommonUtils.php');
+
+$conn = ConnectionFactory::create();
+$jobsDaoImpl = new JobsDaoImpl();
+$jobsServiceImpl = new JobsServiceImpl();
+$jobsServiceImpl->setJobsDao($jobsDaoImpl);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -17,6 +32,32 @@
     <script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
+    <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
+    <script type="text/javascript">
+        del_checked = function() {
+            var checkVObj = document.getElementsByName("check_v");
+            var checkCnt = checkVObj.length;
+            var cCnt = 0;
+            var sChecked = "";
+            for(var k=0; k<checkCnt; k++) {
+                if(checkVObj[k].checked == true) {
+                    cCnt++;
+                    sChecked = sChecked + checkVObj[k].value + "^";
+                }
+            }
+            if(cCnt == 0) {
+                alert(DEL_NO_CHECKED);
+                return;
+            }
+
+            if(confirm("정말 삭제하시겠습니까?")) {
+                location.href = "./jobs_delete_post.php?jids=" + sChecked;
+            } else {
+                return;
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -122,7 +163,7 @@
         </select>
     </div>
     <div class="right">
-        <a class="txt_button" href="job_posting_list.php">삭제</a>
+        <a class="txt_button" href="javascript:del_checked();">삭제</a>
         <a class="txt_button" href="job_posting_write.php">신규등록</a>
     </div>
 </div>
@@ -172,148 +213,97 @@
         </tr>
         </thead>
         <tbody>
+<?
+$rowCountPerPage = 7;
+$wParam = '';
+$orderBy = $_REQUEST['orderBy'];
+$orderDir = $_REQUEST['orderDir'];
+if($orderBy == '') {
+    $orderBy = ' regdate DESC ';
+}
+
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+$totalCnt = $jobsServiceImpl->listsCount($conn, $wParam);
+$result = $jobsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
+
+
+
+if($totalCnt > 0) {
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
+
+        if($row['is_always'] == 'N') {
+            $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
+            $eDate = $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'];
+            $seDate = $sDate.' ~<br />'.$eDate;
+        } else {
+            $seDate = '상시';
+        }
+?>
         <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>10</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
+            <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
+            <td><?= $bPage - 1 ?></td>
+            <td class="job_subject"><a href="job_posting_view.php"><?= $row['title'] ?></a></td>
+            <td><?= CommonUtils::getCareerTypes($row['career_types']) ?></td>
+            <td><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
+            <td><?= $seDate ?>
+            </td>
+            <td><?= CommonUtils::getHirePart($row['hire_part']) ?></td>
+            <td><?= $row['applicants_cnt'] ?></td>
+            <td><?= $row['is_show'] ?></td>
+            <td><?= $row['regdate'] ?></td>
         </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>9</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>경력4년</td>
-            <td>계약직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>디자인실</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>8</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>무관</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>퍼블리싱팀</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>7</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>6</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>5</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>Y</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>4</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>N</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>3</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>N</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>2</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>N</td>
-            <td>2013.01.05</td>
-        </tr>
-        <tr>
-            <td class="check"><input type="checkbox" /></td>
-            <td>1</td>
-            <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-            <td>신입</td>
-            <td>정규직</td>
-            <td>2013.01.01 ~<br />2013.03.30</td>
-            <td>기획실</td>
-            <td>15</td>
-            <td>N</td>
-            <td>2013.01.05</td>
-        </tr>
+<?
+    }
+}
+?>
         </tbody>
     </table>
 </div>
 <!-- //데이터 테이블 -->
 
-<!-- 페이징 -->
-<div class="paginate">
-    <a class="direction" href="#"><span>‹</span> 이전페이지</a>
-    <a href="#">11</a>
-    <strong>12</strong>
-    <a href="#">13</a>
-    <a href="#">14</a>
-    <a href="#">15</a>
-    <a href="#">16</a>
-    <a href="#">17</a>
-    <a href="#">18</a>
-    <a href="#">19</a>
-    <a href="#">20</a>
-    <a class="direction" href="#">다음페이지 <span>›</span></a>
-</div>
-<!-- //페이징 -->
-</div>
+    <!-- 페이징 -->
+    <?
+    $divPage = (int) ($totalCnt / $rowCountPerPage);
+    $modPage = $totalCnt % $rowCountPerPage;
+
+    $totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+    ?>
+    <div class="paginate">
+        <?
+        // Prev block
+        if($curPage > 1) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+        } else {
+            echo '<span>‹</span> 이전페이지';
+        }
+
+        $strPage = '';
+        for($k = 1; $k <= $totalPage; $k++) {
+            if($curPage == $k) {
+                $strPage = '<a href=><strong>'.$k.'</strong></a>';
+            } else {
+                $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+            }
+
+            // 1, 2, 3, 4, 5, 6 ...
+            echo $strPage;
+        }
+
+        // Next block
+        if($curPage < $totalPage) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+        } else {
+            echo '다음페이지 <span>›</span>';
+        }
+        ?>
+        <!-- //페이징 -->
+    </div>
 
 <!-- //본문 영역 -->
 </div>
