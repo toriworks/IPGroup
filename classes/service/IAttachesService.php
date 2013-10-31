@@ -13,4 +13,6 @@ interface IAttachesService {
     public function delete( $conn, Attaches $obj );
     public function lists($conn, $id);
     public function listsCount( $conn, $wParam );
+
+    public function detail($conn, Attaches $obj);
 }

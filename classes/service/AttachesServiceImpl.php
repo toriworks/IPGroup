@@ -46,4 +46,9 @@ class AttachesServiceImpl implements IAttachesService {
     {
         // TODO: Implement listsCount() method.
     }
+
+    public function detail($conn, Attaches $obj)
+    {
+        return $this->attachesDao->detail($conn, $obj);
+    }
 }

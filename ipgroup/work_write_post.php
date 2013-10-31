@@ -45,7 +45,7 @@ if($open_date != "") {
 }
 
 // 썸네일 첨부1, 2
-$thumb_attach1 = $_FILES['thumb_attach1']['name'];
+$target_path = $_FILES['thumb_attach1']['name'];
 $thumb_attach2 = $_FILES['thumb_attach2']['name'];
 
 $wtypes = $_REQUEST['wtypes'];

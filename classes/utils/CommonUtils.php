@@ -113,4 +113,38 @@ class CommonUtils {
         return $strCT;
     }
 
+    public static function getSchoolTypes($cd) {
+        $strST = '';
+
+        if($cd == 'UV') {
+            $strST = '대졸 이상';
+        } else if($cd == 'CL') {
+            $strST = '전문대졸 이상';
+        } else if($cd == 'HS') {
+            $strST = '고졸 이상';
+        } else if($cd == 'NG') {
+            $strST = '무관';
+        } else {
+            $strST = '';
+        }
+
+        return $strST;
+    }
+
+    public static function getGender($cd) {
+        $strG = '';
+
+        if($cd == 'ML') {
+            $strG = '남자';
+        } else if($cd == 'FL') {
+            $strG = '여자';
+        } else if($cd == 'NG') {
+            $strG = '무관';
+        } else {
+            $strG = '';
+        }
+
+        return $strG;
+    }
+
 }

@@ -44,4 +44,9 @@ class JobsServiceImpl implements IJobsService {
     {
         return $this->jobsDao->listsCount($conn, $wParam);
     }
+
+    public function detail($conn, Jobs $obj)
+    {
+        return $this->jobsDao->detail($conn, $obj);
+    }
 }

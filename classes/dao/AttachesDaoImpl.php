@@ -59,4 +59,13 @@ class AttachesDaoImpl implements IAttachesDao {
     {
         // TODO: Implement listsCount() method.
     }
+
+    public function detail($conn, Attaches $obj)
+    {
+        $sql = "SELECT original_filename, transfer_filename, regdate FROM attaches ";
+        $sql .= " WHERE ref_id='".$obj->getRefId()."' AND stypes='".$obj->getStypes()."' AND mtypes='".$obj->getMtypes()."' ";
+
+        $result = mysql_query($sql) or die("AttachesDaoImpl detail error : ".mysql_error());
+        return $result;
+    }
 }

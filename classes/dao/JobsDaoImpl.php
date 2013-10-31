@@ -85,4 +85,15 @@ class JobsDaoImpl implements IJobsDao {
         }
         return $tCnt;
     }
+
+    public function detail($conn, Jobs $obj)
+    {
+        $sql = "SELECT title, start_date_y, start_date_m, start_date_d, end_date_y, end_date_m, end_date_d, is_always, career_types, career_years, how_many ";
+        $sql .= ", hire_types, school_types, hire_part, position, gender, old_types, how_old, descriptions, add_descriptions, keeper_name, keeper_contacts ";
+        $sql .= ", applicants_cnt, is_show, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r FROM jobs ";
+        $sql .= " WHERE id='".$obj->getId()."' ";
+
+        $result = mysql_query($sql) or die("JobsDaoImpl detail error : ".mysql_error());
+        return $result;
+    }
 }

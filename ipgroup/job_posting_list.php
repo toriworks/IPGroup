@@ -219,7 +219,7 @@ $wParam = '';
 $orderBy = $_REQUEST['orderBy'];
 $orderDir = $_REQUEST['orderDir'];
 if($orderBy == '') {
-    $orderBy = ' regdate DESC ';
+    $orderBy = ' regdate_r DESC ';
 }
 
 $curPage = $_REQUEST['curPage'];
@@ -248,14 +248,14 @@ if($totalCnt > 0) {
         <tr>
             <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
             <td><?= $bPage - 1 ?></td>
-            <td class="job_subject"><a href="job_posting_view.php"><?= $row['title'] ?></a></td>
+            <td class="job_subject"><a href="job_posting_view.php?jids=<?= $row['id'] ?>"><?= $row['title'] ?></a></td>
             <td><?= CommonUtils::getCareerTypes($row['career_types']) ?></td>
             <td><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
             <td><?= $seDate ?>
             </td>
             <td><?= CommonUtils::getHirePart($row['hire_part']) ?></td>
             <td><?= $row['applicants_cnt'] ?></td>
-            <td><?= $row['is_show'] ?></td>
+            <td><?= ($row['is_show'] == 'Y') ? 'YES' : 'NO'  ?></td>
             <td><?= $row['regdate'] ?></td>
         </tr>
 <?

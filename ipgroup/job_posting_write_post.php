@@ -56,6 +56,8 @@ $keeper_name = $_REQUEST['keeper_name'];
 $keeper_contacts = $_REQUEST['keeper_contacts'];
 $is_show = $_REQUEST['is_show'];
 
+$school_types = $_REQUEST['school_types'];
+
 //echo $title."<br>";
 //echo $start_date."<br>";
 //echo $end_date."<br>";
@@ -103,6 +105,7 @@ $jObj->setAddDescriptions($add_descriptions);
 $jObj->setKeeperName($keeper_name);
 $jObj->setKeeperContacts($keeper_contacts);
 $jObj->setIsShow($is_show);
+$jObj->setSchoolTypes($school_types);
 
 $jobsService->add($conn, $jObj);
 
