@@ -51,6 +51,10 @@ $row = @mysql_fetch_array($result);
                 return;
             }
         }
+
+        update_data = function() {
+            location.href = "./job_posting_revise.php?jids=<?= $jids ?>";
+        }
     </script>
 </head>
 <body>
@@ -88,7 +92,7 @@ $row = @mysql_fetch_array($result);
     </div>
     <div class="right">
         <a class="txt_button" href="job_posting_list.php">리스트 가기</a>
-        <a class="txt_button" href="job_posting_revise.php">수정하기</a>
+        <a class="txt_button" href="javascript:update_data();">수정하기</a>
     </div>
 </div>
 
