@@ -10,35 +10,29 @@
  */
 class Applicants
 {
-    private $id = '';
-    private $status = '';       // 접수, 불합격, 합격
     private $jobs_id = '';
-
-    private $in_date_y = '';
-    private $in_date_m = '';
-    private $in_date_d = '';
-    private $work_part = '';
-    private $work_tasks = '';
-    private $keeper_name = '';
-    private $keeper_contacts = '';
-
-    private $hire_part = '';
-    private $has_career = '';
-    private $career_year = '';
-    private $name = '';
-    private $birth_year = '';
-    private $contacts_tel = '';
-    private $contacts_mobile = '';
+    private $id = '';
+    private $kor_name = '';
+    private $mobile_1 = '';
+    private $mobile_2 = '';
+    private $mobile_3 = '';
     private $email = '';
-    private $school_grade = '';
-    private $is_graduate = '';
-    private $pay_cnt = '';
-
-    private $original_file_name = '';
-    private $break_file_name = '';
-    private $memos = '';
-
+    private $career_types = '';
+    private $career_years = '';
+    private $birth_year = '';
+    private $tel_1 = '';
+    private $tel_2 = '';
+    private $tel_3 = '';
+    private $school_type = '';
+    private $school_name = '';
+    private $school_sub = '';
+    private $wish_pay = '';
     private $regdate = '';
+    private $status = '';
+    private $memos = '';
+    private $hire_date = '';
+    private $hire_part = '';
+    private $hire_task = '';
 
     /**
      * @param string $birth_year
@@ -57,67 +51,35 @@ class Applicants
     }
 
     /**
-     * @param string $break_file_name
+     * @param string $career_types
      */
-    public function setBreakFileName($break_file_name)
+    public function setCareerTypes($career_types)
     {
-        $this->break_file_name = $break_file_name;
+        $this->career_types = $career_types;
     }
 
     /**
      * @return string
      */
-    public function getBreakFileName()
+    public function getCareerTypes()
     {
-        return $this->break_file_name;
+        return $this->career_types;
     }
 
     /**
-     * @param string $career_year
+     * @param string $career_years
      */
-    public function setCareerYear($career_year)
+    public function setCareerYears($career_years)
     {
-        $this->career_year = $career_year;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCareerYear()
-    {
-        return $this->career_year;
-    }
-
-    /**
-     * @param string $contacts_mobile
-     */
-    public function setContactsMobile($contacts_mobile)
-    {
-        $this->contacts_mobile = $contacts_mobile;
+        $this->career_years = $career_years;
     }
 
     /**
      * @return string
      */
-    public function getContactsMobile()
+    public function getCareerYears()
     {
-        return $this->contacts_mobile;
-    }
-
-    /**
-     * @param string $contacts_tel
-     */
-    public function setContactsTel($contacts_tel)
-    {
-        $this->contacts_tel = $contacts_tel;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContactsTel()
-    {
-        return $this->contacts_tel;
+        return $this->career_years;
     }
 
     /**
@@ -137,19 +99,19 @@ class Applicants
     }
 
     /**
-     * @param string $has_career
+     * @param string $hire_date
      */
-    public function setHasCareer($has_career)
+    public function setHireDate($hire_date)
     {
-        $this->has_career = $has_career;
+        $this->hire_date = $hire_date;
     }
 
     /**
      * @return string
      */
-    public function getHasCareer()
+    public function getHireDate()
     {
-        return $this->has_career;
+        return $this->hire_date;
     }
 
     /**
@@ -169,6 +131,22 @@ class Applicants
     }
 
     /**
+     * @param string $hire_task
+     */
+    public function setHireTask($hire_task)
+    {
+        $this->hire_task = $hire_task;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHireTask()
+    {
+        return $this->hire_task;
+    }
+
+    /**
      * @param string $id
      */
     public function setId($id)
@@ -182,70 +160,6 @@ class Applicants
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param string $in_date_d
-     */
-    public function setInDateD($in_date_d)
-    {
-        $this->in_date_d = $in_date_d;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInDateD()
-    {
-        return $this->in_date_d;
-    }
-
-    /**
-     * @param string $in_date_m
-     */
-    public function setInDateM($in_date_m)
-    {
-        $this->in_date_m = $in_date_m;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInDateM()
-    {
-        return $this->in_date_m;
-    }
-
-    /**
-     * @param string $in_date_y
-     */
-    public function setInDateY($in_date_y)
-    {
-        $this->in_date_y = $in_date_y;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInDateY()
-    {
-        return $this->in_date_y;
-    }
-
-    /**
-     * @param string $is_graduate
-     */
-    public function setIsGraduate($is_graduate)
-    {
-        $this->is_graduate = $is_graduate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIsGraduate()
-    {
-        return $this->is_graduate;
     }
 
     /**
@@ -265,35 +179,19 @@ class Applicants
     }
 
     /**
-     * @param string $keeper_contacts
+     * @param string $kor_name
      */
-    public function setKeeperContacts($keeper_contacts)
+    public function setKorName($kor_name)
     {
-        $this->keeper_contacts = $keeper_contacts;
+        $this->kor_name = $kor_name;
     }
 
     /**
      * @return string
      */
-    public function getKeeperContacts()
+    public function getKorName()
     {
-        return $this->keeper_contacts;
-    }
-
-    /**
-     * @param string $keeper_name
-     */
-    public function setKeeperName($keeper_name)
-    {
-        $this->keeper_name = $keeper_name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeeperName()
-    {
-        return $this->keeper_name;
+        return $this->kor_name;
     }
 
     /**
@@ -313,51 +211,51 @@ class Applicants
     }
 
     /**
-     * @param string $name
+     * @param string $mobile_1
      */
-    public function setName($name)
+    public function setMobile1($mobile_1)
     {
-        $this->name = $name;
+        $this->mobile_1 = $mobile_1;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getMobile1()
     {
-        return $this->name;
+        return $this->mobile_1;
     }
 
     /**
-     * @param string $original_file_name
+     * @param string $mobile_2
      */
-    public function setOriginalFileName($original_file_name)
+    public function setMobile2($mobile_2)
     {
-        $this->original_file_name = $original_file_name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOriginalFileName()
-    {
-        return $this->original_file_name;
-    }
-
-    /**
-     * @param string $pay_cnt
-     */
-    public function setPayCnt($pay_cnt)
-    {
-        $this->pay_cnt = $pay_cnt;
+        $this->mobile_2 = $mobile_2;
     }
 
     /**
      * @return string
      */
-    public function getPayCnt()
+    public function getMobile2()
     {
-        return $this->pay_cnt;
+        return $this->mobile_2;
+    }
+
+    /**
+     * @param string $mobile_3
+     */
+    public function setMobile3($mobile_3)
+    {
+        $this->mobile_3 = $mobile_3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile3()
+    {
+        return $this->mobile_3;
     }
 
     /**
@@ -377,19 +275,51 @@ class Applicants
     }
 
     /**
-     * @param string $school_grade
+     * @param string $school_name
      */
-    public function setSchoolGrade($school_grade)
+    public function setSchoolName($school_name)
     {
-        $this->school_grade = $school_grade;
+        $this->school_name = $school_name;
     }
 
     /**
      * @return string
      */
-    public function getSchoolGrade()
+    public function getSchoolName()
     {
-        return $this->school_grade;
+        return $this->school_name;
+    }
+
+    /**
+     * @param string $school_sub
+     */
+    public function setSchoolSub($school_sub)
+    {
+        $this->school_sub = $school_sub;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchoolSub()
+    {
+        return $this->school_sub;
+    }
+
+    /**
+     * @param string $school_type
+     */
+    public function setSchoolType($school_type)
+    {
+        $this->school_type = $school_type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchoolType()
+    {
+        return $this->school_type;
     }
 
     /**
@@ -409,35 +339,67 @@ class Applicants
     }
 
     /**
-     * @param string $work_part
+     * @param string $tel_1
      */
-    public function setWorkPart($work_part)
+    public function setTel1($tel_1)
     {
-        $this->work_part = $work_part;
+        $this->tel_1 = $tel_1;
     }
 
     /**
      * @return string
      */
-    public function getWorkPart()
+    public function getTel1()
     {
-        return $this->work_part;
+        return $this->tel_1;
     }
 
     /**
-     * @param string $work_tasks
+     * @param string $tel_2
      */
-    public function setWorkTasks($work_tasks)
+    public function setTel2($tel_2)
     {
-        $this->work_tasks = $work_tasks;
+        $this->tel_2 = $tel_2;
     }
 
     /**
      * @return string
      */
-    public function getWorkTasks()
+    public function getTel2()
     {
-        return $this->work_tasks;
+        return $this->tel_2;
+    }
+
+    /**
+     * @param string $tel_3
+     */
+    public function setTel3($tel_3)
+    {
+        $this->tel_3 = $tel_3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTel3()
+    {
+        return $this->tel_3;
+    }
+
+    /**
+     * @param string $wish_pay
+     */
+    public function setWishPay($wish_pay)
+    {
+        $this->wish_pay = $wish_pay;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWishPay()
+    {
+        return $this->wish_pay;
     }
 
 

@@ -6,6 +6,18 @@
  * Time: 오전 12:45
  * To change this template use File | Settings | File Templates.
  */
+
+require_once('./auth.php');
+
+require_once('../classes/ConnectionFactory.php');
+require_once('../classes/dao/ApplicantsDaoImpl.php');
+require_once('../classes/service/ApplicantsServiceImpl.php');
+require_once('../classes/domain/Applicants.php');
+
+$conn = ConnectionFactory::create();
+$applicantsDaoImpl = new ApplicantsDaoImpl();
+$applicantsServiceImpl = new ApplicantsServiceImpl();
+$applicantsServiceImpl->setApplicantsDao($applicantsDaoImpl);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -35,18 +47,34 @@
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.php">Work</a></li>
+        <li><a href="work_list.php">Applicants</a></li>
         <li><a href="request_list.php">Request</a></li>
-        <li class="active"><a href="recruit_list.php">Recruit</a></li>
+        <li class="active"><a href="recruit_list.php">Applicants</a></li>
         <li><a href="job_posting_list.php">Job Posting</a></li>
         <li><a href="company_introduction.php">Company Introduction</a></li>
         <li><a href="member_list.php">Member</a></li>
     </ul>
 </div>
+<?
+$rowCountPerPage = 7;
+$wParam = '';
+$orderBy = $_REQUEST['orderBy'];
+$orderDir = $_REQUEST['orderDir'];
+if($orderBy == '') {
+    $orderBy = ' regdate DESC ';
+}
 
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+$totalCnt = $applicantsServiceImpl->listsCount($conn, $wParam);
+$result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
+?>
 <div id="admin_contents">
 <div class="page_top">
-    <h2>Recruit</h2>
+    <h2>Applicants</h2>
 </div>
 <div class="container">
 <!-- 본문 영역 -->
@@ -175,187 +203,75 @@
 </tr>
 </thead>
 <tbody>
+<?
+if($totalCnt > 0) {
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
+?>
 <tr>
     <td class="check"><input type="checkbox" /></td>
-    <td>10</td>
+    <td><?= $bPage - 1 ?></td>
     <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
+        <? if($row['original_filename'] != "") { ?>
+            <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
+        <? } ?>
+        <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
     </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="ready">접수</span></td>
+    <td class="name"><a href="recruit_view.php"><?= $row['kor_name'] ?></a></td>
+    <td><?= $row['tel_1'] ?>-<?= $row['tel_2'] ?>-<?= $row['tel_3'] ?><br />/ <?= $row['mobile_1'] ?>-<?= $row['mobile_2'] ?>-<?= $row['mobile_3'] ?></td>
+    <td><?= $row['email'] ?></td>
+    <td><?= $row['status'] ?></td>
+    <td><?= $row['career_types'] ?></td>
+    <td><?= $row['school_type'] ?></td>
+    <td><?= $row['regdate'] ?></td>
+    <td class="status"><span class="pass"><?= $row['status'] ?></span></td>
 </tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>9</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="ready">접수</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>8</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>디자인실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="ready">접수</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>7</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>경영지원팀</td>
-    <td>경력3년</td>
-    <td>전문대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="pass">합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>6</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>퍼블리싱팀</td>
-    <td>신입</td>
-    <td>고졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="fail">불합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>5</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>기타</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="fail">불합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>4</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="fail">불합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>3</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="pass">합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>2</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="pass">합격</span></td>
-</tr>
-<tr>
-    <td class="check"><input type="checkbox" /></td>
-    <td>1</td>
-    <td>
-        <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
-        <img src="./images/new-message.png" alt="신규항목" title="신규항목" />
-    </td>
-    <td class="name"><a href="recruit_view.php">홍길동</a></td>
-    <td>070-8730-8080<br />/ 010-1216-8888</td>
-    <td>abcduser@ipgroup.co.kr</td>
-    <td>기획실</td>
-    <td>신입</td>
-    <td>대졸</td>
-    <td>2012.12.25</td>
-    <td class="status"><span class="pass">합격</span></td>
-</tr>
+    <?
+    }
+}
+?>
 </tbody>
 </table>
 </div>
 <!-- //데이터 테이블 -->
 
 <!-- 페이징 -->
+<?
+$divPage = (int) ($totalCnt / $rowCountPerPage);
+$modPage = $totalCnt % $rowCountPerPage;
+
+$totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+?>
 <div class="paginate">
-    <a class="direction" href="#"><span>‹</span> 이전페이지</a>
-    <a href="#">11</a>
-    <strong>12</strong>
-    <a href="#">13</a>
-    <a href="#">14</a>
-    <a href="#">15</a>
-    <a href="#">16</a>
-    <a href="#">17</a>
-    <a href="#">18</a>
-    <a href="#">19</a>
-    <a href="#">20</a>
-    <a class="direction" href="#">다음페이지 <span>›</span></a>
-</div>
-<!-- //페이징 -->
+    <?
+    // Prev block
+    if($curPage > 1) {
+        echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+    } else {
+        echo '<span>‹</span> 이전페이지';
+    }
+
+    $strPage = '';
+    for($k = 1; $k <= $totalPage; $k++) {
+        if($curPage == $k) {
+            $strPage = '<a href=><strong>'.$k.'</strong></a>';
+        } else {
+            $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+        }
+
+        // 1, 2, 3, 4, 5, 6 ...
+        echo $strPage;
+    }
+
+    // Next block
+    if($curPage < $totalPage) {
+        echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+    } else {
+        echo '다음페이지 <span>›</span>';
+    }
+    ?>
+    <!-- //페이징 -->
 </div>
 
 <!-- //본문 영역 -->
