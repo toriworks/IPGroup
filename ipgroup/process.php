@@ -20,6 +20,10 @@ require_once('../classes/dao/RequestsDaoImpl.php');
 require_once('../classes/service/RequestsServiceImpl.php');
 require_once('../classes/domain/Requests.php');
 
+require_once('../classes/dao/ApplicantsDaoImpl.php');
+require_once('../classes/service/ApplicantsServiceImpl.php');
+require_once('../classes/domain/Applicants.php');
+
 
 // get parameter from previous page
 $call_type = $_REQUEST['call_type'];
@@ -96,6 +100,68 @@ if ($call_type == 'login') {
 
     $result = $reqService->updateMemos($conn, $reqObj);
     $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\": \"".$result."\"}}";
+    echo $ret;
+} else if($call_type == 'save_recruit') {
+    $recruit_id = $_REQUEST['requests_id'];
+    $memos = $_REQUEST['memos'];
+    $status = $_REQUEST['status'];
+    $hire_date = $_REQUEST['hire_date'];
+    $hire_part = $_REQUEST['hire_part'];
+    $hire_task = $_REQUEST['hire_task'];
+    $keeper_name = $_REQUEST['keeper_name'];
+    $keeper_contact = $_REQUEST['keeper_contact'];
+
+    $conn = ConnectionFactory::create();
+    $appDao = new ApplicantsDaoImpl();
+    $appService = new ApplicantsServiceImpl();
+    $appService->setApplicantsDao($appDao);
+    $app = new Applicants();
+    $app->setId($recruit_id);
+    $app->setMemos($memos);
+    $app->setStatus($status);
+    $app->setHireDate($hire_date);
+    $app->setHirePart($hire_part);
+    $app->setHireTask($hire_task);
+    $app->setKeeperName($keeper_name);
+    $app->setKeeperContact($keeper_contact);
+
+    $result = $appService->update_keeper($conn, $app);
+    $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\": \"".$result."\"}}";
+    echo $ret;
+} else if($call_type == 'check_success') {
+    $mobile_1 = $_REQUEST['mobile_1'];
+    $mobile_2 = $_REQUEST['mobile_2'];
+    $mobile_3 = $_REQUEST['mobile_3'];
+
+    $name = $_REQUEST['name'];
+
+    $conn = ConnectionFactory::create();
+    $appDao = new ApplicantsDaoImpl();
+    $appService = new ApplicantsServiceImpl();
+    $appService->setApplicantsDao($appDao);
+    $app = new Applicants();
+    $app->setKorName($name);
+    $app->setMobile1($mobile_1);
+    $app->setMobile2($mobile_2);
+    $app->setMobile3($mobile_3);
+
+    $status = ''; $hire_date = ''; $wday = ''; $hire_task = ''; $hire_part = '';
+    $keeper_name = ''; $keeper_contact = '';
+    $result = $appService->detail4Success($conn, $app);
+    while($row = mysql_fetch_array($result)) {
+        // 맨 마지막의 상태값만을 취득함
+        $status = $row['status'];
+        $hire_date = $row['hire_date'];
+        $hire_task = $row['hire_task'];
+        $hire_part = $row['hire_part'];
+        $keeper_name = $row['keeper_name'];
+        $keeper_contact = $row['keeper_contact'];
+        $wday = $row['wday'];
+    }
+
+    $ret = '{"ipg":{"call_type":"'.$call_type.'","status":"'.$status.'","hire_date":"'.$hire_date.'"';
+    $ret .= ',"hire_task":"'.$hire_task.'","hire_part":"'.$hire_part.'","keeper_name":"'.$keeper_name.'","keeper_contact":"'.$keeper_contact.'","wday":"'.$wday.'"}}';
+
     echo $ret;
 }
 ?>

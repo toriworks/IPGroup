@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipgroup>
+
+    <work>
+        <thumbnail type="1">
+            <title><![CDATA[]]></title>
+            <subtitle><![CDATA[]]></subtitle>
+            <open><![CDATA[]]></open>
+            <img_1><![CDATA[]]></img_1>
+            <img_2><![CDATA[]]></img_2>
+        </thumbnail>
+        <project>
+            <name><![CDATA[]]></name>
+            <client><![CDATA[]]></client>
+            <period><![CDATA[]]></period>
+            <link></link>
+            <content><![CDATA[
+			]]></content>
+            <file></file>
+            <file></file>
+        </project>
+    </work>
+
+</ipgroup>

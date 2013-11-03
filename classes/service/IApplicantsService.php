@@ -15,4 +15,5 @@ interface IApplicantsService {
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Applicants $obj);
+    public function detail4Success($conn, Applicants $obj);
 }

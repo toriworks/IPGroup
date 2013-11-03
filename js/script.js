@@ -171,10 +171,13 @@
                     param_cate = param_cate + parseInt('0' + $(this).val());
 				});
 
+                //var qry = "param_year="+param_year+"^&param_cate="+param_cate;
+                //alert(qry);
+
 				var works_list = $.WorksList({
 					param_y : param_year,
 					param_c : param_cate,
-					xmlPath : "./xml/works.php?param_year="+param_year+"&param_cate="+param_cate
+					xmlPath : "./xml/works.php?param_year="+param_year+"^&param_cate="+param_cate
 				});
 			}
 			if ($('#works').length > 0) loadWorksList();

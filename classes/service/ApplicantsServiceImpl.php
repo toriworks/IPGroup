@@ -37,7 +37,7 @@ class ApplicantsServiceImpl implements IApplicantsService {
 
     public function delete($conn, Applicants $obj)
     {
-        // TODO: Implement delete() method.
+        return $this->applicantsDao->delete($conn, $obj);
     }
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
@@ -52,11 +52,17 @@ class ApplicantsServiceImpl implements IApplicantsService {
 
     public function detail($conn, Applicants $obj)
     {
-        // TODO: Implement detail() method.
+        return $this->applicantsDao->detail($conn, $obj);
     }
 
     public function update_jobs_hire_part($conn, Applicants $obj)
     {
         return $this->applicantsDao->update_jobs_hire_part($conn, $obj);
+    }
+
+    public function detail4Success($conn, Applicants $obj)
+    {
+        $result = $this->applicantsDao->detail4Success($conn, $obj);
+        return $result;
     }
 }

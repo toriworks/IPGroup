@@ -36,6 +36,30 @@ $applicantsServiceImpl->setApplicantsDao($applicantsDaoImpl);
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
     <script type="text/javascript" src="./js/login.js"></script>
+    <script type="text/javascript">
+        del_checked = function() {
+            var checkVObj = document.getElementsByName("check_v");
+            var checkCnt = checkVObj.length;
+            var cCnt = 0;
+            var sChecked = "";
+            for(var k=0; k<checkCnt; k++) {
+                if(checkVObj[k].checked == true) {
+                    cCnt++;
+                    sChecked = sChecked + checkVObj[k].value + "^";
+                }
+            }
+            if(cCnt == 0) {
+                alert(DEL_NO_CHECKED);
+                return;
+            }
+
+            if(confirm("정말 삭제하시겠습니까?")) {
+                location.href = "./recruit_delete_post.php?ids=" + sChecked;
+            } else {
+                return;
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -77,7 +101,7 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $row
 ?>
 <div id="admin_contents">
 <div class="page_top">
-    <h2>Applicants</h2>
+    <h2>Recruit</h2>
 </div>
 <div class="container">
 <!-- 본문 영역 -->
@@ -155,7 +179,7 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $row
         </select>
     </div>
     <div class="right">
-        <a class="txt_button" href="recruit_list.php">삭제</a>
+        <a class="txt_button" href="javascript:del_checked();">삭제</a>
     </div>
 </div>
 <!-- //상단 영역 -->
@@ -213,7 +237,7 @@ if($totalCnt > 0) {
         $bPage++;
 ?>
 <tr>
-    <td class="check"><input type="checkbox" /></td>
+    <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
     <td><?= $bPage - 1 ?></td>
     <td>
         <? if($row['original_filename'] != "") { ?>
@@ -221,7 +245,7 @@ if($totalCnt > 0) {
         <? } ?>
         <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
     </td>
-    <td class="name"><a href="recruit_view.php"><?= $row['kor_name'] ?></a></td>
+    <td class="name"><a href="recruit_view.php?id=<?= $row['id'] ?>&jid=<?= $row['jobs_id'] ?>"><?= $row['kor_name'] ?></a></td>
     <td><?= $row['tel_1'] ?>-<?= $row['tel_2'] ?>-<?= $row['tel_3'] ?><br />/ <?= $row['mobile_1'] ?>-<?= $row['mobile_2'] ?>-<?= $row['mobile_3'] ?></td>
     <td><?= $row['email'] ?></td>
     <td><?= CommonUtils::getRecruitStatus($row['status']) ?></td>

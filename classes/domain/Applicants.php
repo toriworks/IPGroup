@@ -35,6 +35,42 @@ class Applicants
     private $hire_task = '';
     private $jobs_hire_part = '';
 
+    // 추가항목
+    private $keeper_name = '';
+    private $keeper_contact = '';
+
+    /**
+     * @param string $keeper_contact
+     */
+    public function setKeeperContact($keeper_contact)
+    {
+        $this->keeper_contact = $keeper_contact;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeeperContact()
+    {
+        return $this->keeper_contact;
+    }
+
+    /**
+     * @param string $keeper_name
+     */
+    public function setKeeperName($keeper_name)
+    {
+        $this->keeper_name = $keeper_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeeperName()
+    {
+        return $this->keeper_name;
+    }
+
     /**
      * @param string $jobs_hire_part
      */
