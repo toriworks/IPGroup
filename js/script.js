@@ -1,46 +1,10 @@
 (function($){ 
 /* ----------------------------------------------------------------------------------------- */
+	function is_mobile() {
+		return ($('#mobile_check').is(':visible')) ? true : false;
+	}
 
 	$(document).ready(function(){
-
-		if ($('body').hasClass('VERTICAL_PAGE')) {
-			var default_idx = 1;
-			var default_mark = document.location.href.split('#')[1];
-			if (default_mark) {
-				if (default_mark == 'about') {
-					default_idx = 0;
-				} else if (default_mark == 'works') {
-					default_idx = 1;
-				} else if (default_mark == 'contact') {
-					default_idx = 2;
-				}
-			}
-			var vertical_scroll = $.VerticalScroll({
-				defaultSectionIdx : default_idx
-			});
-		}
-
-		function loadWorksList() {
-			var param_year = Array();
-			$('input[name="year"]:checked').each(function(idx){
-				param_year.push($(this).val());
-			});
-			param_year = param_year.join(",");
-
-			var param_cate = Array();
-			$('input[name="cate"]:checked').each(function(idx){
-				param_cate.push($(this).val());
-			});
-			param_cate = param_cate.join(",");
-
-			var works_list = $.WorksList({
-				param_y : param_year,
-				param_c : param_cate,
-				xmlPath : "./xml/works.xml"
-			});
-		}
-		loadWorksList();
-
 
 		/*
 		|--------------------------------------------------------------------------
@@ -79,6 +43,7 @@
 			$("div.contents > nav.lnb").each(function(){
 				var _this = $(this);
 				var _lnb_links = _this.find("> ul > li > a");
+				if (_this.find("li.on").length > 0) return;
 				_lnb_links.each(function(){ $($(this).attr("href")).hide(); });
 				_lnb_links.bind("click",function(){
 					nav_link_off(_this.find("> ul > li.on > a"));
@@ -90,7 +55,14 @@
 
 			$("#about   nav.lnb li:first-child a").trigger("click");
 			$("#contact nav.lnb li:first-child a").trigger("click");
-			$("#recruit nav.lnb li:first-child a").trigger("click");
+			//$("#recruit nav.lnb li:first-child a").trigger("click");
+			if ($("#recruit nav.lnb").length > 0) {
+				if (document.location.href.split('#')[1] == 'recruit_job_posting') {
+					$("#recruit nav.lnb li").eq(1).find("a").trigger("click");
+				} else {
+					$("#recruit nav.lnb li").eq(0).find("a").trigger("click");
+				}
+			}
 
 			$("div.contents > div.nav_controler > a.prev").bind("click",function(){
 				if ($(this).parents("div.contents").find("nav.lnb li.on").prev().length > 0) {
@@ -146,7 +118,74 @@
 				$($(this).attr("href")).show();
 
 				return false;
-			}).first().trigger("click");
+			});
+
+			setTimeout(function(){
+				$(".map_side .line_link a").first().trigger("click");
+			},100);
+
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| Vertical script
+		|--------------------------------------------------------------------------
+		|
+		| Vertical script
+		|
+		*/
+			if ($('body').hasClass('VERTICAL_PAGE')) {
+				var default_idx = 1;
+				var default_mark = document.location.href.split('#')[1];
+				if (default_mark) {
+					if (default_mark == 'about') {
+						default_idx = 0;
+					} else if (default_mark == 'works') {
+						default_idx = 1;
+					} else if (default_mark == 'contact') {
+						default_idx = 2;
+					}
+				}
+				var vertical_scroll = $.VerticalScroll({
+					defaultSectionIdx : default_idx
+				});
+			}
+
+		/*
+		|--------------------------------------------------------------------------
+		| Work list
+		|--------------------------------------------------------------------------
+		|
+		| Work list
+		|
+		*/
+			function loadWorksList() {
+				var param_year = Array();
+				$('input[name="year"]:checked').each(function(idx){
+					param_year.push($(this).val());
+				});
+				param_year = param_year.join("^");
+
+				var param_cate = 0;
+				$('input[name="cate"]:checked').each(function(idx){
+                    param_cate = param_cate + parseInt('0' + $(this).val());
+				});
+
+				var works_list = $.WorksList({
+					param_y : param_year,
+					param_c : param_cate,
+					xmlPath : "./xml/works.php?param_year="+param_year+"&param_cate="+param_cate
+				});
+			}
+			if ($('#works').length > 0) loadWorksList();
+			var before_resize_is_mobile = is_mobile();
+			$(window).bind('resize',function(){
+				if (before_resize_is_mobile != is_mobile()) {
+					loadWorksList();
+				}
+				before_resize_is_mobile = is_mobile();
+			});
+
 	});
 
 /* ----------------------------------------------------------------------------------------- */
@@ -175,13 +214,15 @@
 			var timeoutResize;
 			var moveMode;
 			var scrollDuration = 0;
+			var scrollEnabled = true;
 
 			// initialize the VerticalScroll
 			function init() {
+				scrollEnableCheck();
 				maxIdx = $(config.sectionContainer).length;
 				bind_event();
 				changeSection(config.defaultSectionIdx);
-				scrollDuration = config.scrollDuration;
+				scrollDuration = config.scrollDuration;				
 			}
 
 			function bind_event() {
@@ -194,6 +235,7 @@
 			}
 
 			function bindDocumentMousewheel(event, delta, deltaX, deltaY) {
+				if (!scrollEnabled) return;
 				clearTimeout(timeoutScroll);
 				event.preventDefault();
 				if ($('html,body').is(':animated')) return;
@@ -224,13 +266,35 @@
 					clearTimeout(timeoutScroll);
 				}
 				timeoutScroll = setTimeout(function(){
-					checkScrollPosition();
+					if (!scrollEnabled) {
+						var half = $('body').height() / 2;
+						var about_top = $('#about').position().top;
+						var works_top = $('#works').position().top;
+						var contact_top = $('#contact').position().top;
+						var document_top = $(document).scrollTop() + half;
+						$('nav.gnb li.on').removeClass('on');
+						if (document_top >= about_top && document_top < works_top) {
+							$('nav.gnb li.a').addClass('on');
+						} else if (document_top >= works_top && document_top < contact_top) {
+							$('nav.gnb li.w').addClass('on');
+						} else if (document_top >= contact_top) {
+							$('nav.gnb li.c').addClass('on');
+						}
+					} else {
+						checkScrollPosition();
+					}
 				}, 500);
 			}
 
 			function bindWindowResize() {
+				scrollEnableCheck();
+				if (!scrollEnabled) return;
 				clearTimeout(timeoutResize);
 				timeoutResize = setTimeout(checkScrollPosition, 500);
+			}
+
+			function scrollEnableCheck() {
+				scrollEnabled = ($('#wrap').width() < 1024) ? false : true;
 			}
 
 			function bindNavLink() {
@@ -239,11 +303,16 @@
 			}
 
 			function autoScroll(n) {
-				$('html,body').animate({
-					scrollTop : $('body').height() * n
-				}, scrollDuration, function(){
-					currentIdx = n;
-				});
+				if (scrollEnabled) {
+					$('html,body').animate({
+						scrollTop : $('body').height() * n
+					}, scrollDuration, function(){
+						currentIdx = n;
+					});
+				} else {
+					var o = $(config.sectionContainer).eq(n);
+					$(document).scrollTop(o.position().top - 40);
+				}
 			}
 
 			function checkScrollPosition() {
@@ -257,7 +326,7 @@
 
 			function changeSection(n) {
 				$('nav.gnb ul li').removeClass('on').eq(n).addClass('on');
-				autoScroll(n);				
+				autoScroll(n);
 			}
 
 			init();
@@ -287,8 +356,6 @@
 			var workListPageMax = 1;
 			var btnPrev = $('.works_list_controler a.prev');
 			var btnNext = $('.works_list_controler a.next');
-
-
 			var workView = $('#works_view .view_contents');
 			var workViewSeq = 1;
 			var btnViewPrev = $('#works_view a.prev');
@@ -437,8 +504,17 @@
 				});
 
 				workListPageMax = page;
+
+				// ******************************
+				if (is_mobile()) {
+					worksXml.find('work').each(function(idx){
+						$(this).attr('page',idx + 1);
+						workListPageMax = idx + 1;
+					});
+				}
+				// ******************************
 			}
-			
+
 			function clear_works_list() {
 				worksList.find('> ul').remove();
 			}
@@ -454,7 +530,8 @@
 
 				worksList.find('> ul > li')
 				worksList.find('> ul > li').each(function(idx){
-					$(this).delay(50 * idx).show(400);
+					//$(this).delay(50 * idx).show(400);
+					$(this).delay(50 * idx).fadeIn(400);
 					//$(this).show();
 				});
 

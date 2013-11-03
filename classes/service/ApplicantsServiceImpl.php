@@ -22,7 +22,7 @@ class ApplicantsServiceImpl implements IApplicantsService {
 
     public function add($conn, Applicants $obj)
     {
-        // TODO: Implement add() method.
+        return $this->applicantsDao->add($conn, $obj);
     }
 
     public function update($conn, Applicants $obj)
@@ -32,7 +32,7 @@ class ApplicantsServiceImpl implements IApplicantsService {
 
     public function update_keeper($conn, Applicants $obj)
     {
-        // TODO: Implement update_keeper() method.
+        return $this->applicantsDao->update_keeper($conn, $obj);
     }
 
     public function delete($conn, Applicants $obj)
@@ -53,5 +53,10 @@ class ApplicantsServiceImpl implements IApplicantsService {
     public function detail($conn, Applicants $obj)
     {
         // TODO: Implement detail() method.
+    }
+
+    public function update_jobs_hire_part($conn, Applicants $obj)
+    {
+        return $this->applicantsDao->update_jobs_hire_part($conn, $obj);
     }
 }

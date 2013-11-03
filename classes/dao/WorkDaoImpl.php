@@ -104,4 +104,66 @@ class WorkDaoImpl implements IWorkDao {
 
         return $result;
     }
+
+    public function lists4Work($conn, $year, $category)
+    {
+        $sql = "SELECT id, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r, date_format(moddate, '%Y.%m.%d') moddate, keeper_id, mod_id, is_shop, thumb_types, thumb_title, thumb_sub_title, open_date_y,";
+        $sql .= "open_date_m, open_date_d, wtypes, name, client_name,";
+        $sql .= "start_date_y, start_date_m, start_date_d, end_date_y, end_date_m, end_date_d,";
+        $sql .= "url, descriptions FROM work ";
+
+
+        // 조건절 구성
+        $sql = $sql." WHERE is_shop='Y' ";
+
+        // 카테고리 검색 추가
+        $strCategory = '';
+        if($category != '') {
+            $strCategory = " AND (wtypes & ".$category.")= wtypes ";
+        }
+
+        $sql = $sql.$strCategory;
+
+        // 년도 검색 추가
+        $arrYear = explode('^', $year);
+        $sizeOfArrYear = count($arrYear)-1;
+        $strYear = ''; $strYear2 = '';
+        $bPos = 0;
+        if(strpos($year, '2010') > 0) {
+            $bPos = 1;
+        }
+
+        if($year != '') {
+            for($i = 0; $i < $sizeOfArrYear; $i++) {
+                if($arrYear[$i] != '2010') {
+                    $strYear = $strYear." '".$arrYear[$i]."' ";
+                    if($i < $sizeOfArrYear-(1+$bPos)) {
+                        $strYear = $strYear.",";
+                    }
+                } else if($arrYear[$i] == '2010') {
+                    $strYear2 = $strYear2." open_date_y <= '2010'";
+                }
+            }
+
+            $operation = "";
+            if($strYear != '') {
+                $sql = $sql." AND open_date_y IN (".$strYear.")";
+                if($strYear2 != '')
+                    $operation = " OR ".$strYear2;
+            } else if($strYear2) {
+                $operation = " AND ".$strYear2;
+
+            }
+        }
+
+        // 정렬 추가
+        $order = " ORDER BY open_date_y DESC ";
+
+
+        //echo $sql.$operation.$order;
+
+        $result = mysql_query($sql.$operation.$order) or die("WorkDaoImpl detail error : ".mysql_error());
+        return $result;
+
+    }
 }

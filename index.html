@@ -1,69 +1,635 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<?php
+/**
+ * User: Hyoseok Kim (toriworks@gmail.com)
+ * Date: 13. 11. 01
+ * Time: 오후 10:45
+ */
+
+require_once('./classes/ConnectionFactory.php');
+
+// 회사소개서 관련
+require_once('./classes/dao/AttachesDaoImpl.php');
+require_once('./classes/service/AttachesServiceImpl.php');
+require_once('./classes/domain/Attaches.php');
+
+$conn = ConnectionFactory::create();
+
+$attachesDaoImpl = new AttachesDaoImpl();
+$attachesServiceImpl = new AttachesServiceImpl();
+$attachesServiceImpl->setAttachesDao($attachesDaoImpl);
+
+// 브로셔 파라미터 설정
+$ref_id = 'CPI-000001'; // 브로셔 자료 고유 아이디
+$stypes = 'A1';
+$mtypes = 'CI';
+
+$attachesObj = new Attaches();
+$attachesObj->setRefId($ref_id);
+$attachesObj->setStypes($stypes);
+$attachesObj->setMtypes($mtypes);
+
+$result = $attachesServiceImpl->detail($conn, $attachesObj);
+$attach_row = @mysql_fetch_array($result);
+
+// 파일명 얻기
+$original_filename = '';
+$transfer_filename = '';
+if($attach_row != null) {
+    $original_filename = $attach_row['original_filename'];
+    $transfer_filename = $attach_row['transfer_filename'];
+}
+?>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>IPGROUP</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="./_old/css/style.css" />
-	<script type="text/javascript">
-	//<![CDATA[
-		$(document).ready(function(){
-			$('.i1, .i2, .i3, .i4, .i5').fadeTo(0,0.01);
-		});
-		$(window).load(function(){
-			$('.i1').delay(100).fadeTo(300,1);
-			$('.i2').delay(200).fadeTo(300,1);
-			$('.i3').delay(300).fadeTo(300,1);
-			$('.i4').delay(400).fadeTo(300,1);
-			$('.i5').delay(500).fadeTo(300,1);
-		});
-	//]]>
-	</script>
+	<meta charset="utf-8">
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="/favicon.png"> -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write(unescape('%3Cscript src="http://jquery.com/jquery-wp-content/themes/jquery/js/jquery-1.9.1.min.js"%3E%3C/script%3E'))</script>
+	<script src="./js/jquery.mousewheel.js"></script>
+	<script src="./js/script.js"></script>
+    <script type="text/javascript">
+        send_request = function() {
+            var request_form = document.forms.request_form;
+            if(request_form.company_name.value == '' || request_form.manager_name.value == '') {
+                alert("회사정보를 입력해 주세요.");
+                return;
+            }
+
+            var contactTel1 = request_form.contact_tel_1;
+            var contactTel1Selected = 0;
+            var contactTel1V = '';
+            for(var t1=1; t1<contactTel1.length; t1++) {
+                if(contactTel1[t1].selected == true) {
+                    contactTel1Selected = contactTel1Selected + 1;
+                    contactTel1V = contactTel1[t1].value;
+                }
+            }
+
+            var contactMob1 = request_form.contact_mobile_1;
+            var contactMob1Selected = 0;
+            var contactMob1V = '';
+            for(var m1=1; m1<contactMob1.length; m1++) {
+                if(contactMob1[m1].selected == true) {
+                    contactMob1Selected = contactMob1Selected + 1;
+                    contactMob1V = contactMob1[m1].value;
+                }
+            }
+
+            if(contactTel1Selected == 0 || contactMob1Selected == 0
+                    || request_form.contact_tel_2.value == '' || request_form.contact_tel_3.value == ''
+                    || request_form.contact_mobile_2.value == '' || request_form.contact_mobile_3.value == '') {
+                alert("연락처를 입력해주세요.");
+                return;
+            }
+
+            if(request_form.email_1.value == '' || request_form.email_2.value == '') {
+                alert("이메일을 입력해주세요.");
+                return;
+            }
+
+            var typesT = request_form.types_t;
+            var typesSelected = 0;
+            for(var i=0; i<typesT.length; i++) {
+                if(typesT[i].checked == true) {
+                    typesSelected = typesSelected + parseInt("0" + typesT[i].value);
+                }
+            }
+
+            if(typesSelected < 1) {
+                alert("문의 항목을 선택해주세요.");
+                return;
+            }
+            request_form.types.value = typesSelected;
+
+            if(request_form.memos.value == '') {
+                alert("문의 내용을 입력해주세요.");
+                return;
+            }
+
+            var acheck = document.getElementById('agree_check');
+            if(acheck.checked != true) {
+                alert("개인정보 수집 및 이용약관에 동의해야 합니다.");
+                return;
+            }
+
+            request_form.contact_tel.value = contactTel1V + '-' + request_form.contact_tel_2.value + '-' + request_form.contact_tel_3.value;
+            request_form.contact_mobile.value = contactMob1V + '-' + request_form.contact_mobile_2.value + '-' + request_form.contact_mobile_3.value;
+            request_form.email.value = request_form.email_1.value + '@' + request_form.email_2.value;
+
+            request_form.action = "upload.php";
+            request_form.submit();
+        }
+    </script>
+
+	<!-- Google Fonts : Early Access [Nanum Gothic Coding (Korean)] http://www.google.com/fonts/earlyaccess -->
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+	<link rel="stylesheet" type="text/css" href="./css/default.css">
+	<link rel="stylesheet" type="text/css" href="./css/mobile.css">
+	<!--[if lt IE 9]>
+		<script src="./js/respond.min.js"></script>
+	<![endif]-->
+
+	<title>아이피그룹</title>
+
 </head>
+<body class="VERTICAL_PAGE">
 
-<body>
+<div id="wrap">
 
-<div id="header">
-	<div class="align">
-		<h1><img src="./_old/images/logo.gif" alt="IPGROUP" /></h1>
+	<header>
+		<h1>IPGROUP</h1>
+		<nav class="gnb" role="navigation">
+			<ul>
+				<li class="a"><a href="index_new.html#about">About</a></li>
+				<li class="w"><a href="index_new.html#works">Works</a></li>
+				<li class="c"><a href="index_new.html#contact">Contact</a></li>
+			</ul>
+		</nav>
+		<div class="etc_links">
+			<a class="company" href="./download.php?filename=<?= $transfer_filename ?>&ofilename=<?= $original_filename ?>&category=CI" target="_blank">COMPANY BROCHURE</a>
+			<a class="recruit" href="recruit.html">RECRUIT</a>
+		</div>
+		<div class="top_link">
+			<a href="#wrap">Top</a>
+		</div>
+	</header>
+
+	<div id="container">
+
+		<!-- SECTION : About -->
+		<section class="screen" id="about">
+			<div class="contents">
+				<h2>About</h2>
+				<nav class="lnb">
+					<ul>
+						<li><a href="#about_overview">Overview</a></li>
+						<li><a href="#about_direction">Future direction</a></li>
+						<li><a href="#about_business">Business</a></li>
+						<li><a href="#about_partner">Clients/Partner</a></li>
+					</ul>
+				</nav>
+				<div class="nav_controler">
+					<a class="prev" href="#">이전 메뉴</a>
+					<a class="next" href="#">다음 메뉴</a>
+				</div>
+
+				<!-- Overview -->
+				<div id="about_overview">
+					<h3>Overview</h3>
+					<p class="txt1">
+						IPGROUP은 사용자 중심, 마케팅 기반 <strong>User Interface</strong>의 설계, 구축, 운영에 필요한 
+						<strong>Total Creative Service</strong>를 제공하여 고객사의 마케팅 성과의 최적화를 지원하는 전문가 집단입니다.
+					</p>
+					<ul class="txt2">
+						<li>2000년 설립 후 롯데그룹 관계사를 중심으로 국내 최고의 <strong>Brand Power</strong>를 보유한 고객사의 파트너로써 역할을 해왔습니다.</li>
+						<li>웹 사이트, 모바일 등 다양한 UI환경에 대한 구축 경험과 유통 산업의 홍보 및 E-Commerce 사이트의 <strong>구축과 운영</strong>에 대한 탁월한 경쟁력을 보유하고 있습니다.</li>
+						<li>그 동안 축척한 경험과 새로운 매체 및 방법론에 대한 연구를 통해 고객사의 마케팅 활동을 효과적으로 지원할 수 있는 역량을 지속적으로 개발하는 IPGROUP이 될 것을 약속 드립니다.</li>
+					</ul>
+					<div class="overview_img">
+						<img src="./images/about/overview.png" alt="">
+					</div>
+				</div>
+
+				<!-- Future direction -->
+				<div id="about_direction">
+					<h3>Future <strong>direction</strong></h3>
+					<p class="txt1">
+						IPGROUP의 미래는 고객사의 <strong>Marketing Communication</strong> 활동의 효과적인 지원을 위한 역량을 지속적으로 개발하는 것을 지향합니다.
+					</p>
+					<p class="txt2">
+						사용자 중심의 Interface 구현을 위한 Total Service 제공 및 성과 중심의 마케팅 수행을 위한 전문가 집단 구성을 목표로 사용자 중심 UI설계, 창의적인 시각 디자인, 마케팅 개념 중심의 기획 역량을 지속적으로 향상시키기 위해 프로젝트 수행 및 운영 프로세스를 표준화하고 산출물의 품질 향상을 위한 관리 활동을 체계적으로 수행하고 있습니다.<br>
+						<br>
+						그리고 외부 역량의 효과적인 활용을 위해 분야별 전문 기업과의 협력 네트워크 구성에도 최선의 노력을 기울이고 있습니다.<br>
+					</p>
+					<div class="direction_img">
+						<img src="./images/about/direction.png" alt="">
+					</div>
+				</div>
+
+				<!-- Business -->
+				<div id="about_business">
+					<h3>Business</h3>
+					<p class="txt1">
+						IPGROUP은 고객사의 Web, Mobile등 고객 접점에 대한 <strong>UI 개선 방안 수립</strong>을 바탕으로 신규 구축 프로젝트의 수행 및 마케팅 관점의 운영 대행을 포함한 <strong>Total Service</strong>를 제공 합니다.
+					</p>
+					<div class="business_img">
+						<img src="./images/about/business.png" alt="">
+					</div>
+				</div>
+
+				<!-- Clients/Partner -->
+				<div id="about_partner">
+					<h3>IPG <strong>Clients</strong> &amp; <strong>Partners</strong></h3>
+					<p class="txt1">
+						아이피그룹과 함께걸어온 <strong>클라이언트</strong>와 <strong>파트너</strong>를 소개 합니다.
+					</p>
+					<dl class="clients">
+						<dt>Clients</dt>
+						<dd>
+							<ul>
+								<li><img src="./images/about/p_dotcom.png" alt=""></li>
+								<li><img src="./images/about/p_lotteshopping.png" alt=""></li>
+								<li><img src="./images/about/p_lottedfs.png" alt=""></li>
+								<li><img src="./images/about/p_ldcc.png" alt=""></li>
+								<li><img src="./images/about/p_doosanic.png" alt=""></li>
+								<li><img src="./images/about/p_lottesuper.png" alt=""></li>
+								<li><img src="./images/about/p_hanalife.png" alt=""></li>
+								<li><img src="./images/about/p_meritzfire.png" alt=""></li>
+								<li><img src="./images/about/p_chunjae.png" alt=""></li>
+								<li><img src="./images/about/p_nhis.png" alt=""></li>
+								<li><img src="./images/about/p_miraen.png" alt=""></li>
+								<li><img src="./images/about/p_tsis.png" alt=""></li>
+								<li><img src="./images/about/p_kidi.png" alt=""></li>
+							</ul>
+						</dd>
+					</dl>
+					<dl class="partners">
+						<dt>Partners</dt>
+						<dd>
+							<ul>
+								<li><img src="./images/about/p_edsk.png" alt=""></li>
+								<li><img src="./images/about/p_smartebiz.png" alt=""></li>
+								<li><img src="./images/about/p_sysforu.png" alt=""></li>
+								<li><img src="./images/about/p_contentssolution.png" alt=""></li>
+								<li><img src="./images/about/p_hiweb.png" alt=""></li>
+								<li><img src="./images/about/p_wisenut.png" alt=""></li>
+								<li><img src="./images/about/p_kcvision.png" alt=""></li>
+								<li><img src="./images/about/p_mondaykorea.png" alt=""></li>
+								<li><img src="./images/about/p_bnp21.png" alt=""></li>
+								<li><img src="./images/about/p_gpmobile.png" alt=""></li>
+								<li><img src="./images/about/p_chunjae.png" alt=""></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+
+			</div>
+		</section>
+
+		<!-- SECTION : Works -->
+		<section class="screen" id="works">
+			<div class="contents">
+				<h2>Works</h2>
+				<div class="works_check">
+					<ul>
+						<li><input id="wcy_1" type="checkbox" name="year" value="2013" checked="checked" onclick="qry_work();"><label for="wcy_1">2013</label></li>
+						<li><input id="wcy_2" type="checkbox" name="year" value="2012" onclick="qry_work();"><label for="wcy_2">2012</label></li>
+						<li><input id="wcy_3" type="checkbox" name="year" value="2011" onclick="qry_work();"><label for="wcy_3">2011</label></li>
+						<li><input id="wcy_4" type="checkbox" name="year" value="2010" onclick="qry_work();"><label for="wcy_4">2010이전</label></li>
+					</ul>
+					<ul>
+						<li><input id="wct_1" type="checkbox" name="cate" value="1" checked="checked" onclick="qry_work();"><label for="wct_1">PROJECT</label></li>
+						<li><input id="wct_2" type="checkbox" name="cate" value="2" checked="checked" onclick="qry_work();"><label for="wct_2">PROMOTION</label></li>
+						<li><input id="wct_3" type="checkbox" name="cate" value="4" checked="checked" onclick="qry_work();"><label for="wct_3">UX/UI</label></li>
+						<li><input id="wct_4" type="checkbox" name="cate" value="8" checked="checked" onclick="qry_work();"><label for="wct_4">MOBILE</label></li>
+						<li><input id="wct_5" type="checkbox" name="cate" value="16" checked="checked" onclick="qry_work();"><label for="wct_5">OFFER</label></li>
+						<li><input id="wct_6" type="checkbox" name="cate" value="32" checked="checked" onclick="qry_work();"><label for="wct_6">CONSULTING</label></li>
+						<li><input id="wct_7" type="checkbox" name="cate" value="64" checked="checked" onclick="qry_work();"><label for="wct_7">AD</label></li>
+					</ul>
+				</div>
+				<div class="works_list">
+					<!--
+					<ul>
+						<li class="type_a row_1 col_1">
+							<a href="#" onclick="$('#works_view').show();return false;">
+								<img class="thumb" src="./images/works/temp_1.jpg" alt="하나생명 웹접근성 프로젝트 이미지">
+								<span class="title">하나생명</span>
+								<span class="desc">하나생명 웹접근성 프로젝트</span>
+								<span class="date">2013. 09</span>
+								<span class="cover"></span>
+							</a>
+						</li>
+					</ul>
+					-->
+					<div class="works_list_controler">
+						<a class="prev" href="#"><img src="./images/works/btn_list_prev.png" alt="이전 목록"></a>
+						<a class="next" href="#"><img src="./images/works/btn_list_next.png" alt="다음 목록"></a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="works_view" style="display:none;">
+			<div class="view_container">
+				<div class="area">
+					<div class="view_contents">
+						<h3 class="title">
+							<!-- <strong>롯데홈쇼핑</strong> -->
+							<span>롯데홈쇼핑 웹접근성 프로젝트 명 나오는 곳</span>
+						</h3>
+						<div class="info">
+							Client : 롯데홈쇼핑<br>
+							Period : 2013.12 ~ 2014.03<br>
+							Link : <a href="http://www.lotteimall.co.kr" target="_blank" title="새창">http://www.lotteimall.co.kr</a><br>
+						</div>
+						<article>
+							<img src="./images/works/temp.jpg" alt="롯데홈쇼핑 웹접근성 프로젝트">
+							<p>
+								포로젝트 설명 나오는 곳.<br>
+								포로젝트 설명 나오는 곳.<br>
+								포로젝트 설명 나오는 곳.<br>
+								포로젝트 설명 나오는 곳.<br>
+							</p>
+						</article>
+					</div>
+				</div>
+				<a class="prev" href="#">이전</a>
+				<a class="next" href="#">다음</a>
+				<a class="close" href="#close">닫기</a>
+			</div>
+		</section>
+
+		<!-- SECTION : Contact -->
+		<section class="screen" id="contact">
+			<div class="contents">
+				<h2>Contact</h2>
+				<nav class="lnb">
+					<ul>
+						<li><a href="#contact_location">Location</a></li>
+						<li><a href="#contact_request">Request</a></li>
+					</ul>
+				</nav>
+				<div class="nav_controler">
+					<a class="prev" href="#">이전 메뉴</a>
+					<a class="next" href="#">다음 메뉴</a>
+				</div>
+
+				<div id="contact_location">
+					<h3>How To <strong>Location</strong></h3>
+					<p class="txt1">
+						100-879 서울특별시 중구 을지로4가 310-68 삼풍빌딩 5층/7층 (삼풍빌딩 1층에 스텐다드차드 은행이 있습니다.)
+					</p>
+					<p class="txt2">
+						<strong>IPGROUP</strong>
+						<span class="tel">TEL 070-8730-8065</span>
+						<span class="fax">FAX 02-6261-8065</span>
+					</p>
+					<div class="map_area">
+						<aside class="map_side">
+							<strong class="title">BY SUBWAY</strong>
+							<ul class="line_link">
+								<li><a href="#line_map_2_5"><img src="images/contact/line_2_5.png" alt="2호선, 5호선 을지로4가역 10번 출구"></a></li>
+								<li><a href="#line_map_3"><img src="images/contact/line_3.png" alt="3호선 을지로3가역 7번 출구"></a></li>
+								<li><a href="#line_map_4"><img src="images/contact/line_4.png" alt="4호선 충무로역 8번 출구"></a></li>
+							</ul>
+						</aside>
+						<div class="map_image">
+							<div class="imgwrap" id="line_map_2_5">
+								<img class="map" src="./images/contact/map_line_2_5.gif" alt="2호선, 5호선 을지로4가역 10번 출구">
+								<div class="photo_wrap">
+									<ul>
+										<li id="mp_2_5_1">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_2_5_1.jpg" alt="">
+										</li>
+										<li id="mp_2_5_2">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_2_5_2.jpg" alt="">
+										</li>
+										<li id="mp_2_5_3">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_2_5_3.jpg" alt="">
+										</li>
+									</ul>
+									<a class="close" href="#"><img src="./images/contact/photo_close.gif" alt="닫기"></a>
+								</div>
+							</div>
+							<div class="imgwrap" id="line_map_3">
+								<img class="map" src="./images/contact/map_line_3.gif" alt="3호선 을지로3가역 7번 출구">
+								<div class="photo_wrap">
+									<ul>
+										<li id="mp_3_1">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_3_1.jpg" alt="">
+										</li>
+										<li id="mp_3_2">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_3_2.jpg" alt="">
+										</li>
+										<li id="mp_3_3">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_3_3.jpg" alt="">
+										</li>
+									</ul>
+									<a class="close" href="#"><img src="./images/contact/photo_close.gif" alt="닫기"></a>
+								</div>
+							</div>
+							<div class="imgwrap" id="line_map_4">
+								<img class="map" src="./images/contact/map_line_4.gif" alt="4호선 충무로역 8번 출구">
+								<div class="photo_wrap">
+									<ul>
+										<li id="mp_4_1">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_4_1.jpg" alt="">
+										</li>
+										<li id="mp_4_2">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_4_2.jpg" alt="">
+										</li>
+										<li id="mp_4_3">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_4_3.jpg" alt="">
+										</li>
+										<li id="mp_4_4">
+											<a href="#"><img src="./images/contact/ico_photo.png" alt=""></a>
+											<img class="photo" src="./images/contact/map_photo_4_4.jpg" alt="">
+										</li>
+									</ul>
+									<a class="close" href="#"><img src="./images/contact/photo_close.gif" alt="닫기"></a>
+								</div>
+							</div>
+						</div>
+						
+						<script type="text/javascript">
+							$('.imgwrap .photo_wrap a.close').bind('click',function(){
+								$(this).parents('.photo_wrap').find('li img.photo').hide();
+								return false;
+							});
+							$('.imgwrap .photo_wrap li a').bind('click',function(){
+								var tg = $(this).next();
+								tg.show();
+								return false;
+							});
+						</script>
+
+					</div>
+					<div class="map_link">
+						<a href="http://m.map.naver.com/map.nhn?lng=126.9955198&lat=37.5662354&pinType=site&pinId=18700093&dlevel=12" target="_blank"><img src="./images/contact/btn_naver_map.png" alt="네이버 지도로 보기"></a>
+					</div>
+				</div>
+<form id="upload_form" name="request_form" action="upload.php" method="post" enctype="multipart/form-data">
+<input type="hidden" name="contact_tel" value="" />
+<input type="hidden" name="contact_mobile" value="" />
+<input type="hidden" name="email" value="" />
+<input type="hidden" name="types" value="" />
+				<div id="contact_request">
+					<h3>Request <strong>Information</strong></h3>
+					<p class="txt1">
+						IPGROUP은 고객의 비즈니스 환경과 온/오프라인 마케팅 전략에 대한 철저한 이해를 통해 최고의 온라인 서비스를 제공할 준비가 되어 있습니다.
+					</p>
+
+					<table class="form" cellspacing="0">
+						<tr>
+							<th><strong>회사정보</strong></th>
+							<td>
+								<div class="area">
+									<label class="bul" for="txt_company">회사명</label>
+									<input id="txt_company" class="i_text" type="text" name="company_name" value="">
+									<br class="m">
+									<label class="bul ml" for="txt_name">담당자</label>
+									<input id="txt_name" class="i_text" type="text" name="manager_name" value="">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong><label for="txt_site">사이트</label></strong></th>
+							<td>
+								<div class="area">
+									<input id="txt_site" class="i_text" type="text" name="url" value="">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong>연락처</strong></th>
+							<td>
+								<div class="area">
+									<label class="bul" for="num_phone_1">전화</label>
+									<select class="select" id="num_phone_1" name="contact_tel_1">
+										<option value="" selected="selected">선택</option>
+										<option value="02">02</option>
+										<option value="031">031</option>
+										<option value="032">032</option>
+										<option value="033">033</option>
+										<option value="041">041</option>
+										<option value="042">042</option>
+										<option value="043">043</option>
+										<option value="051">051</option>
+										<option value="052">052</option>
+										<option value="053">053</option>
+										<option value="054">054</option>
+										<option value="055">055</option>
+										<option value="061">061</option>
+										<option value="062">062</option>
+										<option value="063">063</option>
+										<option value="064">064</option>
+										<option value="070">070</option>
+									</select>
+									-
+									<input id="num_phone_2" class="i_text" type="number" name="contact_tel_2" value="">
+									-
+									<input id="num_phone_3" class="i_text" type="number" name="contact_tel_3" value="">
+
+									<br class="m">
+									
+									<label class="bul ml" for="num_hphone_1">휴대폰</label>
+									<select class="select" id="num_hphone_1" name="contact_mobile_1">
+										<option value="" selected="selected">선택</option>
+										<option value="010">010</option>
+										<option value="011">011</option>
+										<option value="016">016</option>
+										<option value="017">017</option>
+										<option value="018">018</option>
+										<option value="019">019</option>
+									</select>
+									-
+									<input id="num_hphone_2" class="i_text" type="number" name="contact_mobile_2" value="">
+									-
+									<input id="num_hphone_3" class="i_text" type="number" name="contact_mobile_3" value="">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong>E-Mail</strong></th>
+							<td>
+								<div class="area">
+									<input id="txt_email_1" class="i_text" type="text" name="email_1" value="">
+									@
+									<input id="txt_email_2" class="i_text" type="text" name="email_2" value="">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong>문의항목</strong></th>
+							<td>
+								<div class="area ck_area">
+									<input id="cate_ck_1" type="checkbox" name="types_t" value="1"><label class="ck" for="cate_ck_1">Project</label>
+									<input id="cate_ck_2" type="checkbox" name="types_t" value="2"><label class="ck" for="cate_ck_2">Promotion</label>
+									<input id="cate_ck_3" type="checkbox" name="types_t" value="4"><label class="ck" for="cate_ck_3">UX/UI</label>
+									<input id="cate_ck_4" type="checkbox" name="types_t" value="8"><label class="ck" for="cate_ck_4">Mobile</label>
+									<input id="cate_ck_5" type="checkbox" name="types_t" value="16"><label class="ck" for="cate_ck_5">Offer</label>
+									<input id="cate_ck_6" type="checkbox" name="types_t" value="32"><label class="ck" for="cate_ck_6">Consulting</label>
+									<input id="cate_ck_7" type="checkbox" name="types_t" value="64"><label class="ck" for="cate_ck_7">AD</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong>문의내용</strong></th>
+							<td>
+								<div class="area">
+									<textarea class="textarea" name="memos" id=""></textarea>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th><strong>첨부파일</strong></th>
+							<td>
+								<div class="area">
+									<input id="txt_file" class="i_file" type="file" name="file_attach" value="">
+									<span class="t">※ 첨부파일은 50MB이하만 가능합니다.</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+</form>
+					<table class="form" cellspacing="0">
+						<tr>
+							<th><strong>개인정보 수집 및 이용에 대한 안내</strong></th>
+							<td>
+								<div class="area">
+									<div class="agree_text">
+										<div class="inner">
+											<strong>개인정보 취급방침</strong><br>
+											<br>
+											가. 개인정보의 수집, 이용 목적 - 입사지원<br>
+											나. 수집하는 개인정보의 항목- 이름,연락처, 휴대폰번호, 이메일, 주소, 학력<br>
+											다. 개인정보의 보유 및 이용 기간 - 개인정보 수집 및 이용목적이 달성된 후에는 해당 정보를 파기합니다.<br>
+										</div>
+									</div>
+									<input id="agree_check" type="checkbox" name="" value="">
+									<label for="agree_check">개인정보 수집 및 이용에 동의합니다.</label>
+								</div>
+							</td>
+						</tr>
+					</table>
+
+					<div class="button_confirm">
+						<a href="javascript:send_request();"><img src="./images/contact/btn_confirm.gif" alt="확인"></a>
+					</div>
+				</div>
+			</div>
+		</section>
+
 	</div>
+
+	<footer>
+		<p class="copyright"><span>COPYRIGHT 2013 IPGROUP All RIGHTS RESERVED.</span></p>
+	</footer>
+
 </div>
 
-<div id="middle">
-	<div class="section i1">
-		<img src="./_old/images/img_1.jpg" alt="" usemap="#map1" />
-		<map id="map1" name="map1">
-			<area shape="rect" href="./_old/workshop.html" onclick="window.open(this.href,'workshop','width=917,height=1000,scrollbars=yes');return false;" coords="693,54,854,82" alt="" />
-			<area shape="rect" href="./_old/exhibition.html" onclick="window.open(this.href,'exhibition','width=917,height=1000,scrollbars=yes');return false;" coords="693,84,854,112" alt="" />
-		</map>
-	</div>
-	<div class="section i2">
-		<img src="./_old/images/img_2.jpg" alt="" />
-	</div>
-	<div class="section i3">
-		<img src="./_old/images/img_3.jpg" alt="" />
-	</div>
-	<div class="section i4">
-		<img src="./_old/images/img_4.jpg" alt="" border="0" usemap="#eMap" />
-        <map name="eMap" id="eMap">
-          <area shape="rect" coords="623,72,663,86" href="mailto:nhj@ipgroup.co.kr" alt="" />
-          <area shape="rect" coords="623,148,663,162" href="mailto:nhj@ipgroup.co.kr" alt="" />
-          <area shape="rect" coords="621,230,661,244" href="mailto:nhj@ipgroup.co.kr" alt="" />
-        </map>
-    </div>
-	<div class="section i5">
-		<img src="./_old/images/img_5.jpg" alt="" />
-	</div>
-</div>
-
-<div id="footer">
-	<address><img src="./_old/images/copy.gif" alt="COPYRIGHT &copy; 2012 IPGROUP. ALL RIGHTS RESERVED" /></address>
-</div>
-
-
+<span id="mobile_check"></span>
 
 </body>
 </html>

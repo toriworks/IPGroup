@@ -14,6 +14,9 @@ require_once('../classes/dao/ApplicantsDaoImpl.php');
 require_once('../classes/service/ApplicantsServiceImpl.php');
 require_once('../classes/domain/Applicants.php');
 
+require_once('../classes/utils/CommonUtils.php');
+
+
 $conn = ConnectionFactory::create();
 $applicantsDaoImpl = new ApplicantsDaoImpl();
 $applicantsServiceImpl = new ApplicantsServiceImpl();
@@ -47,9 +50,9 @@ $applicantsServiceImpl->setApplicantsDao($applicantsDaoImpl);
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.php">Applicants</a></li>
+        <li><a href="work_list.php">Work</a></li>
         <li><a href="request_list.php">Request</a></li>
-        <li class="active"><a href="recruit_list.php">Applicants</a></li>
+        <li class="active"><a href="recruit_list.php">Recruit</a></li>
         <li><a href="job_posting_list.php">Job Posting</a></li>
         <li><a href="company_introduction.php">Company Introduction</a></li>
         <li><a href="member_list.php">Member</a></li>
@@ -221,11 +224,11 @@ if($totalCnt > 0) {
     <td class="name"><a href="recruit_view.php"><?= $row['kor_name'] ?></a></td>
     <td><?= $row['tel_1'] ?>-<?= $row['tel_2'] ?>-<?= $row['tel_3'] ?><br />/ <?= $row['mobile_1'] ?>-<?= $row['mobile_2'] ?>-<?= $row['mobile_3'] ?></td>
     <td><?= $row['email'] ?></td>
-    <td><?= $row['status'] ?></td>
-    <td><?= $row['career_types'] ?></td>
-    <td><?= $row['school_type'] ?></td>
+    <td><?= CommonUtils::getRecruitStatus($row['status']) ?></td>
+    <td><?= CommonUtils::getCareerTypes($row['career_types']) ?></td>
+    <td><?= CommonUtils::getSchoolTypes4Recruit($row['school_type']) ?></td>
     <td><?= $row['regdate'] ?></td>
-    <td class="status"><span class="pass"><?= $row['status'] ?></span></td>
+    <td class="status"><span class="<?= CommonUtils::getRecruitStatusStyle($row['status']) ?>"><?= CommonUtils::getRecruitStatus($row['status']) ?></span></td>
 </tr>
     <?
     }

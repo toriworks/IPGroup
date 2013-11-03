@@ -10,6 +10,7 @@
 @define('class_path', '/home/hosting_users/ipgroup1/www');
 require_once(class_path."/classes/service/IAttachesService.php");
 require_once(class_path."/classes/dao/AttachesDaoImpl.php");
+require_once(class_path."/classes/domain/Attaches.php");
 class AttachesServiceImpl implements IAttachesService {
 
     private $attachesDao;
@@ -50,5 +51,22 @@ class AttachesServiceImpl implements IAttachesService {
     public function detail($conn, Attaches $obj)
     {
         return $this->attachesDao->detail($conn, $obj);
+    }
+
+    public function lists4Work($conn, $id)
+    {
+        $result = $this->attachesDao->lists($conn, $id);
+        $i = 0;
+        $arrAttaches = '';
+        while($row = mysql_fetch_array($result)) {
+            $attObj = new Attaches();
+            $attObj->setOriginalFilename($row['original_filename']);
+            $attObj->setTransferFilename($row['transfer_filename']);
+            $attObj->setStypes($row['stypes']);
+
+            $arrAttaches[$i++] = $attObj;
+        }
+
+        return $arrAttaches;
     }
 }

@@ -33,6 +33,23 @@ class Applicants
     private $hire_date = '';
     private $hire_part = '';
     private $hire_task = '';
+    private $jobs_hire_part = '';
+
+    /**
+     * @param string $jobs_hire_part
+     */
+    public function setJobsHirePart($jobs_hire_part)
+    {
+        $this->jobs_hire_part = $jobs_hire_part;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobsHirePart()
+    {
+        return $this->jobs_hire_part;
+    }
 
     /**
      * @param string $birth_year

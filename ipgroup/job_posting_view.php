@@ -188,7 +188,7 @@ if($row['career_types'] == 'Y') {
                 <th class="tit" scope="row">성별</th>
                 <td class="val"><?= CommonUtils::getGender($row['gender']) ?></td>
                 <th class="tit" scope="row">나이</th>
-                <td class="val">무관</td>
+                <td class="val"><? if($row['old_types'] == 'NO') { echo '무관'; } else { echo $row['how_old']; } ?></td>
             </tr>
             <tr>
                 <th class="tit" scope="row">복리후생</th>

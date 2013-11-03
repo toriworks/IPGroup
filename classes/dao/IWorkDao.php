@@ -12,4 +12,6 @@ interface IWorkDao {
     public function lists( $conn, $wParam, $orderBy, $curPage, $pageMax );
     public function listsCount( $conn, $wParam );
     public function detail( $conn, Work $obj );
+
+    public function lists4Work($conn, $year, $category);
 }

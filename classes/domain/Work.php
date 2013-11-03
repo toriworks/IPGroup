@@ -45,6 +45,76 @@ class Work
     private $work_attach = '';
     private $work_attach_cnt = '';
 
+    // 부가항목
+    private $open_date_str = '';
+    private $start_date_str = '';
+    private $end_date_str = '';
+    private $arr_attaches = '';
+
+    /**
+     * @param string $arr_attaches
+     */
+    public function setArrAttaches($arr_attaches)
+    {
+        $this->arr_attaches = $arr_attaches;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArrAttaches()
+    {
+        return $this->arr_attaches;
+    }
+
+    /**
+     * @param string $end_date_str
+     */
+    public function setEndDateStr($end_date_str)
+    {
+        $this->end_date_str = $end_date_str;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndDateStr()
+    {
+        return $this->end_date_str;
+    }
+
+    /**
+     * @param string $start_date_str
+     */
+    public function setStartDateStr($start_date_str)
+    {
+        $this->start_date_str = $start_date_str;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartDateStr()
+    {
+        return $this->start_date_str;
+    }
+
+    /**
+     * @param string $open_date_str
+     */
+    public function setOpenDateStr($open_date_str)
+    {
+        $this->open_date_str = $open_date_str;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpenDateStr()
+    {
+        return $this->open_date_str;
+    }
+
     /**
      * @param string $mod_id
      */

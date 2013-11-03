@@ -124,6 +124,8 @@ class CommonUtils {
             $strST = '고졸 이상';
         } else if($cd == 'NG') {
             $strST = '무관';
+        } else if($cd == 'EC') {
+            $strST = '기타';
         } else {
             $strST = '';
         }
@@ -145,6 +147,62 @@ class CommonUtils {
         }
 
         return $strG;
+    }
+
+    public static function getRecruitStatus($cd) {
+        $strRS = '';
+
+        if($cd == 'A') {
+            $strRS = '접수';
+        } else if($cd == 'B') {
+            $strRS = '심사중';
+        } else if($cd == 'C') {
+            $strRS = '합격';
+        } else if($cd == 'D') {
+            $strRS = '불합격';
+        } else {
+            $strRS = '';
+        }
+
+        return $strRS;
+    }
+
+    public static function getRecruitStatusStyle($cd) {
+        $strRS = '';
+
+        if($cd == 'A') {
+            $strRS = 'ready';
+        } else if($cd == 'B') {
+            $strRS = '';
+        } else if($cd == 'C') {
+            $strRS = 'pass';
+        } else if($cd == 'D') {
+            $strRS = 'fail';
+        } else {
+            $strRS = '';
+        }
+
+        return $strRS;
+    }
+
+    public static function getSchoolTypes4Recruit($cd) {
+        $strST = '';
+
+        if($cd == 'UV') {
+            $strST = '대졸';
+        } else if($cd == 'CL') {
+            $strST = '전문대졸';
+        } else if($cd == 'HS') {
+            $strST = '고졸';
+        } else if($cd == 'NG') {
+            $strST = '무관';
+        } else if($cd == 'EC') {
+            $strST = '기타';
+        } else {
+            $strST = '';
+        }
+
+        return $strST;
     }
 
 }

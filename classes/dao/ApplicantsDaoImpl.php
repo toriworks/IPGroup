@@ -14,11 +14,11 @@ class ApplicantsDaoImpl implements IApplicantsDao {
     {
         $resultOfQuery = 0;
         $sql = "INSERT INTO applicants (jobs_id,id,kor_name,mobile_1,mobile_2,mobile_3,email,career_types,career_years,birth_year,tel_1,tel_2,tel_3,school_type,school_name,school_sub";
-        $sql .= ",wish_pay,regdate ,status, memos ,hire_date,hire_part ,hire_task) VALUES ";
+        $sql .= ",wish_pay,regdate ,status,memos,hire_date,hire_part,hire_task,jobs_hire_part) VALUES ";
         $sql .= "('".$obj->getJobsId()."', '".$obj->getId()."', '".$obj->getKorName()."', '".$obj->getMobile1()."', '".$obj->getMobile2()."', '".$obj->getMobile3()."'";
         $sql .= ", '".$obj->getEmail()."', '".$obj->getCareerTypes()."', '".$obj->getCareerYears()."', '".$obj->getBirthYear()."'";
         $sql .= ", '".$obj->getTel1()."', '".$obj->getTel2()."', '".$obj->getTel3()."', '".$obj->getSchoolType()."', '".$obj->getSchoolName()."', '".$obj->getSchoolSub()."'";
-        $sql .= ", '".$obj->getWishPay()."', now(), 'A', '', '', '', '')";
+        $sql .= ", '".$obj->getWishPay()."', now(), 'A', '', '', '', '','".$obj->getJobsHirePart()."')";
 
         $resultOfQuery = mysql_query($sql, $conn) or die("ApplicantsDaoImpl add error : ".mysql_error());
         return $resultOfQuery;
@@ -43,6 +43,18 @@ class ApplicantsDaoImpl implements IApplicantsDao {
         $resultOfQuery = 0;
         $sql = "UPDATE applicants SET status='".$obj->getStatus()."', memos='".$obj->getMemos()."', hire_date='".$obj->getHireDate()."', hire_part='".$obj->getHirePart()."', hire_task='".$obj->getHireTask()."'";
         $sql .= " WHERE jobs_id='".$obj->getJobsId()."' AND id='".$obj->getId()."'";
+
+        $resultOfQuery = mysql_query($sql, $conn) or die("ApplicantsDaoImpl update_keeper error : ".mysql_error());
+        return $resultOfQuery;
+    }
+
+    public function update_jobs_hire_part($conn, Applicants $obj) {
+        $resultOfQuery = 0;
+        $sql = "UPDATE applicants SET jobs_hire_part='".$obj->getJobsHirePart()."' ";
+        $sql .= " WHERE jobs_id='".$obj->getJobsId()."'";
+
+        $resultOfQuery = mysql_query($sql, $conn) or die("ApplicantsDaoImpl update_jobs_hire_part error : ".mysql_error());
+        return $resultOfQuery;
     }
 
     public function delete($conn, Applicants $obj)
@@ -56,6 +68,7 @@ class ApplicantsDaoImpl implements IApplicantsDao {
         $sql .= ",a.wish_pay, date_format(a.regdate, '%Y.%m.%d') regdate, a.regdate as regdate_r, datediff(now(), a.regdate) as is_old, a.status, a.memos, a.hire_date, a.hire_part, a.hire_task ";
         $sql .= ", b.original_filename ";
         $sql .= " FROM applicants a LEFT OUTER JOIN attaches b ON a.id=b.ref_id ";
+
         if(!empty($wParam)) {
             $sql .= " WHERE ".$wParam;
         }

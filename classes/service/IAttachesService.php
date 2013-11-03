@@ -15,4 +15,5 @@ interface IAttachesService {
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Attaches $obj);
+    public function lists4Work($conn, $id);
 }

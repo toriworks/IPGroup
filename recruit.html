@@ -1,3 +1,54 @@
+<?php
+/**
+ * User: Hyoseok Kim (toriworks@gmail.com)
+ * Date: 13. 11. 01
+ * Time: 오후 10:45
+ */
+
+require_once('./classes/ConnectionFactory.php');
+require_once('./classes/dao/ICommons.php');
+
+// 회사소개서 관련
+require_once('./classes/dao/AttachesDaoImpl.php');
+require_once('./classes/service/AttachesServiceImpl.php');
+require_once('./classes/domain/Attaches.php');
+require_once('./classes/dao/JobsDaoImpl.php');
+require_once('./classes/service/JobsServiceImpl.php');
+require_once('./classes/domain/Jobs.php');
+require_once('./classes/utils/CommonUtils.php');
+
+$conn = ConnectionFactory::create();
+
+$attachesDaoImpl = new AttachesDaoImpl();
+$attachesServiceImpl = new AttachesServiceImpl();
+$attachesServiceImpl->setAttachesDao($attachesDaoImpl);
+
+$jobsDaoImpl = new JobsDaoImpl();
+$jobsServiceImpl = new JobsServiceImpl();
+$jobsServiceImpl->setJobsDao($jobsDaoImpl);
+
+
+// 브로셔 파라미터 설정
+$ref_id = 'CPI-000001'; // 브로셔 자료 고유 아이디
+$stypes = 'A1';
+$mtypes = 'CI';
+
+$attachesObj = new Attaches();
+$attachesObj->setRefId($ref_id);
+$attachesObj->setStypes($stypes);
+$attachesObj->setMtypes($mtypes);
+
+$result = $attachesServiceImpl->detail($conn, $attachesObj);
+$attach_row = @mysql_fetch_array($result);
+
+// 파일명 얻기
+$original_filename = '';
+$transfer_filename = '';
+if($attach_row != null) {
+    $original_filename = $attach_row['original_filename'];
+    $transfer_filename = $attach_row['transfer_filename'];
+}
+?>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,6 +59,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
 	<!-- <link rel="shortcut icon" type="image/x-icon" href="/favicon.png"> -->
 	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
 
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
@@ -21,6 +73,7 @@
 	<!-- Google Fonts : Early Access [Nanum Gothic Coding (Korean)] http://www.google.com/fonts/earlyaccess -->
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
 	<link rel="stylesheet" type="text/css" href="./css/default.css">
+	<link rel="stylesheet" type="text/css" href="./css/mobile.css">
 	<!--[if lt IE 9]>
 		<script src="./js/respond.min.js"></script>
 	<![endif]-->
@@ -36,13 +89,13 @@
 		<h1>IPGROUP</h1>
 		<nav class="gnb" role="navigation">
 			<ul>
-				<li class="a"><a href="index_new.html#about">About</a></li>
-				<li class="w"><a href="index_new.html#works">Works</a></li>
-				<li class="c"><a href="index_new.html#contact">Contact</a></li>
+				<li class="a"><a href="index.html#about">About</a></li>
+				<li class="w"><a href="index.html#works">Works</a></li>
+				<li class="c"><a href="index.html#contact">Contact</a></li>
 			</ul>
 		</nav>
 		<div class="etc_links">
-			<a class="company" href="#">COMPANY BROCHURE</a>
+			<a class="company" href="./download.php?filename=<?= $transfer_filename ?>&ofilename=<?= $original_filename ?>&category=CI" target="_blank">COMPANY BROCHURE</a>
 			<a class="recruit" href="recruit.html">RECRUIT</a>
 		</div>
 		<div class="top_link">
@@ -109,13 +162,29 @@
 					</ol>
 
 				</div>
+<?
+$rowCountPerPage = 3;
+$wParam = " is_show='Y' ";
+$orderBy = $_REQUEST['orderBy'];
+$orderDir = $_REQUEST['orderDir'];
+if($orderBy == '') {
+    $orderBy = ' regdate_r DESC ';
+}
 
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+$totalCnt = $jobsServiceImpl->listsCount($conn, $wParam);
+$result = $jobsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
+?>
 				<!-- Job Posting -->
 				<div id="recruit_job_posting">
 
 					<div class="posting_top">
 						<h3>현재 진행중인 채용정보 입니다.</h3>
-						<a href="#"><img src="./images/recruit/btn_recruit_check.png" alt="합격확인"></a>
+						<a href="#recruit_result"><img src="./images/recruit/btn_recruit_check.png" alt="합격확인"></a>
 					</div>
 
 					<div class="posting_list">
@@ -132,228 +201,171 @@
 								});
 							});
 						</script>
-						
+<?
+if($totalCnt == 0) {
+?>
+						<!-- 진행중인 채용정보가 없을 때 -->
+						<div class="no_data">
+							현재 진행중인 채용공고가 없습니다.
+						</div>
+						<!-- // 진행중인 채용정보가 없을 때 -->
+<?
+}
+?>
 						<dl class="list_container">
-							<!-- Job Posting -->
-							<dt class="posting_title">
-								<a href="#">
-									<span class="new">New</span>
-									<span class="number">003</span>
-									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
-									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
-									<span class="status"><img src="./images/recruit/posting_status_2.png" alt="채용마감"></span>
-								</a>
-							</dt>
-							<dd class="posting_detail">
-								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
-								<strong class="sub">모집안내</strong>
-								<div class="recruit_table">
-									<table>
-										<tr>
-											<th>모집안내</th>
-											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
-										</tr>
-										<tr>
-											<th>고용형태</th>
-											<td>정규직</td>
-											<th>모집인원</th>
-											<td>00명</td>
-										</tr>
-										<tr>
-											<th>근무부서</th>
-											<td>운영디자인</td>
-											<th>채용직급</th>
-											<td>과장</td>
-										</tr>
-										<tr>
-											<th>경력사항</th>
-											<td>5년이상</td>
-											<th>최종학력</th>
-											<td>고졸이상</td>
-										</tr>
-										<tr>
-											<th>성별</th>
-											<td>무관</td>
-											<th>나이</th>
-											<td>무관</td>
-										</tr>
-										<tr>
-											<th>복리후생</th>
-											<td colspan="3">
-												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
-												휴무/휴가 : 주5일근무, 연차<br>
-												보상제도 : 우수사원 표창/포상, 퇴직금<br>
-												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
-											</td>
-										</tr>
-										<tr>
-											<th>담당정보</th>
-											<td colspan="3">
-												홍길동 팀장 / 070-8730-0000
-											</td>
-										</tr>
-									</table>
-								</div>
-								<article>
-									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
-									입사지원 할 인재를 찾습니다.~<br>
-								</article>
-								<div class="btn_area">
-									<img src="./images/recruit/btn_recruit_end.png" alt="채용마감">									
-								</div>
-							</dd>
-							<!-- // Job Posting -->
 
-							<!-- Job Posting -->
-							<dt class="posting_title">
-								<a href="#">
-									<span class="new">New</span>
-									<span class="number">002</span>
-									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
-									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
-									<span class="status"><img src="./images/recruit/posting_status_1.png" alt="더보기"></span>
-								</a>
-							</dt>
-							<dd class="posting_detail">
-								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
-								<strong class="sub">모집안내</strong>
-								<div class="recruit_table">
-									<table>
-										<tr>
-											<th>모집안내</th>
-											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
-										</tr>
-										<tr>
-											<th>고용형태</th>
-											<td>정규직</td>
-											<th>모집인원</th>
-											<td>00명</td>
-										</tr>
-										<tr>
-											<th>근무부서</th>
-											<td>운영디자인</td>
-											<th>채용직급</th>
-											<td>과장</td>
-										</tr>
-										<tr>
-											<th>경력사항</th>
-											<td>5년이상</td>
-											<th>최종학력</th>
-											<td>고졸이상</td>
-										</tr>
-										<tr>
-											<th>성별</th>
-											<td>무관</td>
-											<th>나이</th>
-											<td>무관</td>
-										</tr>
-										<tr>
-											<th>복리후생</th>
-											<td colspan="3">
-												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
-												휴무/휴가 : 주5일근무, 연차<br>
-												보상제도 : 우수사원 표창/포상, 퇴직금<br>
-												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
-											</td>
-										</tr>
-										<tr>
-											<th>담당정보</th>
-											<td colspan="3">
-												홍길동 팀장 / 070-8730-0000
-											</td>
-										</tr>
-									</table>
-								</div>
-								<article>
-									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
-									입사지원 할 인재를 찾습니다.~<br>
-								</article>
-								<div class="btn_area">
-									<a href="#"><img src="./images/recruit/btn_recruit_write.png" alt="입사지원"></a>
-								</div>
-							</dd>
-							<!-- // Job Posting -->
+<?
+if($totalCnt > 0) {
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
 
+        if($row['is_always'] == 'N') {
+            $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
+            $eDate = $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'];
+            $seDate = $sDate.' ~<br />'.$eDate;
+        } else {
+            $seDate = '상시';
+        }
+
+        $careerTypes = ($row['career_types']) ? '경력' : '신입';
+        $hireTypes = CommonUtils::getHireTypes($row['hire_types']);
+
+        $hirePart = CommonUtils::getHirePart($row['hire_part']);
+        $schoolTypes = CommonUtils::getSchoolTypes($row['school_types']);
+        $gender = CommonUtils::getGender($row['gender']);
+        $position = CommonUtils::getPosition($row['position']);
+
+        $idx = ($bPage - 1);
+        if($idx < 10) {
+            $idx = '00'.$idx;
+        } else if($idx > 10 && $idx < 100) {
+            $idx = '0'.$idx;
+        }
+?>
 							<!-- Job Posting -->
 							<dt class="posting_title">
 								<a href="#">
-									
-									<span class="number">001</span>
-									<span class="title">[디자인] 롯데 인터넷면세점 디자이너를 모집합니다.</span>
-									<span class="info">경력 | 정규직 | 2013.01.01 ~ 2013.10.10</span>
-									<span class="status"><img src="./images/recruit/posting_status_2.png" alt="채용마감"></span>
+									<span class="new"><? if($row['is_old'] < IS_OLD_TERM) { ?>New<? } ?></span>
+									<span class="number"><?= $idx ?></span>
+									<span class="title"><?= $row['title'] ?></span>
+									<span class="info"><?= $careerTypes ?> | <?= $hireTypes ?> | <?= $row['start_date_y'] ?>.<?= $row['start_date_m'] ?>.<?= $row['start_date_d'] ?> ~ <?= $row['end_date_y'] ?>.<?= $row['end_date_m'] ?>.<?= $row['end_date_d'] ?></span>
+<?
+if($row['is_closed'] > 0) {
+?>
+                                    <span class="status"><img src="./images/recruit/posting_status_2.png" alt="채용마감"></span>
+<?
+} else {
+?>
+                                    <span class="status"><img src="./images/recruit/posting_status_1.png" alt="더보기"></span>
+<?
+}
+?>
 								</a>
 							</dt>
 							<dd class="posting_detail">
-								<h4 class="title">롯데인터넷면세점 운영 디자이너를 모집합니다.</h4>
+								<h4 class="title"><?= $row['title'] ?></h4>
 								<strong class="sub">모집안내</strong>
 								<div class="recruit_table">
 									<table>
 										<tr>
 											<th>모집안내</th>
-											<td colspan="3">2013.10.01 ~ 2013.10.10</td>
+											<td colspan="3"><?= $row['start_date_y'] ?>.<?= $row['start_date_m'] ?>.<?= $row['start_date_d'] ?> ~ <?= $row['end_date_y'] ?>.<?= $row['end_date_m'] ?>.<?= $row['end_date_d'] ?></td>
 										</tr>
 										<tr>
 											<th>고용형태</th>
-											<td>정규직</td>
+											<td><?= $hireTypes ?></td>
 											<th>모집인원</th>
-											<td>00명</td>
+											<td><?= $row['how_many'] ?>명</td>
 										</tr>
 										<tr>
 											<th>근무부서</th>
-											<td>운영디자인</td>
+											<td><?= $hirePart ?></td>
 											<th>채용직급</th>
-											<td>과장</td>
+											<td><?= $position ?></td>
 										</tr>
 										<tr>
 											<th>경력사항</th>
-											<td>5년이상</td>
+											<td><? if($row['career_types'] == 'Y') { ?><?= $row['career_years'] ?>년이상<? } ?></td>
 											<th>최종학력</th>
-											<td>고졸이상</td>
+											<td><?= $schoolTypes ?></td>
 										</tr>
 										<tr>
 											<th>성별</th>
-											<td>무관</td>
+											<td><?= $gender ?></td>
 											<th>나이</th>
-											<td>무관</td>
+											<td><? if($row['old_types'] == 'NO') { echo '무관'; } else { echo $row['how_old'].'세 이상'; } ?></td>
 										</tr>
 										<tr>
 											<th>복리후생</th>
-											<td colspan="3">
-												연금/보험 : 국민연금, 고용보험, 산재보험, 건강보험<br>
-												휴무/휴가 : 주5일근무, 연차<br>
-												보상제도 : 우수사원 표창/포상, 퇴직금<br>
-												기타지원 : 우수사원, 석식, 각종 경조금, 교육비<br>
+											<td colspan="3"><?= nl2br($row['descriptions']) ?>
 											</td>
 										</tr>
 										<tr>
 											<th>담당정보</th>
 											<td colspan="3">
-												홍길동 팀장 / 070-8730-0000
+												<?= $row['keeper_name'] ?> / <?= $row['keeper_contacts'] ?>
 											</td>
 										</tr>
 									</table>
 								</div>
-								<article>
-									입사지원 할 인재를 찾습니다.~입사지원 할 인재를 찾습니다.~<br>
-									입사지원 할 인재를 찾습니다.~<br>
-								</article>
+								<article><?= nl2br($row['add_descriptions']) ?></article>
 								<div class="btn_area">
-									<img src="./images/recruit/btn_recruit_end.png" alt="채용마감">									
+<?
+if($row['is_closed'] > 0) {
+?>
+									<img src="./images/recruit/btn_recruit_end.png" alt="채용마감">
+<?
+} else {
+?>
+                                    <a href="recruit_write.html?jids=<?= $row['id'] ?>&ht=<?= $row['hire_types'] ?>&hp=<?= $row['hire_part'] ?>"><img src="./images/recruit/btn_recruit_write.png" alt="입사지원"></a>
+<?
+}
+?>
 								</div>
 							</dd>
 							<!-- // Job Posting -->
+<?
+}}
+?>
+
+
 						</dl>
+<?
+$divPage = (int) ($totalCnt / $rowCountPerPage);
+$modPage = $totalCnt % $rowCountPerPage;
 
+$totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+?>
 						<!-- 페이징 -->
 						<div class="paginate">
-							<a class="direction" href="#"><span>‹</span> 이전</a>
-							<a href="#">1</a>
-							<strong>2</strong>
-							<a href="#">3</a>
-							<a href="#">4</a>
-							<a href="#">5</a>
-							<a class="direction" href="#">다음 <span>›</span></a>
+<?
+        // Prev block
+        if($curPage > 1) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+        } else {
+            echo '<span>‹</span> 이전페이지';
+        }
+
+        $strPage = '';
+        for($k = 1; $k <= $totalPage; $k++) {
+            if($curPage == $k) {
+                $strPage = '<a href=><strong>'.$k.'</strong></a>';
+            } else {
+                $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+            }
+
+            // 1, 2, 3, 4, 5, 6 ...
+            echo $strPage;
+        }
+
+        // Next block
+        if($curPage < $totalPage) {
+            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+        } else {
+            echo '다음페이지 <span>›</span>';
+        }
+?>
 						</div>
 						<!-- //페이징 -->
 
@@ -362,6 +374,37 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- 합격 조회 iframe -->
+		<section id="recruit_result">
+			<div class="view_container">
+				<div class="area">
+					<div class="view_contents">
+						<iframe id="result_iframe" src="about:blank;" frameborder="0" scrolling="no"></iframe>
+						<script type="text/javascript">
+							// 합격 확인 스크립트
+							$('#result_iframe').load(function(){
+								$(this).height($(this).contents().find('#result_wrap')[0].scrollHeight);
+								$('#recruit_result .view_container').css('margin-top',0 - $('#recruit_result .view_contents').height() / 2);
+							});
+							$('a[href="#recruit_result"]').bind("click",function(){
+								$(document).scrollTop(0);
+								$('dt.posting_title > a').parent().next().slideUp(200);
+								$('#recruit_result').show();								
+								$('#recruit_result iframe').attr("src","result_view.html");
+								$('#recruit_result a.close').one("click",function(){
+									$('#recruit_result').hide();
+									return false;
+								});
+								return false;
+							});
+						</script>
+					</div>
+				</div>
+				<a class="close" href="#close">닫기</a>
+			</div>
+		</section>
+		<!-- // 합격 조회 iframe -->
 
 	</div>
 
