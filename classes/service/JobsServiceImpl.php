@@ -27,7 +27,7 @@ class JobsServiceImpl implements IJobsService {
 
     public function update($conn, Jobs $obj)
     {
-        // TODO: Implement update() method.
+        return $this->jobsDao->update($conn, $obj);
     }
 
     public function delete($conn, Jobs $obj)

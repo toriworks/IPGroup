@@ -127,7 +127,7 @@ $row = @mysql_fetch_array($result);
                 }
             }
 
-            job_form.action = "./job_posting_write_post.php";
+            job_form.action = "./job_posting_revise_post.php";
             job_form.submit();
         }
     </script>
@@ -167,14 +167,15 @@ $row = @mysql_fetch_array($result);
     </div>
     <div class="right">
         <a class="txt_button" href="javascript:history.back();">취소</a>
-        <a class="txt_button" href="job_posting_view.php">수정완료</a>
+        <a class="txt_button" href="javascript:enroll_form();">수정완료</a>
     </div>
 </div>
 <form name="job_form" action="" method="post" enctype="multipart/form-data">
-<input type="hidden" name="is_show" value="" />
-<input type="hidden" name="is_always" value="" />
-<input type="hidden" name="old_types" value="" />
-<input type="hidden" name="career_types" value="" />
+<input type="hidden" name="id" value="<?= $jids ?>" />
+<input type="hidden" name="is_show" value="<?= $row['is_show'] ?>" />
+<input type="hidden" name="is_always" value="<?= $row['is_always'] ?>" />
+<input type="hidden" name="old_types" value="<?= $row['old_types'] ?>" />
+<input type="hidden" name="career_types" value="<?= $row['career_types'] ?>" />
 <div class="section">
     <div class="form_table">
         <table class="tbl" border="1" cellspacing="0">
@@ -187,8 +188,8 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">전시여부</th>
                 <td class="val">
                     <div class="item">
-                        <input id="r1_1" class="i_radio" value="" type="radio" checked="checked" /><label for="r1_1">YES</label>
-                        <input id="r1_2" class="i_radio" value="" type="radio" /><label for="r1_2">NO</label>
+                        <input id="r1_1" class="i_radio" value="Y" type="radio" name="is_show_t" <? if($row['is_show'] == 'Y') echo 'checked'; ?> /><label for="r1_1">YES</label>
+                        <input id="r1_2" class="i_radio" value="N" type="radio" name="is_show_t" <? if($row['is_show'] == 'N') echo 'checked'; ?>/><label for="r1_2">NO</label>
                     </div>
                 </td>
             </tr>
@@ -212,7 +213,7 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_title">제목</label></th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        <input id="job_title" class="i_text" type="text" value="[운영디자인] 면세점 디자이너를 모집합니다." style="width:550px;" />
+                        <input id="title" name="title" class="i_text" type="text" value="<?= $row['title'] ?>" style="width:550px;" />
                     </div>
                 </td>
             </tr>
@@ -220,17 +221,17 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">모집기간</th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        <input id="r2_1" class="i_radio" value="" type="radio" name="date" checked="checked" /><label for="r2_1">기간</label>
+                        <input id="r2_1" class="i_radio" value="N" name="is_always_t" type="radio" name="date" onclick="clear_dates('N');" <? if($row['is_always'] == 'N') echo ' checked'; ?> /><label for="r2_1">기간</label>
 
-                        <input id="date_from" class="i_text date" type="text" style="width:70px;" value="2013.11.11" />
+                        <input id="date_from" class="i_text date" type="text" style="width:70px;" name="start_date" value="<?= $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'] ?>" />
                         ~
-                        <input id="date_to" class="i_text date" type="text" style="width:70px;" value="2013.11.20" />
+                        <input id="date_to" class="i_text date" type="text" style="width:70px;" name="end_date" value="<?= $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'] ?>" />
                         <script type="text/javascript">
                             init_from_to_date2();
                         </script>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="r2_2" class="i_radio" value="" type="radio" name="date" /><label for="r2_2">상시</label>
+                        <input id="r2_2" class="i_radio" value="Y" name="is_always_t" type="radio" name="date" onclick="clear_dates('Y');" <? if($row['is_always'] == 'Y') echo ' checked'; ?> /><label for="r2_2">상시</label>
                     </div>
                 </td>
             </tr>
@@ -238,21 +239,21 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_type">고용형태</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_type" class="select">
+                        <select id="job_type" name="hire_types" class="select">
                             <option value="">선택해주세요</option>
-                            <option value="" selected="selected">정규직</option>
-                            <option value="">계약직</option>
-                            <option value="">인턴</option>
-                            <option value="">파견</option>
-                            <option value="">아르바이트</option>
-                            <option value="">협의</option>
+                            <option value="RG" <? if($row['hire_types'] == 'RG') echo ' selected'; ?>>정규직</option>
+                            <option value="PT" <? if($row['hire_types'] == 'PT') echo ' selected'; ?>>계약직</option>
+                            <option value="IT" <? if($row['hire_types'] == 'IT') echo ' selected'; ?>>인턴</option>
+                            <option value="SD" <? if($row['hire_types'] == 'SD') echo ' selected'; ?>>파견</option>
+                            <option value="AB" <? if($row['hire_types'] == 'AB') echo ' selected'; ?>>아르바이트</option>
+                            <option value="NG" <? if($row['hire_types'] == 'NG') echo ' selected'; ?>>협의</option>
                         </select>
                     </div>
                 </td>
                 <th class="tit" scope="row"><label for="job_count">모집인원</label></th>
                 <td class="val">
                     <div class="item">
-                        <input id="job_count" class="i_text" type="text" value="2" style="width:30px;" />
+                        <input id="job_count" name="how_many" class="i_text" type="text" value="<?= $row['how_many'] ?>" style="width:30px;" />
                         명
                     </div>
                 </td>
@@ -261,28 +262,28 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_department">근무부서</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_department" class="select">
+                        <select name="hire_part" id="job_department" class="select">
                             <option value="">선택해주세요</option>
-                            <option value="">기획실</option>
-                            <option value="" selected="selected">디자인실</option>
-                            <option value="">퍼블리싱팀</option>
-                            <option value="">경영지원팀</option>
+                            <option value="PL" <? if($row['hire_part'] == 'PL') echo ' selected'; ?>>기획실</option>
+                            <option value="DN" <? if($row['hire_part'] == 'DN') echo ' selected'; ?>>디자인실</option>
+                            <option value="PB" <? if($row['hire_part'] == 'PB') echo ' selected'; ?>>퍼블리싱팀</option>
+                            <option value="MN" <? if($row['hire_part'] == 'NM') echo ' selected'; ?>>경영지원팀</option>
                         </select>
                     </div>
                 </td>
                 <th class="tit" scope="row"><label for="job_rank">채용직급</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_rank" class="select">
+                        <select name="position" id="job_rank" class="select">
                             <option value="">선택해주세요</option>
-                            <option value="">임원</option>
-                            <option value="">실장</option>
-                            <option value="">팀장</option>
-                            <option value="" selected="selected">과장</option>
-                            <option value="">대리</option>
-                            <option value="">주임</option>
-                            <option value="">사원</option>
-                            <option value="">협의</option>
+                            <option value="CO" <? if($row['position'] == 'CO') echo ' selected'; ?>>임원</option>
+                            <option value="TO" <? if($row['position'] == 'TO') echo ' selected'; ?>>실장</option>
+                            <option value="TM" <? if($row['position'] == 'TM') echo ' selected'; ?>>팀장</option>
+                            <option value="PK" <? if($row['position'] == 'PK') echo ' selected'; ?>>과장</option>
+                            <option value="PD" <? if($row['position'] == 'PD') echo ' selected'; ?>>대리</option>
+                            <option value="PJ" <? if($row['position'] == 'PJ') echo ' selected'; ?>>주임</option>
+                            <option value="PS" <? if($row['position'] == 'PS') echo ' selected'; ?>>사원</option>
+                            <option value="NG" <? if($row['position'] == 'NG') echo ' selected'; ?>>협의</option>
                         </select>
                     </div>
                 </td>
@@ -291,18 +292,19 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">경력사항</th>
                 <td class="val">
                     <div class="item">
-                        <input id="r3_1" class="i_radio" value="" type="radio" name="career_y" /><label for="r3_1">신입</label>
-                        <input id="r3_2" class="i_radio" value="" type="radio" name="career_y" checked="checked" /><label for="r3_2">경력</label>
+                        <input id="r3_1" class="i_radio" value="N" type="radio" name="career_types_t"  <? if($row['career_types'] == 'N') echo ' checked'; ?>/><label for="r3_1">신입</label>
+                        <input id="r3_2" class="i_radio" value="Y" type="radio" name="career_types_t"  <? if($row['career_types'] == 'Y') echo ' checked'; ?>/><label for="r3_2">경력</label>
                         <input id="job_year" class="i_text" type="text" value="7" style="width:30px;" />
                         년
                         <script type="text/javascript">
-                            $('input[name="career_y"]').bind('change',function(){
+                            $('input[name="career_types_t"]').bind('change',function(){
                                 if ($('#r3_2').prop('checked')) {
                                     $('#job_year').prop('disabled',false);
                                     $('#job_year').css('background','#fff');
                                 } else {
                                     $('#job_year').prop('disabled',true);
                                     $('#job_year').css('background','#f4f4f4');
+                                    $('#job_year').val('');
                                 }
                             }).trigger('change');
                         </script>
@@ -311,12 +313,12 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_lastedu">최종학력</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_lastedu" class="select">
+                        <select name="school_types" id="job_lastedu" class="select">
                             <option value="">선택해주세요</option>
-                            <option value="" selected="selected">대졸</option>
-                            <option value="">전문대졸</option>
-                            <option value="">고졸</option>
-                            <option value="">무관</option>
+                            <option value="UV" <? if($row['school_types'] == 'UV') echo ' selected'; ?>>대졸</option>
+                            <option value="CL" <? if($row['school_types'] == 'CL') echo ' selected'; ?>>전문대졸</option>
+                            <option value="HS" <? if($row['school_types'] == 'HS') echo ' selected'; ?>>고졸</option>
+                            <option value="NG" <? if($row['school_types'] == 'NG') echo ' selected'; ?>>무관</option>
                         </select>
                     </div>
                 </td>
@@ -325,28 +327,29 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_sex">성별</label></th>
                 <td class="val">
                     <div class="item">
-                        <select name="" id="job_sex" class="select">
+                        <select name="gender" id="job_sex" class="select">
                             <option value="">선택해주세요</option>
-                            <option value="">남자</option>
-                            <option value="">여자</option>
-                            <option value="" selected="selected">무관</option>
+                            <option value="ML" <? if($row['gender'] == 'ML') echo ' selected'; ?>>남자</option>
+                            <option value="FL" <? if($row['gender'] == 'FL') echo ' selected'; ?>>여자</option>
+                            <option value="NG" <? if($row['gender'] == 'NG') echo ' selected'; ?>>무관</option>
                         </select>
                     </div>
                 </td>
                 <th class="tit" scope="row">나이</th>
                 <td class="val">
                     <div class="item">
-                        <input id="r4_1" class="i_radio" value="" type="radio" name="age_y" /><label for="r4_1">무관</label>
-                        <input id="r4_2" class="i_radio" value="" type="radio" name="age_y" checked="checked" /><label for="r4_2">제한</label>
-                        <input id="job_age" class="i_text" type="text" value="35세 이상" style="width:100px;" />
+                        <input id="r4_1" class="i_radio" value="NO" type="radio" name="old_types_t" <? if($row['old_types'] == 'NO') echo ' checked'; ?> /><label for="r4_1">무관</label>
+                        <input id="r4_2" class="i_radio" value="YS" type="radio" name="old_types_t" <? if($row['old_types'] == 'YS') echo ' checked'; ?> /><label for="r4_2">제한</label>
+                        <input id="job_age" class="i_text" name="how_old" type="text" value="<?= $row['how_old'] ?>" style="width:100px;" />
                         <script type="text/javascript">
-                            $('input[name="age_y"]').bind('change',function(){
+                            $('input[name="old_types_t"]').bind('change',function(){
                                 if ($('#r4_2').prop('checked')) {
                                     $('#job_age').prop('disabled',false);
                                     $('#job_age').css('background','#fff');
                                 } else {
                                     $('#job_age').prop('disabled',true);
                                     $('#job_age').css('background','#f4f4f4');
+                                    $('#job_age').val('');
                                 }
                             }).trigger('change');
                         </script>
@@ -357,7 +360,7 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_welfare">복리후생</label></th>
                 <td class="val">
                     <div class="item">
-                        <textarea id="job_welfare" class="i_text" name="" id="" cols="96" rows="10"></textarea>
+                        <textarea id="job_welfare" class="i_text" name="descriptions" id="" cols="96" rows="10"><?= $row['descriptions'] ?></textarea>
                     </div>
                 </td>
             </tr>
@@ -365,8 +368,8 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">담당자 정보</th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        이름 : <input id="job_count" class="i_text" type="text" value="홍길동 팀장" style="width:100px;" />
-                        연락처 : <input id="job_count" class="i_text" type="text" value="070-8730-0000" style="width:100px;" />
+                        이름 : <input id="job_count" class="i_text" type="text" value="<?= $row['keeper_name'] ?>" name="keeper_name" style="width:100px;" />
+                        연락처 : <input id="job_count" class="i_text" type="text" value="<?= $row['keeper_contacts'] ?>" name="keeper_contacts" style="width:100px;" />
                     </div>
                 </td>
             </tr>
@@ -374,7 +377,7 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_contents">추가내용</label></th>
                 <td class="val">
                     <div class="item">
-                        <textarea id="job_contents" class="i_text" name="" id="" cols="96" rows="10"></textarea>
+                        <textarea id="job_contents" class="i_text" name="add_descriptions" cols="96" rows="10"><?= $row['add_descriptions'] ?></textarea>
                     </div>
                 </td>
             </tr>

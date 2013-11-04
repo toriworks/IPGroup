@@ -72,8 +72,6 @@ class WorkServiceImpl implements IWorkService {
         $result = $this->workDao->lists4Work($conn, $year, $category);
         $arrWorks = '';
 
-
-
         // 첨부파일 관련선언
         $attachesDao = new AttachesDaoImpl();
         $attachesService = new AttachesServiceImpl();
