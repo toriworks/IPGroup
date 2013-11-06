@@ -138,31 +138,24 @@ $row = @mysql_fetch_array($result);
 $str_is_always = '';
 $start_date = ''; $end_date = '';
 
-if($row['is_always'] == 'Y') {
-    $str_is_always = '상시';
+$seDate = '';
+if($row['is_always'] == 'N') {
+    $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
+    $eDate = $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'];
+    $seDate = $sDate.' ~<br />'.$eDate;
 } else {
-    $sy = $row['start_date_y'];
-    $sm = $row['start_date_m'];
-    $sd = $row['start_date_d'];
-    $start_date = $sy.'.'.$sm.'.'.$sd;
-
-    $ey = $row['end_date_y'];
-    $em = $row['end_date_m'];
-    $ed = $row['end_date_d'];
-    $end_date = $ey.'.'.$em.'.'.$ed;
-
-    $str_is_always = $start_date.' ~ '.$end_date;
+    $seDate = '상시';
 }
 ?>
             <tr>
                 <th class="tit" scope="row">모집기간</th>
-                <td class="val" colspan="3"><?= $str_is_always ?></td>
+                <td class="val" colspan="3"><?= $seDate ?></td>
             </tr>
             <tr>
                 <th class="tit" scope="row">고용형태</th>
                 <td class="val"><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
                 <th class="tit" scope="row">모집인원</th>
-                <td class="val"><?= $row['how_many'] ?>명</td>
+                <td class="val"><? ($row['how_many'] > 0) ? $row['how_many'] : ''; ?>명</td>
             </tr>
             <tr>
                 <th class="tit" scope="row">근무부서</th>

@@ -354,7 +354,7 @@ while($row2 = mysql_fetch_array($result2)) {
                         <input id="k1_2" class="i_check" name="wtypes_t" value="2" type="checkbox" <? if(($row['wtypes'] & 2) == 2) echo ' checked'; ?> /><label for="k1_2">Promotion</label>
                         <input id="k1_3" class="i_check" name="wtypes_t" value="4" type="checkbox" <? if(($row['wtypes'] & 4) == 4) echo ' checked'; ?> /><label for="k1_3">UX/UI</label>
                         <input id="k1_4" class="i_check" name="wtypes_t" value="8" type="checkbox" <? if(($row['wtypes'] & 8) == 8) echo ' checked'; ?> /><label for="k1_4">Mobile</label>
-                        <input id="k1_5" class="i_check" name="wtypes_t" value="16" type="checkbox" <? if(($row['wtypes'] & 16) == 16) echo ' checked'; ?> /><label for="k1_5">Offer</label>
+                        <input id="k1_5" class="i_check" name="wtypes_t" value="16" type="checkbox" <? if(($row['wtypes'] & 16) == 16) echo ' checked'; ?> /><label for="k1_5">Proposal</label>
                         <input id="k1_6" class="i_check" name="wtypes_t" value="32" type="checkbox" <? if(($row['wtypes'] & 32) == 32) echo ' checked'; ?> /><label for="k1_6">Consulting</label>
                         <input id="k1_7" class="i_check" name="wtypes_t" value="64" type="checkbox" <? if(($row['wtypes'] & 64) == 64) echo ' checked'; ?> /><label for="k1_7">AD</label>
                     </div>

@@ -30,6 +30,7 @@ $keeperServiceImpl->setKeeperDao($keeperDaoImpl);
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
+    <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
         orderBySetting = function(idObj) {
 
@@ -63,7 +64,7 @@ $wParam = '';
 $orderBy = $_REQUEST['orderBy'];
 $orderDir = $_REQUEST['orderDir'];
 if($orderBy == '') {
-    $orderBy = ' regdate DESC ';
+    $orderBy = ' regdate_a DESC ';
 }
 
 $curPage = $_REQUEST['curPage'];
@@ -113,14 +114,26 @@ $result = $keeperServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCoun
 <?
 if($totalCnt > 0) {
     $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+
+    $authTypeS = '';
     while($row = mysql_fetch_array($result)) {
         $bPage++;
+
+        if($row['auth_types'] == 'Y') {
+            $authTypeS = '사용자 세팅';
+        } else {
+            if($row['auth_types'] == '0') {
+                $authTypeS = '운영자';
+            } else if($row['auth_types'] == '1') {
+                $authTypeS = '관리자';
+            }
+        }
 ?>
                         <tr>
                             <td><?= $bPage - 1 ?></td>
                             <td><a href="member_view.php"><?= $row['id'] ?></a></td>
                             <td><?= $row['kor_name'] ?></td>
-                            <td><?= $row['auth_types'] ?></td>
+                            <td><?= $authTypeS ?></td>
                             <td><?= $row['regdate'] ?></td>
                         </tr>
 <?

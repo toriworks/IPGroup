@@ -38,8 +38,7 @@ class JobsDaoImpl implements IJobsDao {
         $sql .= ", keeper_name='".$obj->getKeeperName()."', keeper_contacts='".$obj->getKeeperContacts()."', applicants_cnt='".$obj->getApplicantsCnt()."', is_show='".$obj->getIsShow()."'";
         $sql .= " WHERE id='".$obj->getId()."'";
 
-        echo $sql;
-
+        //echo $sql;
 
         $resultOfQuery = mysql_query($sql, $conn) or die("JobsDaoImpl update error : ".mysql_error());
         return $resultOfQuery;

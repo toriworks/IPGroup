@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: text/xml');
+header('Content-Type: text/xml');
 
 require_once('../classes/ConnectionFactory.php');
 require_once('../classes/dao/WorkDaoImpl.php');
@@ -17,9 +17,6 @@ $param_cate = $_REQUEST['param_cate'];
 
 $result = $workServiceImpl->lists4Work($conn, $param_year, $param_cate);
 $sizeOfResult = count($result);
-
-echo "size:".$sizeOfResult;
-
 
 if($sizeOfResult > 0) {
     $str = '<?xml version="1.0" encoding="utf-8"?>';

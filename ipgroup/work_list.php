@@ -113,7 +113,7 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountP
                     <input id="ck_b_2" type="checkbox" /><label for="ck_b_2">Promotion</label>
                     <input id="ck_b_3" type="checkbox" /><label for="ck_b_3">UX/UI</label>
                     <input id="ck_b_4" type="checkbox" /><label for="ck_b_4">Mobile</label>
-                    <input id="ck_b_5" type="checkbox" /><label for="ck_b_5">Offer</label>
+                    <input id="ck_b_5" type="checkbox" /><label for="ck_b_5">Proposal</label>
                     <input id="ck_b_6" type="checkbox" /><label for="ck_b_6">Consulting</label>
                     <input id="ck_b_7" type="checkbox" /><label for="ck_b_7">AD</label>
                 </dd>

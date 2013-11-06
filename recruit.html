@@ -228,7 +228,7 @@ if($totalCnt > 0) {
             $seDate = '상시';
         }
 
-        $careerTypes = ($row['career_types']) ? '경력' : '신입';
+        $careerTypes = ($row['career_types'] == 'Y') ? '경력' : '신입';
         $hireTypes = CommonUtils::getHireTypes($row['hire_types']);
 
         $hirePart = CommonUtils::getHirePart($row['hire_part']);
@@ -249,7 +249,7 @@ if($totalCnt > 0) {
 									<span class="new"><? if($row['is_old'] < IS_OLD_TERM) { ?>New<? } ?></span>
 									<span class="number"><?= $idx ?></span>
 									<span class="title"><?= $row['title'] ?></span>
-									<span class="info"><?= $careerTypes ?> | <?= $hireTypes ?> | <?= $row['start_date_y'] ?>.<?= $row['start_date_m'] ?>.<?= $row['start_date_d'] ?> ~ <?= $row['end_date_y'] ?>.<?= $row['end_date_m'] ?>.<?= $row['end_date_d'] ?></span>
+									<span class="info"><?= $careerTypes ?> | <?= $hireTypes ?> | <?= $seDate ?></span>
 <?
 if($row['is_closed'] > 0) {
 ?>
@@ -270,7 +270,7 @@ if($row['is_closed'] > 0) {
 									<table>
 										<tr>
 											<th>모집안내</th>
-											<td colspan="3"><?= $row['start_date_y'] ?>.<?= $row['start_date_m'] ?>.<?= $row['start_date_d'] ?> ~ <?= $row['end_date_y'] ?>.<?= $row['end_date_m'] ?>.<?= $row['end_date_d'] ?></td>
+											<td colspan="3"><?= $seDate ?></td>
 										</tr>
 										<tr>
 											<th>고용형태</th>
@@ -413,6 +413,29 @@ $totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
 	</footer>
 
 </div>
+
+<span id="mobile_check"></span>
+
+<script type="text/javascript" src="http://wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "15ca65d066ad198";
+wcs_do();
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-45458481-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 
 </body>
 </html>

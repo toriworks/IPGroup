@@ -25,7 +25,7 @@ class CommonUtils {
             $strWT = $strWT.'Mobile ';
         }
         if(($wtypes & 16) == 16) {
-            $strWT = $strWT.'Offer ';
+            $strWT = $strWT.'Proposal ';
         }
         if(($wtypes & 32) == 32) {
             $strWT = $strWT.'Consulting ';

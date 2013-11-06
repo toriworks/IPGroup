@@ -11,6 +11,94 @@
     <script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/login.js"></script>
+    <script type="text/javascript">
+        enroll_member = function() {
+            var form = document.member_form;
+
+            if(form.id.value == '') {
+                alert("접속 아이디를 입력해주십시오.");
+                return;
+            }
+
+            if(form.kor_name.value == '') {
+                alert("이름을 입력해주십시오.");
+                return;
+            }
+
+            var mrS = '';
+            for(var i=0; i<2; i++) {
+                if(form.mr[i].checked == true) {
+                    mrS = form.mr[i].value;
+                }
+            }
+
+            var atS = '';
+            for(var j=0; j<3; j++) {
+                if(form.auth_types_t[j].selected == true) {
+                    atS = form.auth_types_t[j].value;
+                }
+            }
+
+            if(mrS == 'X' && atS == '') {
+                alert("운영자 또는 관리자를 선택해주십시오.");
+                return;
+            }
+
+            if(mrS == 'X') {
+                form.auth_types.value = atS;
+            } else {
+                form.auth_types.value = 'Y';
+            }
+
+            // 메뉴1
+            var m1 = 0;
+            for(var x=0; x<6; x++) {
+                if(form.menu1[x].checked == true) {
+                    m1 = m1 + parseInt("0" + form.menu1[x].value);
+                }
+            }
+            var m2 = 0;
+            for(var x=0; x<6; x++) {
+                if(form.menu2[x].checked == true) {
+                    m2 = m2 + parseInt("0" + form.menu2[x].value);
+                }
+            }
+            var m3 = 0;
+            for(var x=0; x<6; x++) {
+                if(form.menu3[x].checked == true) {
+                    m3 = m3 + parseInt("0" + form.menu3[x].value);
+                }
+            }
+            var m4 = 0;
+            for(var x=0; x<6; x++) {
+                if(form.menu4[x].checked == true) {
+                    m4 = m4 + parseInt("0" + form.menu4[x].value);
+                }
+            }
+            var m5 = 0;
+            for(var x=0; x<4; x++) {
+                if(form.menu5[x].checked == true) {
+                    m5 = m5 + parseInt("0" + form.menu5[x].value);
+                }
+            }
+            var m6 = 0;
+            for(var x=0; x<6; x++) {
+                if(form.menu6[x].checked == true) {
+                    m6 = m6 + parseInt("0" + form.menu6[x].value);
+                }
+            }
+
+            form.menu1_t.value = m1;
+            form.menu2_t.value = m2;
+            form.menu3_t.value = m3;
+            form.menu4_t.value = m4;
+            form.menu5_t.value = m5;
+            form.menu6_t.value = m6;
+
+            form.action = "member_write_post.php";
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 
@@ -46,7 +134,7 @@
                 <div class="area_top">
                     <div class="right">
                         <a class="txt_button" href="member_list.php">취소</a>
-                        <a class="txt_button" href="member_view.php">생성하기</a>
+                        <a class="txt_button" href="javascript:enroll_member();">생성하기</a>
                     </div>
                 </div>
                 <!-- //상단 영역 -->
@@ -54,6 +142,14 @@
                 <!-- 멤버 테이블 -->
                 <div class="member_table">
                     <table class="tbl" border="1" cellspacing="0">
+                        <form name="member_form" action="" method="post">
+                            <input type="hidden" name="menu1_t" value="" />
+                            <input type="hidden" name="menu2_t" value="" />
+                            <input type="hidden" name="menu3_t" value="" />
+                            <input type="hidden" name="menu4_t" value="" />
+                            <input type="hidden" name="menu5_t" value="" />
+                            <input type="hidden" name="menu6_t" value="" />
+                            <input type="hidden" name="auth_types" value="" />
                         <colgroup>
                             <col width="22%" />
                             <col width="13%" />
@@ -68,7 +164,7 @@
                             <th scope="row" class="b">접속 ID</th>
                             <td colspan="6">
                                 <div class="item">
-                                    <input class="i_text" type="text" value="" style="width:200px;" />
+                                    <input class="i_text" type="text" value="" name="id" style="width:200px;" />
                                 </div>
                             </td>
                         </tr>
@@ -76,7 +172,7 @@
                             <th scope="col" class="b" rowspan="2">권한정보</th>
                             <td colspan="6">
                                 <div class="item">
-                                    이름 : <input class="i_text" type="text" value="" style="width:100px;" />
+                                    이름 : <input class="i_text" type="text" name="kor_name" value="" style="width:100px;" />
                                 </div>
                             </td>
                         </tr>
@@ -84,14 +180,14 @@
                             <td colspan="6">
                                 <div class="item">
                                     권한 :
-                                    <input id="r_setting_1" class="i_radio" type="radio" name="mr" value="" checked="checked" /><label for="r_setting_1">기본 세팅</label>
-                                    <select class="i_select" name="" id="permission_setting">
+                                    <input id="r_setting_1" class="i_radio" type="radio" name="mr" value="X" checked="checked" /><label for="r_setting_1">기본 세팅</label>
+                                    <select class="i_select" name="auth_types_t" id="permission_setting">
                                         <option value="">선택해주세요.</option>
                                         <option value="0">운영자</option>
                                         <option value="1">관리자</option>
                                     </select>
 
-                                    <input id="r_setting_2" class="i_radio" type="radio" name="mr" value="" /><label for="r_setting_2">사용자 세팅</label>
+                                    <input id="r_setting_2" class="i_radio" type="radio" name="mr" value="Y" /><label for="r_setting_2">사용자 세팅</label>
                                 </div>
                             </td>
                         </tr>
@@ -109,58 +205,59 @@
                         </tr>
                         <tr>
                             <th scope="row">Work</th>
-                            <td class="ck"><input id="r_work_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_work_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_work_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_work_3" type="checkbox" /></td>
-                            <td class="ck"><input id="r_work_4" type="checkbox" /></td>
-                            <td class="ck"><input id="r_work_5" type="checkbox" /></td>
+                            <td class="ck"><input id="r_work_0" type="checkbox" name="menu1" value="1" /></td>
+                            <td class="ck"><input id="r_work_1" type="checkbox" name="menu1" value="2" /></td>
+                            <td class="ck"><input id="r_work_2" type="checkbox" name="menu1" value="4" /></td>
+                            <td class="ck"><input id="r_work_3" type="checkbox" name="menu1" value="8" /></td>
+                            <td class="ck"><input id="r_work_4" type="checkbox" name="menu1" value="16" /></td>
+                            <td class="ck"><input id="r_work_5" type="checkbox" name="menu1" value="32" /></td>
                         </tr>
                         <tr>
                             <th scope="row">Request</th>
-                            <td class="ck"><input id="r_request_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_request_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_request_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_request_3" type="checkbox" /></td>
-                            <td class="ck"><input id="r_request_4" type="checkbox" /></td>
-                            <td class="ck"><input id="r_request_5" type="checkbox" /></td>
+                            <td class="ck"><input id="r_request_0" type="checkbox" name="menu2" value="1" /></td>
+                            <td class="ck"><input id="r_request_1" type="checkbox" name="menu2" value="2" /></td>
+                            <td class="ck"><input id="r_request_2" type="checkbox" name="menu2" value="4" /></td>
+                            <td class="ck"><input id="r_request_3" type="checkbox" name="menu2" value="8" /></td>
+                            <td class="ck"><input id="r_request_4" type="checkbox" name="menu2" value="16" /></td>
+                            <td class="ck"><input id="r_request_5" type="checkbox" name="menu2" value="32" /></td>
                         </tr>
                         <tr>
                             <th scope="row">Recruit</th>
-                            <td class="ck"><input id="r_recruit_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_recruit_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_recruit_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_recruit_3" type="checkbox" /></td>
-                            <td class="ck"><input id="r_recruit_4" type="checkbox" /></td>
-                            <td class="ck"><input id="r_recruit_5" type="checkbox" /></td>
+                            <td class="ck"><input id="r_recruit_0" type="checkbox" name="menu3" value="1" /></td>
+                            <td class="ck"><input id="r_recruit_1" type="checkbox" name="menu3" value="2" /></td>
+                            <td class="ck"><input id="r_recruit_2" type="checkbox" name="menu3" value="4" /></td>
+                            <td class="ck"><input id="r_recruit_3" type="checkbox" name="menu3" value="8" /></td>
+                            <td class="ck"><input id="r_recruit_4" type="checkbox" name="menu3" value="16" /></td>
+                            <td class="ck"><input id="r_recruit_5" type="checkbox" name="menu3" value="32" /></td>
                         </tr>
                         <tr>
                             <th scope="row">Job Posting</th>
-                            <td class="ck"><input id="r_jobposting_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_jobposting_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_jobposting_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_jobposting_3" type="checkbox" /></td>
-                            <td class="ck"><input id="r_jobposting_4" type="checkbox" /></td>
-                            <td class="ck"><input id="r_jobposting_5" type="checkbox" /></td>
+                            <td class="ck"><input id="r_jobposting_0" type="checkbox" name="menu4" value="1" /></td>
+                            <td class="ck"><input id="r_jobposting_1" type="checkbox" name="menu4" value="2" /></td>
+                            <td class="ck"><input id="r_jobposting_2" type="checkbox" name="menu4" value="4" /></td>
+                            <td class="ck"><input id="r_jobposting_3" type="checkbox" name="menu4" value="8" /></td>
+                            <td class="ck"><input id="r_jobposting_4" type="checkbox" name="menu4" value="16" /></td>
+                            <td class="ck"><input id="r_jobposting_5" type="checkbox" name="menu4" value="32" /></td>
                         </tr><tr>
                             <th scope="row">Company Introduction</th>
-                            <td class="ck"><input id="r_company_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_company_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_company_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_company_3" type="checkbox" /></td>
+                            <td class="ck"><input id="r_company_0" type="checkbox" name="menu5" value="1" /></td>
+                            <td class="ck"><input id="r_company_1" type="checkbox" name="menu5" value="2" /></td>
+                            <td class="ck"><input id="r_company_2" type="checkbox" name="menu5" value="4" /></td>
+                            <td class="ck"><input id="r_company_3" type="checkbox" name="menu5" value="8" /></td>
                             <td class="ck"></td>
                             <td class="ck"></td>
                         </tr>
                         <tr>
                             <th scope="row">Member</th>
-                            <td class="ck"><input id="r_member_0" type="checkbox" /></td>
-                            <td class="ck"><input id="r_member_1" type="checkbox" /></td>
-                            <td class="ck"><input id="r_member_2" type="checkbox" /></td>
-                            <td class="ck"><input id="r_member_3" type="checkbox" /></td>
-                            <td class="ck"><input id="r_member_4" type="checkbox" /></td>
-                            <td class="ck"><input id="r_member_5" type="checkbox" /></td>
+                            <td class="ck"><input id="r_member_0" type="checkbox" name="menu6" value="1" /></td>
+                            <td class="ck"><input id="r_member_1" type="checkbox" name="menu6" value="2" /></td>
+                            <td class="ck"><input id="r_member_2" type="checkbox" name="menu6" value="4" /></td>
+                            <td class="ck"><input id="r_member_3" type="checkbox" name="menu6" value="8" /></td>
+                            <td class="ck"><input id="r_member_4" type="checkbox" name="menu6" value="16" /></td>
+                            <td class="ck"><input id="r_member_5" type="checkbox" name="menu6" value="32" /></td>
                         </tr>
                         </tbody>
+                        </form>
                     </table>
                 </div>
 

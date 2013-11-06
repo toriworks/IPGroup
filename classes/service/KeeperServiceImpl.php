@@ -22,7 +22,7 @@ class KeeperServiceImpl implements IKeeperService {
 
     public function add($conn, Keeper $obj)
     {
-        $resultOfService = $this->keeperDao->add($conn, $obj);
+        return $resultOfService = $this->keeperDao->add($conn, $obj);
     }
 
     public function update($conn, Keeper $obj)

@@ -22,6 +22,110 @@ class Keeper
     private $last_login = '';
     /** @var string 권한유형 */
     private $auth_types = '';
+    private $menu1 = '';
+    private $menu2 = '';
+    private $menu3 = '';
+    private $menu4 = '';
+    private $menu5 = '';
+    private $menu6 = '';
+
+    /**
+     * @param string $menu1
+     */
+    public function setMenu1($menu1)
+    {
+        $this->menu1 = $menu1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu1()
+    {
+        return $this->menu1;
+    }
+
+    /**
+     * @param string $menu2
+     */
+    public function setMenu2($menu2)
+    {
+        $this->menu2 = $menu2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu2()
+    {
+        return $this->menu2;
+    }
+
+    /**
+     * @param string $menu3
+     */
+    public function setMenu3($menu3)
+    {
+        $this->menu3 = $menu3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu3()
+    {
+        return $this->menu3;
+    }
+
+    /**
+     * @param string $menu4
+     */
+    public function setMenu4($menu4)
+    {
+        $this->menu4 = $menu4;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu4()
+    {
+        return $this->menu4;
+    }
+
+    /**
+     * @param string $menu5
+     */
+    public function setMenu5($menu5)
+    {
+        $this->menu5 = $menu5;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu5()
+    {
+        return $this->menu5;
+    }
+
+    /**
+     * @param string $menu6
+     */
+    public function setMenu6($menu6)
+    {
+        $this->menu6 = $menu6;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenu6()
+    {
+        return $this->menu6;
+    }
+
+
 
     /**
      * @param string $auth_types

@@ -215,7 +215,7 @@
                                 <input id="k1_2" name="wtypes_t" class="i_check" value="2" type="checkbox" /><label for="k1_2">Promotion</label>
                                 <input id="k1_3" name="wtypes_t" class="i_check" value="4" type="checkbox" /><label for="k1_3">UX/UI</label>
                                 <input id="k1_4" name="wtypes_t" class="i_check" value="8" type="checkbox" /><label for="k1_4">Mobile</label>
-                                <input id="k1_5" name="wtypes_t" class="i_check" value="16" type="checkbox" /><label for="k1_5">Offer</label>
+                                <input id="k1_5" name="wtypes_t" class="i_check" value="16" type="checkbox" /><label for="k1_5">Proposal</label>
                                 <input id="k1_6" name="wtypes_t" class="i_check" value="32" type="checkbox" /><label for="k1_6">Consulting</label>
                                 <input id="k1_7" name="wtypes_t" class="i_check" value="64" type="checkbox" /><label for="k1_7">AD</label>
                             </div>

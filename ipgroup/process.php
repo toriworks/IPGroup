@@ -49,6 +49,12 @@ if ($call_type == 'login') {
 
         setcookie("keeper_id", $keeper_id);
         setcookie("keeper_kor_name", $keeperObj->getKorName());
+        setcookie("menu1", $keeperObj->getMenu1());
+        setcookie("menu2", $keeperObj->getMenu2());
+        setcookie("menu3", $keeperObj->getMenu3());
+        setcookie("menu4", $keeperObj->getMenu4());
+        setcookie("menu5", $keeperObj->getMenu5());
+        setcookie("menu6", $keeperObj->getMenu6());
     } else if($result == "2") {
     }
 
@@ -65,6 +71,12 @@ if ($call_type == 'login') {
 } else if ($call_type == 'logout') {
     setcookie("keeper_id");
     setcookie("keeper_kor_name");
+    setcookie("menu1");
+    setcookie("menu2");
+    setcookie("menu3");
+    setcookie("menu4");
+    setcookie("menu5");
+    setcookie("menu6");
 
     $ret = "{\"ipg\": {\"call_type\": \"".$call_type."\",\"result\":\"1\"}}";
     echo $ret;

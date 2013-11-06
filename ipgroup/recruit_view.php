@@ -14,6 +14,10 @@ require_once('../classes/dao/ApplicantsDaoImpl.php');
 require_once('../classes/service/ApplicantsServiceImpl.php');
 require_once('../classes/domain/Applicants.php');
 
+//require_once('../classes/dao/ApplicantsCompanyDaoImpl.php');
+//require_once('../classes/service/ApplicantsCompanyServiceImpl.php');
+require_once('../classes/domain/ApplicantsCompany.php');
+
 require_once('../classes/dao/JobsDaoImpl.php');
 require_once('../classes/service/JobsServiceImpl.php');
 require_once('../classes/domain/Jobs.php');
@@ -23,7 +27,6 @@ require_once('../classes/service/AttachesServiceImpl.php');
 require_once('../classes/domain/Attaches.php');
 
 require_once('../classes/utils/CommonUtils.php');
-
 
 $conn = ConnectionFactory::create();
 $applicantsDaoImpl = new ApplicantsDaoImpl();
@@ -45,6 +48,7 @@ $jid = $_REQUEST['jid'];
 $applicantsObj = new Applicants();
 $applicantsObj->setId($id);
 $applicantsObj->setJobsId($jid);
+
 
 // 데이터 얻기
 $result = $applicantsServiceImpl->detail($conn, $applicantsObj);

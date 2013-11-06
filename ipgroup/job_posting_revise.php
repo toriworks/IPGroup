@@ -188,8 +188,8 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">전시여부</th>
                 <td class="val">
                     <div class="item">
-                        <input id="r1_1" class="i_radio" value="Y" type="radio" name="is_show_t" <? if($row['is_show'] == 'Y') echo 'checked'; ?> /><label for="r1_1">YES</label>
-                        <input id="r1_2" class="i_radio" value="N" type="radio" name="is_show_t" <? if($row['is_show'] == 'N') echo 'checked'; ?>/><label for="r1_2">NO</label>
+                        <input id="r1_1" class="i_radio" value="Y" name="is_show_t" type="radio" <? if($row['is_show'] == 'Y') echo ' checked'; ?> /><label for="r1_1">YES</label>
+                        <input id="r1_2" class="i_radio" value="N" name="is_show_t" type="radio" <? if($row['is_show'] == 'N') echo ' checked'; ?> /><label for="r1_2">NO</label>
                     </div>
                 </td>
             </tr>
@@ -213,25 +213,35 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_title">제목</label></th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        <input id="title" name="title" class="i_text" type="text" value="<?= $row['title'] ?>" style="width:550px;" />
+                        <input id="job_title" name="title" class="i_text" type="text" value="<?= $row['title'] ?>" style="width:550px;" />
                     </div>
                 </td>
             </tr>
+<?
+$sDate = ''; $eDate = '';
+if($row['is_always'] == 'N') {
+    $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
+    $eDate = $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'];
+} else {
+    $sDate = '';
+    $eDate = '';
+}
+?>
             <tr>
                 <th class="tit" scope="row">모집기간</th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        <input id="r2_1" class="i_radio" value="N" name="is_always_t" type="radio" name="date" onclick="clear_dates('N');" <? if($row['is_always'] == 'N') echo ' checked'; ?> /><label for="r2_1">기간</label>
+                        <input id="r2_1" class="i_radio" value="N" type="radio" name="is_always_t" <? if($row['is_always'] == 'N') echo ' checked'; ?>  onclick="clear_dates('N');" /><label for="r2_1">기간</label>
 
-                        <input id="date_from" class="i_text date" type="text" style="width:70px;" name="start_date" value="<?= $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'] ?>" />
+                        <input id="date_from" name="start_date" class="i_text date" type="text" style="width:70px;" value="<?= $sDate ?>" />
                         ~
-                        <input id="date_to" class="i_text date" type="text" style="width:70px;" name="end_date" value="<?= $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'] ?>" />
+                        <input id="date_to" name="end_date" class="i_text date" type="text" style="width:70px;" value="<?= $eDate ?>" />
                         <script type="text/javascript">
-                            init_from_to_date2();
+                            //init_from_to_date2();
                         </script>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="r2_2" class="i_radio" value="Y" name="is_always_t" type="radio" name="date" onclick="clear_dates('Y');" <? if($row['is_always'] == 'Y') echo ' checked'; ?> /><label for="r2_2">상시</label>
+                        <input id="r2_2" class="i_radio" value="Y" type="radio" name="is_always_t" <? if($row['is_always'] == 'Y') echo ' checked'; ?> onclick="clear_dates('Y');" /><label for="r2_2">상시</label>
                     </div>
                 </td>
             </tr>
@@ -253,7 +263,7 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row"><label for="job_count">모집인원</label></th>
                 <td class="val">
                     <div class="item">
-                        <input id="job_count" name="how_many" class="i_text" type="text" value="<?= $row['how_many'] ?>" style="width:30px;" />
+                        <input id="job_count" class="i_text" type="text" name="how_many" value="<?= ($row['how_many'] == '') ? '0' : $row['how_many']; ?>" style="width:30px;" />
                         명
                     </div>
                 </td>
@@ -267,7 +277,7 @@ $row = @mysql_fetch_array($result);
                             <option value="PL" <? if($row['hire_part'] == 'PL') echo ' selected'; ?>>기획실</option>
                             <option value="DN" <? if($row['hire_part'] == 'DN') echo ' selected'; ?>>디자인실</option>
                             <option value="PB" <? if($row['hire_part'] == 'PB') echo ' selected'; ?>>퍼블리싱팀</option>
-                            <option value="MN" <? if($row['hire_part'] == 'NM') echo ' selected'; ?>>경영지원팀</option>
+                            <option value="MN" <? if($row['hire_part'] == 'MN') echo ' selected'; ?>>경영지원팀</option>
                         </select>
                     </div>
                 </td>
@@ -292,19 +302,18 @@ $row = @mysql_fetch_array($result);
                 <th class="tit" scope="row">경력사항</th>
                 <td class="val">
                     <div class="item">
-                        <input id="r3_1" class="i_radio" value="N" type="radio" name="career_types_t"  <? if($row['career_types'] == 'N') echo ' checked'; ?>/><label for="r3_1">신입</label>
-                        <input id="r3_2" class="i_radio" value="Y" type="radio" name="career_types_t"  <? if($row['career_types'] == 'Y') echo ' checked'; ?>/><label for="r3_2">경력</label>
-                        <input id="job_year" class="i_text" type="text" value="7" style="width:30px;" />
+                        <input id="r3_1" class="i_radio" value="N" type="radio" name="career_types_t" <? if($row['career_types'] == 'N') echo ' checked'; ?> /><label for="r3_1">신입</label>
+                        <input id="r3_2" class="i_radio" value="Y" type="radio" name="career_types_t" <? if($row['career_types'] == 'Y') echo ' checked'; ?> /><label for="r3_2">경력</label>
+                        <input id="job_year" class="i_text" name="career_years" type="text" value="<?= $row['career_years'] ?>" style="width:30px;" />
                         년
                         <script type="text/javascript">
-                            $('input[name="career_types_t"]').bind('change',function(){
+                            $('input[name="career_y"]').bind('change',function(){
                                 if ($('#r3_2').prop('checked')) {
                                     $('#job_year').prop('disabled',false);
                                     $('#job_year').css('background','#fff');
                                 } else {
                                     $('#job_year').prop('disabled',true);
                                     $('#job_year').css('background','#f4f4f4');
-                                    $('#job_year').val('');
                                 }
                             }).trigger('change');
                         </script>
@@ -339,7 +348,7 @@ $row = @mysql_fetch_array($result);
                 <td class="val">
                     <div class="item">
                         <input id="r4_1" class="i_radio" value="NO" type="radio" name="old_types_t" <? if($row['old_types'] == 'NO') echo ' checked'; ?> /><label for="r4_1">무관</label>
-                        <input id="r4_2" class="i_radio" value="YS" type="radio" name="old_types_t" <? if($row['old_types'] == 'YS') echo ' checked'; ?> /><label for="r4_2">제한</label>
+                        <input id="r4_2" class="i_radio" value="YS" type="radio" name="old_types_t" <? if($row['old_types'] != 'NO') echo ' checked'; ?> /><label for="r4_2">제한</label>
                         <input id="job_age" class="i_text" name="how_old" type="text" value="<?= $row['how_old'] ?>" style="width:100px;" />
                         <script type="text/javascript">
                             $('input[name="old_types_t"]').bind('change',function(){
@@ -349,7 +358,6 @@ $row = @mysql_fetch_array($result);
                                 } else {
                                     $('#job_age').prop('disabled',true);
                                     $('#job_age').css('background','#f4f4f4');
-                                    $('#job_age').val('');
                                 }
                             }).trigger('change');
                         </script>

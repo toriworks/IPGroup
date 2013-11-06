@@ -164,6 +164,8 @@
 	#works div.works_list li.col_2 {top:244px;}
 	#works div.works_list li.col_3 {top:488px;}
 
+	#works .no_data {padding:130px 0 130px 55px; font-size:48px; font-weight:bold; color:#fff;}
+
 	#works .contents .works_list_controler a {position:absolute; top:50%; width:54px; height:109px; margin-top:-55px; text-indent:-1000px; overflow:hidden; background-image:url('../images/common/sp_ipgroup_v1.png'); background-repeat:no-repeat;}
 	#works .contents .works_list_controler a.prev {left:-70px; background-position:-240px -160px;}
 	#works .contents .works_list_controler a.next {right:-70px; background-position:-300px -160px;}
@@ -322,15 +324,19 @@
 	#recruit_job_posting .paginate {clear:both;padding:15px 0;margin-bottom:30px;text-align:center;line-height:normal}
 	#recruit_job_posting .paginate a,
 	#recruit_job_posting .paginate strong{display:inline-block;position:relative;margin:0 -2px;padding:2px 8px;font-weight:bold;font-size:12px;font-family:Tahoma, Sans-serif;color:#000;line-height:normal;text-decoration:none;vertical-align:middle}
+	/*
 	#recruit_job_posting .paginate a:hover,
 	#recruit_job_posting .paginate a:active,
 	#recruit_job_posting .paginate a:focus{background-color:#eee;}
+	*/
 	#recruit_job_posting .paginate strong{color:#FFF;}
 	#recruit_job_posting .paginate .direction{font-weight:normal;color:#000;white-space:nowrap}
 	#recruit_job_posting .paginate .direction span{font-weight:bold;font-size:14px}
+	/*
 	#recruit_job_posting .paginate .direction:hover,
 	#recruit_job_posting .paginate .direction:active,
 	#recruit_job_posting .paginate .direction:focus{background-color:#fff;color:#000}
+	*/
 	#recruit_job_posting .no_data {padding:130px 0 130px 15px; font-size:48px; font-weight:bold; color:#fff;}
 
 	#recruit_result {display:none; position:fixed; z-index:10000; left:0; top:0; right:0; bottom:0; background:url("../images/common/bg_black.png") repeat 0 0;}
@@ -387,6 +393,13 @@
 	#recruit_write table.form td .area.edu .set label.dept {margin-left:10%; width:auto;}
 	#recruit_write table.form td .area.edu .set input.i_text.dept {width:15%;}
 	#recruit_write .button_confirm {text-align:right;}
+
+	#recruit_write .careerlist {}
+	#recruit_write .careerlist table {width:100%;}
+	#recruit_write .careerlist table th {width:25%; padding:7px 0 5px;background-color:#3A0051; text-align:center; font-family:dotum; font-size:12px; font-weight:normal;}
+	#recruit_write .careerlist table td {width:25%; padding:2px 0; text-align:center;}
+	#recruit_write .careerlist table td .i_text {width:90%;}
+	#recruit_write .careerlist table tr.r1 td {padding-top:4px;}
 
 }
 
@@ -464,6 +477,8 @@
 	#works div.works_list li.col_1 {top:0;}
 	#works div.works_list li.col_2 {top:197px;}
 	#works div.works_list li.col_3 {top:394px;}
+
+	#works .no_data {padding:100px 0 100px 55px; font-size:35px;}
 
 	/*
 	|--------------------------------------------------------------------------
@@ -638,6 +653,7 @@
 	#works div.works_list li.col_2 {top:147px;}
 	#works div.works_list li.col_3 {top:294px;}
 
+	#works .no_data {padding:50px 0 50px 35px; font-size:25px;}
 
 	/*
 	|--------------------------------------------------------------------------

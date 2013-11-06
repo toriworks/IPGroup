@@ -34,7 +34,7 @@ if($start_date != "") {
 $end_date = $_REQUEST['end_date'];
 $end_date_m = ''; $end_date_y = ''; $end_date_d = '';
 if($end_date != "") {
-    $arrED = explode('.', $start_date);
+    $arrED = explode('.', $end_date);
     $end_date_y = $arrED[0];
     $end_date_m = $arrED[1];
     $end_date_d = $arrED[2];

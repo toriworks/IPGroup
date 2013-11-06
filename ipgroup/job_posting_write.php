@@ -185,7 +185,7 @@
                 <th class="tit" scope="row">모집기간</th>
                 <td class="val" colspan="3">
                     <div class="item">
-                        <input id="r2_1" class="i_radio" value="N" name="is_always_t" type="radio" name="date" checked="checked" onclick="clear_dates('N');" /><label for="r2_1">기간</label>
+                        <input id="r2_1" class="i_radio" value="N" name="is_always_t" type="radio" checked="checked" onclick="clear_dates('N');" /><label for="r2_1">기간</label>
 
                         <input id="date_from" name="start_date" class="i_text date" type="text" style="width:70px;" value="" />
                         ~
@@ -195,7 +195,7 @@
                         </script>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="r2_2" class="i_radio" value="Y" name="is_always_t" type="radio" name="date" onclick="clear_dates('Y');" /><label for="r2_2">상시</label>
+                        <input id="r2_2" class="i_radio" value="Y" name="is_always_t" type="radio" onclick="clear_dates('Y');" /><label for="r2_2">상시</label>
                     </div>
                 </td>
             </tr>

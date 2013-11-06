@@ -184,7 +184,7 @@
 			var before_resize_is_mobile = is_mobile();
 			$(window).bind('resize',function(){
 				if (before_resize_is_mobile != is_mobile()) {
-					loadWorksList();
+					if ($('#works').length > 0) loadWorksList();
 				}
 				before_resize_is_mobile = is_mobile();
 			});
@@ -403,7 +403,10 @@
 			}
 
 			function button_setting() {
-				if (workListPage == 1) {
+				if (workListPageMax == 1) {
+					btnPrev.fadeOut(300);
+					btnNext.fadeOut(300);
+				} else if (workListPage == 1) {
 					btnPrev.fadeOut(300);
 					btnNext.fadeIn(300);
 				} else if (workListPage == workListPageMax) {
@@ -435,8 +438,14 @@
 			function works_xml_loaded(xml) {
 				worksXml = $(xml);
 				workCount = worksXml.find('work').length;
-				sort_works_list();
-				display_page(workListPage);
+				if (workCount != 0) {
+					sort_works_list();
+					display_page(workListPage);
+				} else {
+					clear_works_list();
+					worksList.append('<div class="no_data">검색 결과가 없습니다.</div>');
+					button_setting();
+				}
 			}
 
 			function sort_works_list() {
@@ -520,6 +529,7 @@
 
 			function clear_works_list() {
 				worksList.find('> ul').remove();
+				worksList.find('> .no_data').remove();
 			}
 
 			function display_page(p) {
@@ -581,6 +591,7 @@
 			}
 
 			function display_view(seq) {
+				if (is_mobile()) return;
 				$('#works_view').show();
 				clear_work_view();
 				workView.html(html_view(worksXml.find('work[seq='+seq+']')));
@@ -595,9 +606,18 @@
 				html += '					<span>'+o.find('project name').text()+'</span>';
 				html += '				</h3>';
 				html += '				<div class="info">';
-				html += '					Client : '+o.find('project client').text()+'<br>';
-				html += '					Period : '+o.find('project period').text()+'<br>';
-				html += '					Link : <a href="'+o.find('project link').text()+'" target="_blank" title="새창">'+o.find('project link').text()+'</a><br>';
+				if (o.find('thumbnail open').text()) {
+					html += '					Open : '+o.find('thumbnail open').text()+'<br>';
+				}
+				if (o.find('project client').text()) {
+					html += '					Client : '+o.find('project client').text()+'<br>';
+				}
+				if (o.find('project period').text()) {
+					html += '					Period : '+o.find('project period').text()+'<br>';
+				}
+				if (o.find('project link').text()) {
+					html += '					Link : <a href="'+o.find('project link').text()+'" target="_blank" title="새창">'+o.find('project link').text()+'</a><br>';
+				}				
 				html += '				</div>';
 				html += '				<article>';
 				for (var a = 0; a < o.find('project file').length ; a++ ) {

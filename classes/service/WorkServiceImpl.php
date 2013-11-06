@@ -70,7 +70,48 @@ class WorkServiceImpl implements IWorkService {
     public function lists4Work($conn, $year, $category)
     {
         $result = $this->workDao->lists4Work($conn, $year, $category);
-        $arrWorks = '';
+        $arrWorks = null;
+
+        // 첨부파일 관련선언
+        $attachesDao = new AttachesDaoImpl();
+        $attachesService = new AttachesServiceImpl();
+        $attachesService->setAttachesDao($attachesDao);
+
+        $i = 0;
+        while($row = mysql_fetch_array($result)) {
+            $workObj = new Work();
+            $workObj->setId($row['id']);
+
+            // 날짜 조합
+            $open_date = $this->getDate4Work($row['open_date_y'], $row['open_date_m'], $row['open_date_d']);
+            $start_date = $this->getDate4Work($row['start_date_y'], $row['start_date_m'], $row['start_date_d']);
+            $end_date = $this->getDate4Work($row['end_date_y'], $row['end_date_m'], $row['end_date_d']);
+
+            $workObj->setThumbTypes($row['thumb_types']);
+            $workObj->setThumbTitle($row['thumb_title']);
+            $workObj->setThumbSubTitle($row['thumb_sub_title']);
+            $workObj->setOpenDateStr($open_date);
+            $workObj->setStartDateStr($start_date);
+            $workObj->setEndDateStr($end_date);
+            $workObj->setClientName($row['client_name']);
+            $workObj->setName($row['name']);
+            $workObj->setUrl($row['url']);
+            $workObj->setDescriptions($row['descriptions']);
+
+            // 첨부파일 처리
+            $arrAttaches = $attachesService->lists4Work($conn, $row['id']);
+            $workObj->setArrAttaches($arrAttaches);
+
+            $arrWorks[$i++] = $workObj;
+        }
+
+        return $arrWorks;
+    }
+
+    public function lists4WorkTest($conn, $year, $category)
+    {
+        $result = $this->workDao->lists4WorkTest($conn, $year, $category);
+        $arrWorks = null;
 
         // 첨부파일 관련선언
         $attachesDao = new AttachesDaoImpl();
