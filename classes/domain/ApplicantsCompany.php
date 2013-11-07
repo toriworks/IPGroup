@@ -11,33 +11,13 @@ class ApplicantsCompany {
     private $applicants_id;
     private $id;
     private $company_name;
-    private $start_date_y;
-    private $start_date_m;
-    private $start_date_d;
-    private $end_date_y;
-    private $end_date_m;
-    private $end_date_d;
+    private $start_date;
+    private $end_date;
     private $position;
     private $descriptions;
     private $regdate;
     private $moddate;
     private $order;
-
-    /**
-     * @param mixed $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
 
     /**
      * @param mixed $applicants_id
@@ -88,51 +68,19 @@ class ApplicantsCompany {
     }
 
     /**
-     * @param mixed $end_date_d
+     * @param mixed $end_date
      */
-    public function setEndDateD($end_date_d)
+    public function setEndDate($end_date)
     {
-        $this->end_date_d = $end_date_d;
+        $this->end_date = $end_date;
     }
 
     /**
      * @return mixed
      */
-    public function getEndDateD()
+    public function getEndDate()
     {
-        return $this->end_date_d;
-    }
-
-    /**
-     * @param mixed $end_date_m
-     */
-    public function setEndDateM($end_date_m)
-    {
-        $this->end_date_m = $end_date_m;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEndDateM()
-    {
-        return $this->end_date_m;
-    }
-
-    /**
-     * @param mixed $end_date_y
-     */
-    public function setEndDateY($end_date_y)
-    {
-        $this->end_date_y = $end_date_y;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEndDateY()
-    {
-        return $this->end_date_y;
+        return $this->end_date;
     }
 
     /**
@@ -184,6 +132,22 @@ class ApplicantsCompany {
     }
 
     /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
      * @param mixed $position
      */
     public function setPosition($position)
@@ -216,51 +180,19 @@ class ApplicantsCompany {
     }
 
     /**
-     * @param mixed $start_date_d
+     * @param mixed $start_date
      */
-    public function setStartDateD($start_date_d)
+    public function setStartDate($start_date)
     {
-        $this->start_date_d = $start_date_d;
+        $this->start_date = $start_date;
     }
 
     /**
      * @return mixed
      */
-    public function getStartDateD()
+    public function getStartDate()
     {
-        return $this->start_date_d;
-    }
-
-    /**
-     * @param mixed $start_date_m
-     */
-    public function setStartDateM($start_date_m)
-    {
-        $this->start_date_m = $start_date_m;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStartDateM()
-    {
-        return $this->start_date_m;
-    }
-
-    /**
-     * @param mixed $start_date_y
-     */
-    public function setStartDateY($start_date_y)
-    {
-        $this->start_date_y = $start_date_y;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStartDateY()
-    {
-        return $this->start_date_y;
+        return $this->start_date;
     }
 
 

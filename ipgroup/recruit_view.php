@@ -14,8 +14,8 @@ require_once('../classes/dao/ApplicantsDaoImpl.php');
 require_once('../classes/service/ApplicantsServiceImpl.php');
 require_once('../classes/domain/Applicants.php');
 
-//require_once('../classes/dao/ApplicantsCompanyDaoImpl.php');
-//require_once('../classes/service/ApplicantsCompanyServiceImpl.php');
+require_once('../classes/dao/ApplicantsCompanyDaoImpl.php');
+require_once('../classes/service/ApplicantsCompanyServiceImpl.php');
 require_once('../classes/domain/ApplicantsCompany.php');
 
 require_once('../classes/dao/JobsDaoImpl.php');
@@ -41,6 +41,11 @@ $attachesDaoImpl = new AttachesDaoImpl();
 $attachesServiceImpl = new AttachesServiceImpl();
 $attachesServiceImpl->setAttachesDao($attachesDaoImpl);
 
+// 지원자 회사정보
+$appCDaoImpl = new ApplicantsCompanyDaoImpl();
+$appCServiceImpl = new ApplicantsCompanyServiceImpl();
+$appCServiceImpl->setApplicantsCompanyDao($appCDaoImpl);
+
 
 // 파라미터 받기
 $id = $_REQUEST['id'];
@@ -54,11 +59,18 @@ $applicantsObj->setJobsId($jid);
 $result = $applicantsServiceImpl->detail($conn, $applicantsObj);
 $row = @mysql_fetch_array($result);
 
+
 // Job posting 정보
 $jobsObj = new Jobs();
 $jobsObj->setId($jid);
 $jResult = $jobsServiceImpl->detail($conn, $jobsObj);
 $jRow = @mysql_fetch_array($jResult);
+
+
+// 회사명 얻기
+$wParamC = " jobs_id='".$jid."' AND applicants_id='".$id."' ";
+$orderByC = " orders ASC ";
+$resultC = $appCServiceImpl->lists($conn, $wParamC, $orderByC, 1, 10);
 
 // 첨부파일 정보
 $aResult = $attachesServiceImpl->lists($conn, $id);
@@ -322,24 +334,18 @@ $hirePartS = CommonUtils::getHirePart($jRow['hire_part']);
                         </tr>
                         </thead>
                         <tbody>
+<?
+while($rowC = mysql_fetch_array($resultC)) {
+?>
                         <tr>
-                            <td class="company"><!-- (주)아이피그룹 --></td>
-                            <td class="date"><!-- 2012.01.31 ~ 2013.12.31 --></td>
-                            <td class="rank"><!-- 과장 --></td>
-                            <td class="job"><!-- 웹기획/마케팅 --></td>
+                            <td class="company"><?= $rowC['company_name'] ?></td>
+                            <td class="date"><?= $rowC['start_date'] ?></td>
+                            <td class="rank"><?= $rowC['position'] ?></td>
+                            <td class="job"><?= $rowC['descriptions'] ?></td>
                         </tr>
-                        <tr>
-                            <td class="company"><!-- (주)아이피그룹 --></td>
-                            <td class="date"><!-- 2012.01.31 ~ 2013.12.31 --></td>
-                            <td class="rank"><!-- 과장 --></td>
-                            <td class="job"><!-- 웹기획/마케팅 --></td>
-                        </tr>
-                        <tr>
-                            <td class="company"><!-- (주)아이피그룹 --></td>
-                            <td class="date"><!-- 2012.01.31 ~ 2013.12.31 --></td>
-                            <td class="rank"><!-- 과장 --></td>
-                            <td class="job"><!-- 웹기획/마케팅 --></td>
-                        </tr>
+<?
+}
+?>
                         </tbody>
                     </table>
 

@@ -10,6 +10,10 @@ require_once('../classes/domain/Applicants.php');
 require_once('../classes/dao/ApplicantsDaoImpl.php');
 require_once('../classes/service/ApplicantsServiceImpl.php');
 
+require_once('../classes/dao/ApplicantsCompanyDaoImpl.php');
+require_once('../classes/service/ApplicantsCompanyServiceImpl.php');
+require_once('../classes/domain/ApplicantsCompany.php');
+
 require_once('../classes/domain/Attaches.php');
 require_once('../classes/dao/AttachesDaoImpl.php');
 require_once('../classes/service/AttachesServiceImpl.php');
@@ -23,6 +27,11 @@ $applicantsServiceImpl->setApplicantsDao($applicantsDaoImpl);
 $attachesServiceImpl = new AttachesServiceImpl();
 $attachesDaoImpl = new AttachesDaoImpl();
 $attachesServiceImpl->setAttachesDao($attachesDaoImpl);
+
+// 지원자 회사정보
+$appCDaoImpl = new ApplicantsCompanyDaoImpl();
+$appCServiceImpl = new ApplicantsCompanyServiceImpl();
+$appCServiceImpl->setApplicantsCompanyDao($appCDaoImpl);
 
 
 // get parameter
@@ -42,9 +51,16 @@ for($i = 0; $i<count($arrApplicants); $i++) {
         $attachesObj->setRefId($arrApplicants[$i]);
 
         $attachesServiceImpl->delete($conn, $attachesObj);
+
+//        // 지원자 학교 삭제
+//        $appC = new ApplicantsCompany();
+//        $appC->setApplicantsId($arrApplicants[$i]);
+//
+//        $appCServiceImpl->delete($conn, $appC);
     }
 
 }
+
 ?>
 <script type="text/javascript">
     location.href = "./redirect.php?page=recruit_list.php";
