@@ -16,8 +16,6 @@ class KeeperDaoImpl implements IKeeperDao {
         $sql = "INSERT INTO keeper (id, regdate, login_cnt, last_login, kor_name, auth_types, menu1, menu2, menu3, menu4, menu5, menu6) VALUES ";
         $sql .= "('".$obj->getId()."', now(), 0, '', '".$obj->getKorName()."', '".$obj->getAuthTypes()."',".$obj->getMenu1().",".$obj->getMenu2().",".$obj->getMenu3().",".$obj->getMenu4().",".$obj->getMenu5().",".$obj->getMenu6().")";
 
-        echo $sql;
-
         $resultOfQuery = mysql_query($sql, $conn) or die("KeeperDaoImple add error : ".mysql_error());
         return $resultOfQuery;
     }

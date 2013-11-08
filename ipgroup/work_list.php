@@ -16,6 +16,22 @@ $conn = ConnectionFactory::create();
 $workDaoImpl = new WorkDaoImpl();
 $workServiceImpl = new WorkServiceImpl();
 $workServiceImpl->setWorkDao($workDaoImpl);
+
+// 한 페이지에서 보여줄 갯수
+$rowCountPerPage = 0;
+$rowCountPerPage = ($_REQUEST['rcpp'] != '') ?  $_REQUEST['rcpp'] : 10;
+
+$wParam = '';
+$orderBy = $_REQUEST['orderBy'];
+$orderDir = $_REQUEST['orderDir'];
+if($orderBy == '') {
+    $orderBy = ' regdate_r DESC ';
+}
+
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -32,8 +48,33 @@ $workServiceImpl->setWorkDao($workDaoImpl);
     <script type="text/javascript" src="./js/message.js"></script>
     <script type="text/javascript" src="./js/login.js"></script>
     <script type="text/javascript">
+        var oO = [false,false,false,false,false,false];
+
         goDetail = function(id, ob, od, wp) {
             location.href = "work_list_view.php?work_id=" + id + "&orderBy=" + ob + "&orderDir=" + od + "&wParam=" + wp;
+        }
+
+        changeRcpp = function(obj) {
+            var sV = obj[obj.selectedIndex].value;
+            location.href = "<?= $_SERVER[PHP_SELF] ?>?rcpp="+sV;
+        }
+
+        orderb = function(ids, idt) {
+            for(var i=0; i<6; i++) {
+                if(i == (ids-1)) {
+                    oO[i] = !oO[i];
+                } else {
+                    oO[i] = false;
+                }
+            }
+
+            var od = 'asc';
+            for(var x=0; x<6; x++) {
+                od = (oO[x] == false) ? 'asc' : 'desc';
+                document.getElementById('o' + (x + 1)).className = od;
+            }
+
+            //location.href = "<?= $_SERVER[PHP_SELF] ?>?rcpp=<?= $rowCountPerPage ?>";
         }
     </script>
 
@@ -60,19 +101,6 @@ $workServiceImpl->setWorkDao($workDaoImpl);
     </ul>
 </div>
 <?
-$rowCountPerPage = 7;
-$wParam = '';
-$orderBy = $_REQUEST['orderBy'];
-$orderDir = $_REQUEST['orderDir'];
-if($orderBy == '') {
-    $orderBy = ' regdate_r DESC ';
-}
-
-$curPage = $_REQUEST['curPage'];
-if($curPage == '') {
-    $curPage = 1;
-}
-
 $totalCnt = $workServiceImpl->listsCount($conn, $wParam);
 $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
 ?>
@@ -137,11 +165,11 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountP
         <!-- 상단 영역 -->
         <div class="area_top">
             <div class="left">
-                <select class="select">
-                    <option value="10">10개씩보기</option>
-                    <option value="20">20개씩보기</option>
-                    <option value="50">50개씩보기</option>
-                    <option value="100">100개씩보기</option>
+                <select class="select" name="rcpp" onchange="changeRcpp(this);">
+                    <option value="10" <? if($rowCountPerPage == '10') echo ' selected'; ?>>10개씩보기</option>
+                    <option value="20" <? if($rowCountPerPage == '20') echo ' selected'; ?>>20개씩보기</option>
+                    <option value="50" <? if($rowCountPerPage == '50') echo ' selected'; ?>>50개씩보기</option>
+                    <option value="100" <? if($rowCountPerPage == '100') echo ' selected'; ?>>100개씩보기</option>
                 </select>
             </div>
             <div class="right">
@@ -163,12 +191,12 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountP
                 </colgroup>
                 <thead>
                 <tr>
-                    <th><a class="asc" href="#">No</a></th>
-                    <th><a class="desc" href="#">제목</a></th>
-                    <th><a class="desc" href="#">등록일</a></th>
-                    <th><a class="desc" href="#">수정일</a></th>
-                    <th><a class="desc" href="#">등록ID</a></th>
-                    <th><a class="desc" href="#">전시</a></th>
+                    <th><a class="asc" id="o1" href="javascript:orderb(1, 'no');">No</a></th>
+                    <th><a class="asc" id="o2" href="javascript:orderb(2, 'title');">제목</a></th>
+                    <th><a class="asc" id="o3" href="javascript:orderb(3, 'regdate');">등록일</a></th>
+                    <th><a class="asc" id="o4" href="javascript:orderb(4, 'moddate');">수정일</a></th>
+                    <th><a class="asc" id="o5" href="javascript:orderb(5, 'keeper_id');">등록ID</a></th>
+                    <th><a class="asc" id="o6" href="javascript:orderb(6, 'is_shop');">전시</a></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -206,7 +234,7 @@ $totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
 <?
 // Prev block
 if($curPage > 1) {
-    echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+    echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'&rcpp='.$rowCountPerPage.'"><span>‹</span> 이전페이지</a>';
 } else {
     echo '<span>‹</span> 이전페이지';
 }
@@ -216,7 +244,7 @@ for($k = 1; $k <= $totalPage; $k++) {
     if($curPage == $k) {
         $strPage = '<a href=><strong>'.$k.'</strong></a>';
     } else {
-        $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+        $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'&rcpp='.$rowCountPerPage.'">'.$k.'</a>';
     }
 
     // 1, 2, 3, 4, 5, 6 ...
@@ -225,7 +253,7 @@ for($k = 1; $k <= $totalPage; $k++) {
 
 // Next block
 if($curPage < $totalPage) {
-    echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+    echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'&rcpp='.$rowCountPerPage.'">다음페이지 <span>›</span></a>';
 } else {
         echo '다음페이지 <span>›</span>';
     }

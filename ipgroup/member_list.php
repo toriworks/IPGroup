@@ -131,7 +131,7 @@ if($totalCnt > 0) {
 ?>
                         <tr>
                             <td><?= $bPage - 1 ?></td>
-                            <td><a href="member_view.php"><?= $row['id'] ?></a></td>
+                            <td><a href="member_view.php?mid=<?= $row['id'] ?>"><?= $row['id'] ?></a></td>
                             <td><?= $row['kor_name'] ?></td>
                             <td><?= $authTypeS ?></td>
                             <td><?= $row['regdate'] ?></td>

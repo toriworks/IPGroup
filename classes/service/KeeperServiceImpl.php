@@ -27,7 +27,7 @@ class KeeperServiceImpl implements IKeeperService {
 
     public function update($conn, Keeper $obj)
     {
-        // TODO: Implement update() method.
+        return $this->keeperDao->update($conn, $obj);
     }
 
     public function delete($conn, Keeper $obj)

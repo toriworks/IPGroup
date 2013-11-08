@@ -351,9 +351,20 @@ while($rowC = mysql_fetch_array($resultC)) {
 
                 </td>
             </tr>
+<?
+// 희망연봉 문자열 처리
+$wishPayS = '';
+if($row['wish_pay'] != '') {
+    if(strpos($row['wish_pay'], '만원') == true) {
+        $wishPayS = '';
+    } else {
+        $wishPayS = '만원';
+    }
+}
+?>
             <tr>
                 <th class="tit" scope="row">희망연봉</th>
-                <td class="val" colspan="3"><span class="pay"><?= $row['wish_pay'] ?>만원</span></td>
+                <td class="val" colspan="3"><span class="pay"><?= $row['wish_pay'] ?><?= $wishPayS ?></span></td>
             </tr>
             <tr>
                 <th class="tit" scope="row">첨부파일</th>

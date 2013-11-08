@@ -146,6 +146,14 @@ if($row['is_always'] == 'N') {
 } else {
     $seDate = '상시';
 }
+
+// 모집인원
+$hmS = '';
+if($row['how_many'] > 0) {
+    $hmS = $row['how_many'];
+} else {
+    $hmS = '0';
+}
 ?>
             <tr>
                 <th class="tit" scope="row">모집기간</th>
@@ -155,7 +163,7 @@ if($row['is_always'] == 'N') {
                 <th class="tit" scope="row">고용형태</th>
                 <td class="val"><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
                 <th class="tit" scope="row">모집인원</th>
-                <td class="val"><? ($row['how_many'] > 0) ? $row['how_many'] : ''; ?>명</td>
+                <td class="val"><?= $hmS ?>명</td>
             </tr>
             <tr>
                 <th class="tit" scope="row">근무부서</th>
