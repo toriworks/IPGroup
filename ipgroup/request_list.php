@@ -16,6 +16,63 @@ $conn = ConnectionFactory::create();
 $requestsDaoImpl = new RequestsDaoImpl();
 $requestsServiceImpl = new RequestsServiceImpl();
 $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
+
+// 한 페이지에서 보여줄 갯수
+$rowCountPerPage = 0;
+$rowCountPerPage = ($_REQUEST['rcpp'] != '') ?  $_REQUEST['rcpp'] : 10;
+
+$orderBy = $_REQUEST['orderBy'];
+if($orderBy == '') {
+    $orderBy = ' regdate_r ';
+}
+
+$orderDir = $_REQUEST['orderDir'];
+if($orderDir == '') {
+    $orderDir = ' DESC ';
+}
+
+$orderDirS = $_REQUEST['orderDirS'];
+if($orderDirS == '') {
+    $orderDirS = 'f^f^f^f^f^f^f^';
+}
+
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+// 검색조건
+$schPeriod = $_REQUEST['sch_period'];
+$schDateFrom = $_REQUEST['sch_date_from'];
+$schDateTo = $_REQUEST['sch_date_to'];
+$schWtypesR = (int) ('0' + $_REQUEST['sch_wtypes_r']);
+$schGubun = $_REQUEST['sch_gubun'];
+$schText = $_REQUEST['sch_text'];
+
+// 조건절 구성
+$wParam = '';
+if($schPeriod == 'Y') {
+    // 기간 선택이 체크 되어야지만 기간 선택이 수행
+    $wParam .= " AND (a.regdate >= '".$schDateFrom."' AND a.regdate <= '".$schDateTo."') ";
+}
+
+// 유형
+if($schWtypesR > 0) {
+    $wParam .= " AND (types & ".$schWtypesR.") > 0 ";
+}
+
+// 검색어
+if($schText != '') {
+    if($schGubun == 'C') {
+        $wParam .= " AND company_name LIKE '%".$schText."%' ";
+    } else if($schGubun == 'T') {
+        $wParam .= " AND (contact_tel LIKE '%".$schText."%' OR contact_mobile LIKE '%".$schText."%') ";
+    } else if($schGubun == 'E') {
+        $wParam .= " AND email LIKE '%".$schText."%' ";
+    } else {
+        $wParam .= " AND manager_name LIKE '%".$schText."%' ";
+    }
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -54,6 +111,92 @@ $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
                 return;
             }
         }
+
+        orderb = function(ids, idt, idx) {
+
+            // 모두 asc로 변경함
+            for(var i=0; i<7; i++) {
+                document.getElementById('o' + (i+1)).className = 'asc';
+            }
+
+            var ods = '<?= $orderDirS ?>';
+            var arrOds = ods.split("^");
+            for(var x=0; x<7; x++) {
+                if(idx == x) {
+                    if(arrOds[idx] == 'f') {
+                        arrOds[idx] = 't';
+                    } else {
+                        arrOds[idx] = 'f';
+                    }
+                } else {
+                    arrOds[x] = 'f';
+                }
+            }
+
+            var nOds = '';
+            for(var x=0; x<7; x++) {
+                nOds += arrOds[x] + "^";
+            }
+
+            var form = document.forms.sch_form;
+            form.curPage.value = 1;
+            form.orderBy.value = ids;
+            form.orderDirS.value = nOds;
+            form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.submit();
+        }
+
+        changeRcpp = function(obj) {
+            var sV = obj[obj.selectedIndex].value;
+
+            var form = document.forms.sch_form;
+            form.rcpp.value = sV;
+            form.curPage.value = 1;
+
+            form.submit();
+        }
+
+        goSearch = function() {
+            var form = document.forms.sch_form;
+
+            var sch_period = form.sch_period.checked;
+            var sch_date_from = form.sch_date_from.value;
+            var sch_date_to = form.sch_date_to.value;
+
+            var sch_wtypes = 0;
+            for(var k=0; k<7; k++) {
+                if(form.sch_wtypes[k].checked == true) {
+                    sch_wtypes += parseInt(form.sch_wtypes[k].value);
+                }
+            }
+            form.sch_wtypes_r.value = sch_wtypes;
+
+            var sch_gubun = '';
+            for(var a=0; a<3; a++) {
+                if(form.sch_gubun[a].selected == true) {
+                    sch_gubun = form.sch_gubun[a].value;
+                }
+            }
+            var sch_text = form.sch_text.value;
+            form.submit();
+        }
+
+        goDetail = function(id) {
+            var form = document.sch_form;
+            form.requests_id.value = id;
+
+            form.action = "request_view.php";
+            form.submit();
+        }
+
+        goPaging = function(c, r) {
+            var form = document.forms.sch_form;
+
+            form.curPage.value = c;
+            form.rcpp.value = r;
+
+            form.submit();
+        }
     </script>
 </head>
 <body>
@@ -85,16 +228,24 @@ $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
 <div class="container">
 <!-- 본문 영역 -->
 
+<form name="sch_form" action="<?= $_SERVER['PHP_SELF'] ?>?rcpp=<?= $rowCountPerPage ?>&curPage=<?= $curPage ?>" method="GET">
+<input type="hidden" name="sch_wtypes_r" value="<?= $schWtypesR ?>" />
+<input type="hidden" name="rcpp" value="<?= $rowCountPerPage ?>" />
+<input type="hidden" name="curPage" value="<?= $curPage ?>" />
+<input type="hidden" name="orderBy" value="<?= $orderBy ?>" />
+<input type="hidden" name="orderDir" value="<?= $orderDir ?>" />
+<input type="hidden" name="orderDirS" value="<?= $orderDirS ?>" />
+<input type="hidden" name="requests_id" value="" />
 <div class="section">
     <div class="form_search">
         <dl>
             <dt class="t">기간선택 : </dt>
             <dd>
-                <input type="checkbox" />
+                <input type="checkbox" id="sch_period" name="sch_period" value="Y"  <? if($schPeriod == 'Y') { echo ' checked'; } ?> />
                 등록일자
-                <input id="date_from" class="i_text date" type="text" value="" />
+                <input id="date_from" name="sch_date_from" class="i_text date" type="text" value="<?= $schDateFrom ?>" />
                 ~
-                <input id="date_to" class="i_text date" type="text" value="" />
+                <input id="date_to" name="sch_date_to" class="i_text date" type="text" value="<?= $schDateTo ?>" />
             </dd>
             <script type="text/javascript">
                 init_from_to_date();
@@ -102,40 +253,40 @@ $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
 
             <dt>문의항목 : </dt>
             <dd>
-                <input id="ck_b_1" type="checkbox" /><label for="ck_b_1">Project</label>
-                <input id="ck_b_2" type="checkbox" /><label for="ck_b_2">Promotion</label>
-                <input id="ck_b_3" type="checkbox" /><label for="ck_b_3">UX/UI</label>
-                <input id="ck_b_4" type="checkbox" /><label for="ck_b_4">Mobile</label>
-                <input id="ck_b_5" type="checkbox" /><label for="ck_b_5">Offer</label>
-                <input id="ck_b_6" type="checkbox" /><label for="ck_b_6">Consulting</label>
-                <input id="ck_b_7" type="checkbox" /><label for="ck_b_7">AD</label>
+                <input id="ck_b_1" name="sch_wtypes" value="1" type="checkbox" <? if(($schWtypesR & 1) > 0) { echo ' checked'; } ?> /><label for="ck_b_1">Project</label>
+                <input id="ck_b_2" name="sch_wtypes" value="2" type="checkbox" <? if(($schWtypesR & 2) > 0) { echo ' checked'; } ?> /><label for="ck_b_2">Promotion</label>
+                <input id="ck_b_3" name="sch_wtypes" value="4" type="checkbox" <? if(($schWtypesR & 4) > 0) { echo ' checked'; } ?> /><label for="ck_b_3">UX/UI</label>
+                <input id="ck_b_4" name="sch_wtypes" value="8" type="checkbox" <? if(($schWtypesR & 8) > 0) { echo ' checked'; } ?> /><label for="ck_b_4">Mobile</label>
+                <input id="ck_b_5" name="sch_wtypes" value="16" type="checkbox" <? if(($schWtypesR & 16) > 0) { echo ' checked'; } ?> /><label for="ck_b_5">Proposal</label>
+                <input id="ck_b_6" name="sch_wtypes" value="32" type="checkbox" <? if(($schWtypesR & 32) > 0) { echo ' checked'; } ?> /><label for="ck_b_6">Consulting</label>
+                <input id="ck_b_7" name="sch_wtypes" value="64" type="checkbox" <? if(($schWtypesR & 64) > 0) { echo ' checked'; } ?> /><label for="ck_b_7">AD</label>
             </dd>
         </dl>
 
         <div class="keyword_area">
-            <select class="select" name="" id="">
-                <option value="">회사명</option>
-                <option value="">연락처</option>
-                <option value="">E-Mail</option>
-                <option value="">담당자</option>
+            <select class="select" name="sch_gubun" id="sch_gubun">
+                <option value="C" <? if($schGubun == 'C') { echo ' selected'; } ?>>회사명</option>
+                <option value="T" <? if($schGubun == 'T') { echo ' selected'; } ?>>연락처</option>
+                <option value="E" <? if($schGubun == 'E') { echo ' selected'; } ?>>E-Mail</option>
+                <option value="M" <? if($schGubun == 'M') { echo ' selected'; } ?>>담당자</option>
             </select>
-            <input class="keyword" type="text" />
-            <a class="txt_button" href="#">검색</a>
+            <input class="keyword" type="text" name="sch_text" id="sch_text" value="<?= $schText ?>" />
+            <a class="txt_button" href="javascript:goSearch();">검색</a>
         </div>
     </div>
 
 </div>
-
+</form>
 
 <div class="section">
 <!-- 상단 영역 -->
 <div class="area_top">
     <div class="left">
-        <select class="select">
-            <option value="10">10개씩보기</option>
-            <option value="20">20개씩보기</option>
-            <option value="50">50개씩보기</option>
-            <option value="100">100개씩보기</option>
+        <select class="select" name="rcpp" onchange="changeRcpp(this);">
+            <option value="10" <? if($rowCountPerPage == '10') echo ' selected'; ?>>10개씩보기</option>
+            <option value="20" <? if($rowCountPerPage == '20') echo ' selected'; ?>>20개씩보기</option>
+            <option value="50" <? if($rowCountPerPage == '50') echo ' selected'; ?>>50개씩보기</option>
+            <option value="100" <? if($rowCountPerPage == '100') echo ' selected'; ?>>100개씩보기</option>
         </select>
     </div>
     <div class="right">
@@ -159,6 +310,16 @@ $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
             <col width="10%" />
         </colgroup>
         <thead>
+<?
+$arrASC = explode('^', $orderDirS);
+$a1 = ($arrASC[0] == 'f') ? 'asc' : 'desc';
+$a2 = ($arrASC[1] == 'f') ? 'asc' : 'desc';
+$a3 = ($arrASC[2] == 'f') ? 'asc' : 'desc';
+$a4 = ($arrASC[3] == 'f') ? 'asc' : 'desc';
+$a5 = ($arrASC[4] == 'f') ? 'asc' : 'desc';
+$a6 = ($arrASC[5] == 'f') ? 'asc' : 'desc';
+$a7 = ($arrASC[6] == 'f') ? 'asc' : 'desc';
+?>
         <tr>
             <th class="check">
                 <input id="all_check" type="checkbox" />
@@ -175,36 +336,24 @@ $requestsServiceImpl->setRequestsDao($requestsDaoImpl);
                     });
                 </script>
             </th>
-            <th><a class="asc" href="#">No</a></th>
+            <th><a class="<?= $a1 ?>" id="o1" href="javascript:orderb('regdate', 'o1', 0);">No</a></th>
             <th><span class="hide">아이콘</span></th>
-            <th><a class="desc" href="#">회사명</a></th>
-            <th><a class="desc" href="#">연락처</a></th>
-            <th><a class="desc" href="#">E-Mail</a></th>
-            <th><a class="desc" href="#">문의항목</a></th>
-            <th><a class="desc" href="#">담당자</a></th>
-            <th><a class="desc" href="#">문의일</a></th>
+            <th><a class="<?= $a2 ?>" id="o2" href="javascript:orderb('company_name', 'o2', 1);">회사명</a></th>
+            <th><a class="<?= $a3 ?>" id="o3" href="javascript:orderb('contact_tel', 'o3', 2);">연락처</a></th>
+            <th><a class="<?= $a4 ?>" id="o4"  href="javascript:orderb('email', 'o4', 3);">E-Mail</a></th>
+            <th><a class="<?= $a5 ?>" id="o5" href="javascript:orderb('types', 'o5', 4);">문의항목</a></th>
+            <th><a class="<?= $a6 ?>" id="o6" href="javascript:orderb('manager_name', 'o6', 5);">담당자</a></th>
+            <th><a class="<?= $a7 ?>" id="o7" href="javascript:orderb('regdate', 'o7', 6);">문의일</a></th>
         </tr>
         </thead>
         <tbody>
 <?
-$rowCountPerPage = 7;
-$wParam = '';
-$orderBy = $_REQUEST['orderBy'];
-$orderDir = $_REQUEST['orderDir'];
-if($orderBy == '') {
-    $orderBy = ' regdate_r DESC ';
-}
-
-$curPage = $_REQUEST['curPage'];
-if($curPage == '') {
-    $curPage = 1;
-}
-
 $totalCnt = $requestsServiceImpl->listsCount($conn, $wParam);
-$result = $requestsServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCountPerPage);
+$result = $requestsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $rowCountPerPage);
 
 if($totalCnt > 0) {
-$bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $idx = 0;
     while($row = mysql_fetch_array($result)) {
         $bPage++;
 
@@ -233,6 +382,8 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
         if(($wtypes & 64) == 64) {
             $strWT = $strWT.'AD ';
         }
+
+        $idx = $row['id'];
 ?>
         <tr>
             <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
@@ -243,7 +394,7 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
                 <? } ?>
                 <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
             </td>
-            <td class="company"><a href="request_view.php?requests_id=<?= $row['id'] ?>"><?= $row['company_name'] ?></a></td>
+            <td class="company"><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['company_name'] ?></a></td>
             <td><?= $row['contact_tel'] ?><br /><?= $row['contact_mobile'] ?></td>
             <td><?= $row['email'] ?></td>
             <td><?= $strWT ?></td>
@@ -270,7 +421,8 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
         <?
         // Prev block
         if($curPage > 1) {
-            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+            //echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orerBy=&curPage='.($curPage-1).'&rcpp='.$rowCountPerPage.'"><span>‹</span> 이전페이지</a>';
+            echo "<a class='direction' href='javascript:goPaging(".($curPage-1).",".$rowCountPerPage.");'><span>‹</span> 이전페이지</a>";
         } else {
             echo '<span>‹</span> 이전페이지';
         }
@@ -280,7 +432,8 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
             if($curPage == $k) {
                 $strPage = '<a href=><strong>'.$k.'</strong></a>';
             } else {
-                $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+                //$strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orderBy=&curPage='.$k.'&rcpp='.$rowCountPerPage.'">'.$k.'</a>';
+                $strPage = "<a href='javascript:goPaging(".$k.",".$rowCountPerPage.");'>".$k."</a>";
             }
 
             // 1, 2, 3, 4, 5, 6 ...
@@ -289,7 +442,8 @@ $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
 
         // Next block
         if($curPage < $totalPage) {
-            echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+            //echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orderBy=&curPage='.($curPage+1).'&rcpp='.$rowCountPerPage.'">다음페이지 <span>›</span></a>';
+            echo "<a class='direction' href='javascript:goPaging(".($curPage+1).",".$rowCountPerPage.");'>다음페이지 <span>›</span></a>";
         } else {
             echo '다음페이지 <span>›</span>';
         }

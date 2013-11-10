@@ -51,9 +51,9 @@ class WorkServiceImpl implements IWorkService {
         return $this->workDao->delete($conn, $obj);
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
-        return $this->workDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
+        return $this->workDao->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)

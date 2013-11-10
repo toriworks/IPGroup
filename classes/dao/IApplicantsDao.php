@@ -11,7 +11,7 @@ interface IApplicantsDao {
     public function update_keeper( $conn, Applicants $obj );
     public function update_jobs_hire_part($conn, Applicants $obj);
     public function delete( $conn, Applicants $obj );
-    public function lists( $conn, $wParam, $orderBy, $curPage, $pageMax );
+    public function lists( $conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax );
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Applicants $obj);

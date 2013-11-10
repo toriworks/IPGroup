@@ -40,9 +40,9 @@ class ApplicantsServiceImpl implements IApplicantsService {
         return $this->applicantsDao->delete($conn, $obj);
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
-        return $this->applicantsDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
+        return $this->applicantsDao->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)

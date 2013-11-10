@@ -47,20 +47,25 @@ class RequestsDaoImpl implements IRequestsDao {
         return $resultOfQuery;
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
         $sql = "SELECT a.id, a.company_name, a.contact_tel, a.contact_mobile, a.email, a.url, a.types";
         $sql .= ", a.manager_name, a.manager_id, a.descriptions, a.memos, date_format(a.regdate, '%Y.%m.%d') regdate, a.regdate as regdate_r ";
         $sql .= ", datediff(now(), a.regdate) as is_old, b.original_filename ";
         $sql .= " FROM requests a LEFT OUTER JOIN attaches b ON a.id=b.ref_id ";
         if(!empty($wParam)) {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
         if(!empty($orderBy)) {
-            $sql .= " ORDER BY ".$orderBy;
+            if(empty($orderDir)) {
+                $orderDir = " DESC ";
+            }
+            $sql .= " ORDER BY ".$orderBy." ".$orderDir;
         }
 
         $sql = $sql." LIMIT ".(($curPage-1) * $pageMax)." , ".$pageMax;
+//        echo $sql;
+
         $result = mysql_query($sql) or die("RequestsDaoImpl lists error : ".mysql_error());
 
         return $result;
@@ -68,10 +73,12 @@ class RequestsDaoImpl implements IRequestsDao {
 
     public function listsCount($conn, $wParam)
     {
-        $sql = "SELECT COUNT(0) cnt FROM requests";
+        $sql = "SELECT COUNT(0) cnt FROM requests a";
         if($wParam != "") {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
+
+//        echo $sql;
 
         $result = mysql_query($sql) or die("RequestsDaoImpl listsCount error : ".mysql_error());
         $tCnt = 0;

@@ -54,20 +54,25 @@ class WorkDaoImpl implements IWorkDao {
         return $resultOfQuery;
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
         $sql = "SELECT id, date_format(regdate, '%Y.%m.%d') regdate, regdate as regdate_r, date_format(moddate, '%Y.%m.%d') moddate, keeper_id, mod_id, is_shop, thumb_types, thumb_title, thumb_sub_title, open_date_y,";
         $sql .= "open_date_m, open_date_d, wtypes, name, client_name,";
         $sql .= "start_date_y, start_date_m, start_date_d, end_date_y, end_date_m, end_date_d,";
         $sql .= "url, descriptions FROM work ";
         if(!empty($wParam)) {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
         if(!empty($orderBy)) {
-            $sql .= " ORDER BY ".$orderBy;
+            if(empty($orderDir)) {
+                $orderDir = " DESC ";
+            }
+            $sql .= " ORDER BY ".$orderBy." ".$orderDir;
         }
 
         $sql = $sql." LIMIT ".(($curPage-1) * $pageMax)." , ".$pageMax;
+
+
         $result = mysql_query($sql) or die("WorkDaoImpl lists error : ".mysql_error());
 
         return $result;
@@ -77,7 +82,7 @@ class WorkDaoImpl implements IWorkDao {
     {
         $sql = "SELECT COUNT(0) cnt FROM work";
         if($wParam != "") {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
 
         $result = mysql_query($sql) or die("WorkDaoImpl listsCount error : ".mysql_error());

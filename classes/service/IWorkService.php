@@ -14,7 +14,7 @@ interface IWorkService {
     public function add( $conn, Work $obj );
     public function update( $conn, Work $obj );
     public function delete( $conn, Work $obj );
-    public function lists( $conn, $wParam, $orderBy, $curPage, $pageMax );
+    public function lists( $conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax );
     public function listsCount( $conn, $wParam );
     public function detail( $conn, Work $obj );
 

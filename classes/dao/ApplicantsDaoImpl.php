@@ -67,7 +67,7 @@ class ApplicantsDaoImpl implements IApplicantsDao {
         return $resultOfQuery;
     }
 
-    public function lists($conn,$wParam,$orderBy,$curPage,$pageMax)
+    public function lists($conn,$wParam,$orderBy, $orderDir, $curPage,$pageMax)
     {
         $sql = "SELECT a.jobs_id,a.id,a.kor_name,a.mobile_1,a.mobile_2,a.mobile_3,a.email,a.career_types,a.career_years,a.birth_year,a.tel_1,a.tel_2,a.tel_3,a.school_type,a.school_name,a.school_sub";
         $sql .= ",a.wish_pay,date_format(a.regdate,'%Y.%m.%d') regdate,a.regdate as regdate_r,datediff(now(),a.regdate) as is_old,a.status,a.memos,a.hire_date,a.hire_part,a.hire_task ";
@@ -75,10 +75,13 @@ class ApplicantsDaoImpl implements IApplicantsDao {
         $sql .= " FROM applicants a LEFT OUTER JOIN attaches b ON a.id=b.ref_id ";
 
         if(!empty($wParam)) {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
         if(!empty($orderBy)) {
-            $sql .= " ORDER BY ".$orderBy;
+            if(empty($orderDir)) {
+                $orderDir = " DESC ";
+            }
+            $sql .= " ORDER BY ".$orderBy." ".$orderDir;
         }
 
         $sql = $sql." LIMIT ".(($curPage-1) * $pageMax).",".$pageMax;
@@ -91,7 +94,7 @@ class ApplicantsDaoImpl implements IApplicantsDao {
     {
         $sql = "SELECT COUNT(0) cnt FROM applicants ";
         if($wParam != "") {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE1=1 ".$wParam;
         }
 
         $result = mysql_query($sql) or die("ApplicantsDaoImpl listsCount error : ".mysql_error());

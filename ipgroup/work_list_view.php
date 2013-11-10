@@ -29,9 +29,6 @@ $attachesServiceImpl->setAttachesDao($attachesDaoImpl);
 
 // get parameters
 $work_id = $_REQUEST['work_id'];
-$orderBy = $_REQUEST['order_by'];
-$orderDir = $_REQUEST['order_dir'];
-$wParam = $_REQUEST['wParam'];
 
 // get detail informations
 $workObj = new Work();
@@ -93,6 +90,73 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
                 return;
             }
         }
+
+        changeRcpp = function(obj) {
+            var sV = obj[obj.selectedIndex].value;
+
+            var form = document.forms.sch_form;
+            form.rcpp.value = sV;
+            form.curPage.value = 1;
+
+            form.submit();
+        }
+
+        orderb = function(ids, idt, idx) {
+
+            // 모두 asc로 변경함
+            for(var i=0; i<6; i++) {
+                document.getElementById('o' + (i+1)).className = 'asc';
+            }
+
+            var ods = '<?= $orderDirS ?>';
+            var arrOds = ods.split("^");
+            for(var x=0; x<6; x++) {
+                if(idx == x) {
+                    if(arrOds[idx] == 'f') {
+                        arrOds[idx] = 't';
+                    } else {
+                        arrOds[idx] = 'f';
+                    }
+                } else {
+                    arrOds[x] = 'f';
+                }
+            }
+
+            var nOds = '';
+            for(var x=0; x<6; x++) {
+                nOds += arrOds[x] + "^";
+            }
+
+            var form = document.forms.sch_form;
+            form.curPage.value = 1;
+            form.orderBy.value = ids;
+            form.orderDirS.value = nOds;
+            form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.submit();
+        }
+
+        goPaging = function(c, r) {
+            var form = document.forms.sch_form;
+
+            form.curPage.value = c;
+            form.rcpp.value = r;
+
+            form.submit();
+        }
+
+        goDetail = function(id) {
+            var form = document.sch_form;
+            form.work_id.value = id;
+
+            form.action = "work_list_view.php";
+            form.submit();
+        }
+
+        goList = function() {
+            var form = document.sch_form;
+            form.action = "work_list.php";
+            form.submit();
+        }
     </script>
 
 </head>
@@ -130,7 +194,7 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
         <a class="txt_button" href="javascript:del_data('<?=  $work_id ?>');">삭제하기</a>
     </div>
     <div class="right">
-        <a class="txt_button" href="work_list.php">리스트 가기</a>
+        <a class="txt_button" href="javascript:goList();">리스트 가기</a>
         <a class="txt_button" href="work_revise.php?work_id=<?= $work_id ?>&order_by=<?= $orderBy ?>&order_dir=<?= $orderDir ?>wParam=<?= $wParam ?>">수정하기</a>
     </div>
 </div>
@@ -297,16 +361,102 @@ while($row3 = mysql_fetch_array($result2)) {
     </div>
 </div>
 
+<?
+// 한 페이지에서 보여줄 갯수
+$rowCountPerPage = 0;
+$rowCountPerPage = ($_REQUEST['rcpp'] != '') ?  $_REQUEST['rcpp'] : 10;
 
+$orderBy = $_REQUEST['orderBy'];
+if($orderBy == '') {
+    $orderBy = ' regdate_r ';
+}
+
+$orderDir = $_REQUEST['orderDir'];
+if($orderDir == '') {
+    $orderDir = ' DESC ';
+}
+
+$orderDirS = $_REQUEST['orderDirS'];
+if($orderDirS == '') {
+    $orderDirS = 'f^f^f^f^f^f^';
+}
+
+$curPage = $_REQUEST['curPage'];
+if($curPage == '') {
+    $curPage = 1;
+}
+
+// 검색조건
+$schPeriod = $_REQUEST['sch_period'];
+$schDateType = $_REQUEST['sch_date_type'];
+$schDateFrom = $_REQUEST['sch_date_from'];
+$schDateTo = $_REQUEST['sch_date_to'];
+$schIsShopR = $_REQUEST['sch_is_shop_r'];
+$schWtypesR = (int) ('0' + $_REQUEST['sch_wtypes_r']);
+$schGubun = $_REQUEST['sch_gubun'];
+$schText = $_REQUEST['sch_text'];
+
+// 조건절 구성
+$wParam = '';
+if($schPeriod == 'Y') {
+    // 기간 선택이 체크 되어야지만 기간 선택이 수행
+    if($schDateType == 'R') {
+        $wParam .= " AND (regdate >= '".$schDateFrom."' AND regdate <= '".$schDateTo."') ";
+    } else {
+        $wParam .= " AND (moddate >= '".$schDateFrom."' AND moddate <= '".$schDateTo."') ";
+    }
+}
+
+// 전시여부
+if($schIsShopR != '') {
+    if($schIsShopR == 1) {
+        $wParam .= " AND is_shop='Y' ";
+    } else if($schIsShopR == 2) {
+        $wParam .= " AND is_shop='N' ";
+    } else if($schIsShopR == 3) {
+        $wParam .= " AND (is_shop='Y' OR is_shop='N') ";
+    }
+}
+
+// 유형
+if($schWtypesR > 0) {
+    $wParam .= " AND (wtypes & ".$schWtypesR.") > 0 ";
+}
+
+// 검색어
+if($schText != '') {
+    if($schGubun == 'P') {
+        $wParam .= " AND name LIKE '%".$schText."%' ";
+    } else if($schGubun == 'C') {
+        $wParam .= " AND client_name LIKE '%".$schText."%' ";
+    } else {
+        $wParam .= " AND url LIKE '%".$schText."%' ";
+    }
+}
+
+$totalCnt = $workServiceImpl->listsCount($conn, $wParam);
+$result = $workServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $rowCountPerPage);
+?>
 <div class="section">
+    <form name="sch_form" action="<?= $_SERVER['PHP_SELF'] ?>?rcpp=<?= $rowCountPerPage ?>&curPage=<?= $curPage ?>" method="GET">
+        <input type="hidden" name="sch_is_shop_r" value="<?= $schIsShopR ?>" />
+        <input type="hidden" name="sch_wtypes_r" value="<?= $schWtypesR ?>" />
+        <input type="hidden" name="rcpp" value="<?= $rowCountPerPage ?>" />
+        <input type="hidden" name="curPage" value="<?= $curPage ?>" />
+        <input type="hidden" name="orderBy" value="<?= $orderBy ?>" />
+        <input type="hidden" name="orderDir" value="<?= $orderDir ?>" />
+        <input type="hidden" name="orderDirS" value="<?= $orderDirS ?>" />
+        <input type="hidden" name="work_id" value="<?= $work_id ?>" />
+    </form>
+
     <!-- 상단 영역 -->
     <div class="area_top">
         <div class="left">
-            <select class="select">
-                <option value="10">10개씩보기</option>
-                <option value="20">20개씩보기</option>
-                <option value="50">50개씩보기</option>
-                <option value="100">100개씩보기</option>
+            <select class="select" name="rcpp" onchange="changeRcpp(this);">
+                <option value="10" <? if($rowCountPerPage == '10') echo ' selected'; ?>>10개씩보기</option>
+                <option value="20" <? if($rowCountPerPage == '20') echo ' selected'; ?>>20개씩보기</option>
+                <option value="50" <? if($rowCountPerPage == '50') echo ' selected'; ?>>50개씩보기</option>
+                <option value="100" <? if($rowCountPerPage == '100') echo ' selected'; ?>>100개씩보기</option>
             </select>
         </div>
         <div class="right">
@@ -327,118 +477,91 @@ while($row3 = mysql_fetch_array($result2)) {
                 <col width="8%" />
             </colgroup>
             <thead>
+<?
+$arrASC = explode('^', $orderDirS);
+$a1 = ($arrASC[0] == 'f') ? 'asc' : 'desc';
+$a2 = ($arrASC[1] == 'f') ? 'asc' : 'desc';
+$a3 = ($arrASC[2] == 'f') ? 'asc' : 'desc';
+$a4 = ($arrASC[3] == 'f') ? 'asc' : 'desc';
+$a5 = ($arrASC[4] == 'f') ? 'asc' : 'desc';
+$a6 = ($arrASC[5] == 'f') ? 'asc' : 'desc';
+?>
             <tr>
-                <th><a class="asc" href="#">No</a></th>
-                <th><a class="desc" href="#">제목</a></th>
-                <th><a class="desc" href="#">등록일</a></th>
-                <th><a class="desc" href="#">수정일</a></th>
-                <th><a class="desc" href="#">등록ID</a></th>
-                <th><a class="desc" href="#">전시</a></th>
+                <th><a class="<?= $a1 ?>" id="o1" href="javascript:orderb('regdate', 'o1', 0);">No</a></th>
+                <th><a class="<?= $a2 ?>" id="o2" href="javascript:orderb('name', 'o2', 1);">제목</a></th>
+                <th><a class="<?= $a3 ?>" id="o3" href="javascript:orderb('regdate', 'o3', 2);">등록일</a></th>
+                <th><a class="<?= $a4 ?>" id="o4" href="javascript:orderb('moddate', 'o4', 3);">수정일</a></th>
+                <th><a class="<?= $a5 ?>" id="o5" href="javascript:orderb('keeper_id', 'o5', 4);">등록ID</a></th>
+                <th><a class="<?= $a6 ?>" id="o6" href="javascript:orderb('is_shop', 'o6', 5);">전시</a></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>10</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td class="title"><strong class="current">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분 프로젝트 제목 나오는 부분</strong></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active n">N</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active n">N</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td class="title"><a href="work_list_view.php">아이피그룹 웹사이트 리뉴얼 프로젝트 제목 나오는 부분</a></td>
-                <td>2012/12/28</td>
-                <td>2012/12/28</td>
-                <td>admin</td>
-                <td class="active y">Y</td>
-            </tr>
+<?
+if($totalCnt > 0) {
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $idx = 0;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
+        $idx = $row['id'];
+?>
+                    <tr>
+                        <td><?= $bPage - 1 ?></td>
+                        <td class="title"><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['name'] ?></a></td>
+                        <td><?= $row['regdate'] ?></td>
+                        <td><?= $row['moddate'] ?></td>
+                        <td><?= $row['keeper_id'] ?></td>
+                        <td class="active y"><?= $row['is_shop'] ?></td>
+                    </tr>
+<?
+    }
+}
+?>
             </tbody>
         </table>
     </div>
     <!-- //데이터 테이블 -->
 
+
     <!-- 페이징 -->
+<?
+$divPage = (int) ($totalCnt / $rowCountPerPage);
+$modPage = $totalCnt % $rowCountPerPage;
+
+$totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+?>
     <div class="paginate">
-        <a class="direction" href="#"><span>‹</span> 이전페이지</a>
-        <a href="#">11</a>
-        <strong>12</strong>
-        <a href="#">13</a>
-        <a href="#">14</a>
-        <a href="#">15</a>
-        <a href="#">16</a>
-        <a href="#">17</a>
-        <a href="#">18</a>
-        <a href="#">19</a>
-        <a href="#">20</a>
-        <a class="direction" href="#">다음페이지 <span>›</span></a>
+<?
+// Prev block
+if($curPage > 1) {
+    //echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orerBy=&curPage='.($curPage-1).'&rcpp='.$rowCountPerPage.'"><span>‹</span> 이전페이지</a>';
+    echo "<a class='direction' href='javascript:goPaging(".($curPage-1).",".$rowCountPerPage.");'><span>‹</span> 이전페이지</a>";
+} else {
+    echo '<span>‹</span> 이전페이지';
+}
+
+$strPage = '';
+for($k = 1; $k <= $totalPage; $k++) {
+    if($curPage == $k) {
+        $strPage = '<a href=><strong>'.$k.'</strong></a>';
+    } else {
+        //$strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orderBy=&curPage='.$k.'&rcpp='.$rowCountPerPage.'">'.$k.'</a>';
+        $strPage = "<a href='javascript:goPaging(".$k.",".$rowCountPerPage.");'>".$k."</a>";
+    }
+
+    // 1, 2, 3, 4, 5, 6 ...
+    echo $strPage;
+}
+
+// Next block
+if($curPage < $totalPage) {
+    //echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam='.$wParam.'&orderBy=&curPage='.($curPage+1).'&rcpp='.$rowCountPerPage.'">다음페이지 <span>›</span></a>';
+    echo "<a class='direction' href='javascript:goPaging(".($curPage+1).",".$rowCountPerPage.");'>다음페이지 <span>›</span></a>";
+} else {
+    echo '다음페이지 <span>›</span>';
+}
+?>
+        <!-- //페이징 -->
     </div>
-    <!-- //페이징 -->
-</div>
 
 <!-- //본문 영역 -->
 </div>

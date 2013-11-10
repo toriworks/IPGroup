@@ -35,9 +35,9 @@ class RequestsServiceImpl implements IRequestsService {
         return $this->requestsDao->delete($conn, $obj);
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
-        return $this->requestsDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
+        return $this->requestsDao->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)
