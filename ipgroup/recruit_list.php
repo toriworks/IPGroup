@@ -60,23 +60,75 @@ $schText = $_REQUEST['sch_text'];
 // 조건절 구성
 $wParam = '';
 if($schPeriod == 'Y') {
-    $wParam .= " AND (regdate >= '".$schDateFrom."' AND regdate <= '".$schDateTo."') ";
+    $wParam .= " AND (a.regdate >= '".$schDateFrom."' AND a.regdate <= '".$schDateTo."') ";
 }
 
 // 경력
 if($schCareerTypesR > 0) {
     if($schCareerTypesR == 1) {
-        $wParam .= " AND carrer_types='N' ";
+        $wParam .= " AND career_types='N' ";
     } else if($schCareerTypesR == 2) {
-        $wParam .= " AND carrer_types='Y' ";
+        $wParam .= " AND career_types='Y' ";
     } else if($schCareerTypesR == 3) {
-        $wParam .= " AND (carrer_types='N' OR career_types='Y') ";
+        $wParam .= " AND (career_types='N' OR career_types='Y') ";
     }
 }
 
 // 학력
 if($schSchoolTypesR > 0) {
+    //$wParam .= " AND (a.school_type & ".$schSchoolTypesR.") > 0 ";
+    $arrSS = array();
+    if(($schSchoolTypesR & 1) >0) {
+        array_push($arrSS, 'HS');
+    }
+    if(($schSchoolTypesR & 2) >0) {
+        array_push($arrSS, 'CL');
+    }
+    if(($schSchoolTypesR & 4) >0) {
+        array_push($arrSS, 'UV');
+    }
+    if(($schSchoolTypesR & 8) >0) {
+        array_push($arrSS, 'NG');
+    }
 
+    $strSS = '';
+    $sizeSS = count($arrSS);
+    for($i=0; $i<$sizeSS; $i++) {
+        $strSS .= "'".$arrSS[$i]."'";
+        if($i < $sizeSS-1) {
+            $strSS .= ",";
+        }
+    }
+
+    $wParam .= " AND a.school_type IN (".$strSS.") ";
+}
+
+// 상태
+if($schStatusR > 0) {
+    $arrSX = array();
+    if(($schStatusR & 1) >0) {
+        array_push($arrSX, 'A');
+    }
+    if(($schStatusR & 2) >0) {
+        array_push($arrSX, 'B');
+    }
+    if(($schStatusR & 4) >0) {
+        array_push($arrSX, 'C');
+    }
+    if(($schStatusR & 8) >0) {
+        array_push($arrSX, 'D');
+    }
+
+    $strSX = '';
+    $sizeSX = count($arrSX);
+    for($i=0; $i<$sizeSX; $i++) {
+        $strSX .= "'".$arrSX[$i]."'";
+        if($i < $sizeSX-1) {
+            $strSX .= ",";
+        }
+    }
+
+    $wParam .= " AND a.status IN (".$strSX.") ";
 }
 
 // 검색어
@@ -89,8 +141,6 @@ if($schText != '') {
         $wParam .= " AND email LIKE '%".$schText."%' ";
     }
 }
-
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -164,12 +214,6 @@ if($schText != '') {
             }
             form.sch_status_r.value = sch_status;
 
-            var sch_gubun = '';
-            for(var a=0; a<3; a++) {
-                if(form.sch_gubun[a].selected == true) {
-                    sch_gubun = form.sch_gubun[a].value;
-                }
-            }
             var sch_text = form.sch_text.value;
             form.submit();
         }
@@ -205,6 +249,25 @@ if($schText != '') {
             form.orderBy.value = ids;
             form.orderDirS.value = nOds;
             form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.submit();
+        }
+
+        goDetail = function(id, jid) {
+            var form = document.sch_form;
+            form.id.value = id;
+            form.jid.value = jid;
+
+            form.action = "recruit_view.php";
+            form.submit();
+        }
+
+        changeRcpp = function(obj) {
+            var sV = obj[obj.selectedIndex].value;
+
+            var form = document.forms.sch_form;
+            form.rcpp.value = sV;
+            form.curPage.value = 1;
+
             form.submit();
         }
     </script>
@@ -248,6 +311,7 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $cu
         <input type="hidden" name="orderDir" value="<?= $orderDir ?>" />
         <input type="hidden" name="orderDirS" value="<?= $orderDirS ?>" />
         <input type="hidden" name="id" value="" />
+        <input type="hidden" name="jid" value="" />
         <input type="hidden" name="sch_career_types_r" value="<?= $schCareerTypesR ?>" />
         <input type="hidden" name="sch_school_types_r" value="<?= $schSchoolTypesR ?>" />
         <input type="hidden" name="sch_status_r" value="<?= $schStatusR ?>" />
@@ -256,7 +320,7 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $cu
         <dl>
             <dt class="t">기간선택 : </dt>
             <dd>
-                <input type="checkbox" />
+                <input type="checkbox" id="sch_period" name="sch_period" value="Y"  <? if($schPeriod == 'Y') { echo ' checked'; } ?> />
                 지원일자
                 <input id="date_from" name="sch_date_from" class="i_text date" type="text" value="<?= $schDateFrom ?>" />
                 ~
@@ -268,8 +332,8 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $cu
 
             <dt>경력 : </dt>
             <dd>
-                <input id="ck_a_1" type="checkbox" name="career_types" value="1" /><label for="ck_a_1">신입</label>
-                <input id="ck_a_2" type="checkbox" name="career_types" value="2" /><label for="ck_a_2">경력</label>
+                <input id="ck_a_1" type="checkbox" name="career_types" value="1" <? if(($schCareerTypesR & 1) > 0) { echo ' checked'; } ?> /><label for="ck_a_1">신입</label>
+                <input id="ck_a_2" type="checkbox" name="career_types" value="2" <? if(($schCareerTypesR & 2) > 0) { echo ' checked'; } ?> /><label for="ck_a_2">경력</label>
                 <!--input id="ck_a_3" type="checkbox" name="career_types" value="" /><label for="ck_a_3">무관</label-->
             </dd>
 
@@ -283,18 +347,18 @@ $result = $applicantsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $cu
 
             <dt>학력 : </dt>
             <dd>
-                <input id="ck_c_1" type="checkbox" name="school_types" value="1" /><label for="ck_c_1">고졸</label>
-                <input id="ck_c_2" type="checkbox" name="school_types" value="2" /><label for="ck_c_2">전문대졸</label>
-                <input id="ck_c_3" type="checkbox" name="school_types" value="4" /><label for="ck_c_3">대졸</label>
-                <input id="ck_c_4" type="checkbox" name="school_types" value="8" /><label for="ck_c_4">무관</label>
+                <input id="ck_c_1" type="checkbox" name="school_type" value="1" <? if(($schSchoolTypesR & 1) > 0) { echo ' checked'; } ?> /><label for="ck_c_1">고졸</label>
+                <input id="ck_c_2" type="checkbox" name="school_type" value="2" <? if(($schSchoolTypesR & 2) > 0) { echo ' checked'; } ?> /><label for="ck_c_2">전문대졸</label>
+                <input id="ck_c_3" type="checkbox" name="school_type" value="4" <? if(($schSchoolTypesR & 4) > 0) { echo ' checked'; } ?> /><label for="ck_c_3">대졸</label>
+                <input id="ck_c_4" type="checkbox" name="school_type" value="8" <? if(($schSchoolTypesR & 8) > 0) { echo ' checked'; } ?> /><label for="ck_c_4">무관</label>
             </dd>
 
             <dt>상태 : </dt>
             <dd>
-                <input id="ck_d_1" type="checkbox" name="status" value="1" /><label for="ck_d_1">접수</label>
-                <input id="ck_d_2" type="checkbox" name="status" value="2" /><label for="ck_d_2">심사</label>
-                <input id="ck_d_3" type="checkbox" name="status" value="4" /><label for="ck_d_3">합격</label>
-                <input id="ck_d_4" type="checkbox" name="status" value="8" /><label for="ck_d_4">불합격</label>
+                <input id="ck_d_1" type="checkbox" name="sch_status" value="1" <? if(($schStatusR & 1) > 0) { echo ' checked'; } ?> /><label for="ck_d_1">접수</label>
+                <input id="ck_d_2" type="checkbox" name="sch_status" value="2" <? if(($schStatusR & 2) > 0) { echo ' checked'; } ?> /><label for="ck_d_2">심사</label>
+                <input id="ck_d_3" type="checkbox" name="sch_status" value="4" <? if(($schStatusR & 4) > 0) { echo ' checked'; } ?> /><label for="ck_d_3">합격</label>
+                <input id="ck_d_4" type="checkbox" name="sch_status" value="8" <? if(($schStatusR & 8) > 0) { echo ' checked'; } ?> /><label for="ck_d_4">불합격</label>
             </dd>
         </dl>
 
@@ -403,7 +467,7 @@ if($totalCnt > 0) {
         <? } ?>
         <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
     </td>
-    <td class="name"><a href="recruit_view.php?id=<?= $row['id'] ?>&jid=<?= $row['jobs_id'] ?>"><?= $row['kor_name'] ?></a></td>
+    <td class="name"><a href="javascript:goDetail('<?= $row['id'] ?>','<?= $row['jobs_id'] ?>');"><?= $row['kor_name'] ?></a></td>
     <td><?= $row['tel_1'] ?>-<?= $row['tel_2'] ?>-<?= $row['tel_3'] ?><br />/ <?= $row['mobile_1'] ?>-<?= $row['mobile_2'] ?>-<?= $row['mobile_3'] ?></td>
     <td><?= $row['email'] ?></td>
     <td><?= CommonUtils::getRecruitStatus($row['status']) ?></td>
@@ -412,7 +476,7 @@ if($totalCnt > 0) {
     <td><?= $row['regdate'] ?></td>
     <td class="status"><span class="<?= CommonUtils::getRecruitStatusStyle($row['status']) ?>"><?= CommonUtils::getRecruitStatus($row['status']) ?></span></td>
 </tr>
-    <?
+<?
     }
 }
 ?>

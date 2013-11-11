@@ -83,8 +83,8 @@ class ApplicantsDaoImpl implements IApplicantsDao {
             }
             $sql .= " ORDER BY ".$orderBy." ".$orderDir;
         }
-
         $sql = $sql." LIMIT ".(($curPage-1) * $pageMax).",".$pageMax;
+
         $result = mysql_query($sql) or die("ApplicantsDaoImpl lists error : ".mysql_error());
 
         return $result;
@@ -92,9 +92,9 @@ class ApplicantsDaoImpl implements IApplicantsDao {
 
     public function listsCount($conn,$wParam)
     {
-        $sql = "SELECT COUNT(0) cnt FROM applicants ";
+        $sql = "SELECT COUNT(0) cnt FROM applicants a ";
         if($wParam != "") {
-            $sql .= " WHERE1=1 ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
 
         $result = mysql_query($sql) or die("ApplicantsDaoImpl listsCount error : ".mysql_error());
