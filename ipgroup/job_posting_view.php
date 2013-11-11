@@ -55,6 +55,138 @@ $row = @mysql_fetch_array($result);
         update_data = function() {
             location.href = "./job_posting_revise.php?jids=<?= $jids ?>";
         }
+
+        goList = function() {
+            var form = document.sch_form;
+            form.action = "job_posting_list.php";
+            form.submit();
+        }
+
+        goSearch = function() {
+            var form = document.forms.sch_form;
+
+            var sch_period = form.sch_period.checked;
+            var sch_date_from = form.sch_date_from.value;
+            var sch_date_to = form.sch_date_to.value;
+
+            var sch_period = form.sch_period.checked;
+            var sch_date_type = '';
+            for(var i=0; i<2; i++) {
+                if(form.sch_date_type[i].selected == true) {
+                    sch_date_type = form.sch_date_type[i].value;
+                }
+            }
+            var sch_date_from = form.sch_date_from.value;
+            var sch_date_to = form.sch_date_to.value;
+
+            // 날짜 입력 검증
+            if(sch_date_type == 'Y') {
+                if(sch_date_from == '' || sch_date_to == '') {
+                    alert("기간선택 시 날짜는 필수입력항목입니다.");
+                    return;
+                }
+            }
+
+            // 전시여부
+            var sch_is_show = 0;
+            for(var j=0; j<2; j++) {
+                if(form.sch_is_show[j].checked == true) {
+                    sch_is_show += parseInt('0' + form.sch_is_show[j].value);
+                }
+            }
+            form.sch_is_show_r.value = sch_is_show;
+
+            // 고용형태
+            var sch_hire_types = 0;
+            for(var k=0; k<2; k++) {
+                if(form.sch_hire_types[k].checked == true) {
+                    sch_hire_types += parseInt(form.sch_hire_types[k].value);
+                }
+            }
+            form.sch_hire_types_r.value = sch_hire_types;
+
+            // 학력
+            var sch_school_type = 0;
+            for(var k=0; k<4; k++) {
+                if(form.school_type[k].checked == true) {
+                    sch_school_type += parseInt(form.school_type[k].value);
+                }
+            }
+            form.sch_school_types_r.value = sch_school_type;
+
+            // 경력
+            var sch_career_types = 0;
+            for(var k=0; k<2; k++) {
+                if(form.career_types[k].checked == true) {
+                    sch_career_types += parseInt(form.career_types[k].value);
+                }
+            }
+            form.sch_career_types_r.value = sch_career_types;
+
+            // 고용부서
+            var sch_hire_part = 0;
+            for(var k=0; k<4; k++) {
+                if(form.hire_part[k].checked == true) {
+                    sch_hire_part += parseInt(form.hire_part[k].value);
+                }
+            }
+            form.sch_hire_part_r.value = sch_hire_part;
+
+            var sch_text = form.sch_text.value;
+            form.submit();
+        }
+
+        orderb = function(ids, idt, idx) {
+
+            // 모두 asc로 변경함
+            for(var i=0; i<9; i++) {
+                document.getElementById('o' + (i+1)).className = 'asc';
+            }
+
+            var ods = '<?= $orderDirS ?>';
+            var arrOds = ods.split("^");
+            for(var x=0; x<9; x++) {
+                if(idx == x) {
+                    if(arrOds[idx] == 'f') {
+                        arrOds[idx] = 't';
+                    } else {
+                        arrOds[idx] = 'f';
+                    }
+                } else {
+                    arrOds[x] = 'f';
+                }
+            }
+
+            var nOds = '';
+            for(var x=0; x<9; x++) {
+                nOds += arrOds[x] + "^";
+            }
+
+            var form = document.forms.sch_form;
+            form.curPage.value = 1;
+            form.orderBy.value = ids;
+            form.orderDirS.value = nOds;
+            form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.submit();
+        }
+
+        goDetail = function(id) {
+            var form = document.sch_form;
+            form.jids.value = id;
+
+            form.action = "job_posting_view.php";
+            form.submit();
+        }
+
+        changeRcpp = function(obj) {
+            var sV = obj[obj.selectedIndex].value;
+
+            var form = document.forms.sch_form;
+            form.rcpp.value = sV;
+            form.curPage.value = 1;
+
+            form.submit();
+        }
     </script>
 </head>
 <body>
@@ -210,15 +342,178 @@ if($row['career_types'] == 'Y') {
     </div>
 </div>
 
+<?
+// 한 페이지에서 보여줄 갯수
+$rowCountPerPage = 0;
+$rowCountPerPage = ($_REQUEST['rcpp'] != '') ? $_REQUEST['rcpp'] : 10;
+
+$orderBy = $_REQUEST['orderBy'];
+if ($orderBy == '') {
+    $orderBy = ' regdate_r ';
+}
+
+$orderDir = $_REQUEST['orderDir'];
+if ($orderDir == '') {
+    $orderDir = ' DESC ';
+}
+
+$orderDirS = $_REQUEST['orderDirS'];
+if ($orderDirS == '') {
+    $orderDirS = 'f^f^f^f^f^f^f^f^f^';
+}
+
+$curPage = $_REQUEST['curPage'];
+if ($curPage == '') {
+    $curPage = 1;
+}
+
+// 검색조건
+$schPeriod = $_REQUEST['sch_period'];
+$schDateType = $_REQUEST['sch_date_type'];
+$schDateFrom = $_REQUEST['sch_date_from'];
+$schDateTo = $_REQUEST['sch_date_to'];
+$schIsShopR = $_REQUEST['sch_is_show_r'];
+$schCareerTypesR = (int)('0' + $_REQUEST['sch_career_types_r']);
+$schSchoolTypesR = (int)('0' + $_REQUEST['sch_school_types_r']);
+$schHireTypesR = (int)('0' + $_REQUEST['sch_hire_types_r']);
+$schHirePartR = (int)('0' + $_REQUEST['sch_hire_part_r']);
+$schText = $_REQUEST['sch_text'];
+
+// 조건절 구성
+$wParam = '';
+if ($schPeriod == 'Y') {
+// 기간 선택이 체크 되어야지만 기간 선택이 수행
+    if ($schDateType == 'R') {
+        $wParam .= " AND (concat(start_date_y,'.',start_date_m,'.',start_date_d) >= '" . $schDateFrom . "' AND concat(end_date_y,'.',end_date_m,'.',end_date_d) <= '" . $schDateTo . "') ";
+    } else {
+        $wParam .= " AND (regdate >= '" . $schDateFrom . "' AND regdate <= '" . $schDateTo . "') ";
+    }
+}
+
+// 전시여부
+if ($schIsShopR != '') {
+    if ($schIsShopR == 1) {
+        $wParam .= " AND is_show='Y' ";
+    } else if ($schIsShopR == 2) {
+        $wParam .= " AND is_show='N' ";
+    } else if ($schIsShopR == 3) {
+        $wParam .= " AND (is_show='Y' OR is_show='N') ";
+    }
+}
+
+// 고용형태(정규직, 계약직)
+if ($schHireTypesR != '') {
+    if ($schHireTypesR == 1) {
+        $wParam .= " AND hire_types='RG' ";
+    } else if ($schHireTypesR == 2) {
+        $wParam .= " AND hire_types='PT' ";
+    } else if ($schHireTypesR == 3) {
+        $wParam .= " AND (hire_types='RG' OR hire_types='PT') ";
+    }
+}
+
+// 학력
+if ($schSchoolTypesR > 0) {
+//$wParam .= " AND (a.school_type & ".$schSchoolTypesR.") > 0 ";
+    $arrSS = array();
+    if (($schSchoolTypesR & 1) > 0) {
+        array_push($arrSS, 'HS');
+    }
+    if (($schSchoolTypesR & 2) > 0) {
+        array_push($arrSS, 'CL');
+    }
+    if (($schSchoolTypesR & 4) > 0) {
+        array_push($arrSS, 'UV');
+    }
+    if (($schSchoolTypesR & 8) > 0) {
+        array_push($arrSS, 'NG');
+    }
+
+    $strSS = '';
+    $sizeSS = count($arrSS);
+    for ($i = 0; $i < $sizeSS; $i++) {
+        $strSS .= "'" . $arrSS[$i] . "'";
+        if ($i < $sizeSS - 1) {
+            $strSS .= ",";
+        }
+    }
+
+    $wParam .= " AND school_types IN (" . $strSS . ") ";
+}
+
+// 경력
+if ($schCareerTypesR > 0) {
+    if ($schCareerTypesR == 1) {
+        $wParam .= " AND career_types='N' ";
+    } else if ($schCareerTypesR == 2) {
+        $wParam .= " AND career_types='Y' ";
+    } else if ($schCareerTypesR == 3) {
+        $wParam .= " AND (career_types='N' OR career_types='Y') ";
+    }
+}
+
+// 고용부서
+if ($schHirePartR > 0) {
+    $arrSS = array();
+    if (($schHirePartR & 1) > 0) {
+        array_push($arrSS, 'PL');
+    }
+    if (($schHirePartR & 2) > 0) {
+        array_push($arrSS, 'DN');
+    }
+    if (($schHirePartR & 4) > 0) {
+        array_push($arrSS, 'PB');
+    }
+    if (($schHirePartR & 8) > 0) {
+        array_push($arrSS, 'MN');
+    }
+
+    $strSS = '';
+    $sizeSS = count($arrSS);
+    for ($i = 0; $i < $sizeSS; $i++) {
+        $strSS .= "'" . $arrSS[$i] . "'";
+        if ($i < $sizeSS - 1) {
+            $strSS .= ",";
+        }
+    }
+
+    $wParam .= " AND hire_part IN (" . $strSS . ") ";
+}
+
+// 검색어
+if ($schText != '') {
+    if ($schGubun == 'P') {
+        $wParam .= " AND name LIKE '%" . $schText . "%' ";
+    } else if ($schGubun == 'C') {
+        $wParam .= " AND client_name LIKE '%" . $schText . "%' ";
+    } else {
+        $wParam .= " AND url LIKE '%" . $schText . "%' ";
+    }
+}
+
+?>
 <div class="section">
+    <form name="sch_form" action="<?= $_SERVER['PHP_SELF'] ?>?rcpp=<?= $rowCountPerPage ?>&curPage=<?= $curPage ?>" method="GET">
+        <input type="hidden" name="sch_is_show_r" value="<?= $schIsShopR ?>" />
+        <input type="hidden" name="sch_hire_types_r" value="<?= $schHireTypesR ?>" />
+        <input type="hidden" name="rcpp" value="<?= $rowCountPerPage ?>" />
+        <input type="hidden" name="curPage" value="<?= $curPage ?>" />
+        <input type="hidden" name="orderBy" value="<?= $orderBy ?>" />
+        <input type="hidden" name="orderDir" value="<?= $orderDir ?>" />
+        <input type="hidden" name="orderDirS" value="<?= $orderDirS ?>" />
+        <input type="hidden" name="jids" value="<?= $jids ?>" />
+        <input type="hidden" name="sch_career_types_r" value="<?= $schCareerTypesR ?>" />
+        <input type="hidden" name="sch_school_types_r" value="<?= $schSchoolTypesR ?>" />
+        <input type="hidden" name="sch_hire_part_r" value="<?= $schHirePartR ?>" />
+
     <!-- 상단 영역 -->
     <div class="area_top">
         <div class="left">
-            <select class="select">
-                <option value="10">10개씩보기</option>
-                <option value="20">20개씩보기</option>
-                <option value="50">50개씩보기</option>
-                <option value="100">100개씩보기</option>
+            <select class="select" name="rcpp" onchange="changeRcpp(this);">
+                <option value="10" <? if($rowCountPerPage == '10') echo ' selected'; ?>>10개씩보기</option>
+                <option value="20" <? if($rowCountPerPage == '20') echo ' selected'; ?>>20개씩보기</option>
+                <option value="50" <? if($rowCountPerPage == '50') echo ' selected'; ?>>50개씩보기</option>
+                <option value="100" <? if($rowCountPerPage == '100') echo ' selected'; ?>>100개씩보기</option>
             </select>
         </div>
     </div>
@@ -239,150 +534,104 @@ if($row['career_types'] == 'Y') {
                 <col width="10%" />
             </colgroup>
             <thead>
+<?
+$arrASC = explode('^', $orderDirS);
+$a1 = ($arrASC[0] == 'f') ? 'asc' : 'desc';
+$a2 = ($arrASC[1] == 'f') ? 'asc' : 'desc';
+$a3 = ($arrASC[2] == 'f') ? 'asc' : 'desc';
+$a4 = ($arrASC[3] == 'f') ? 'asc' : 'desc';
+$a5 = ($arrASC[4] == 'f') ? 'asc' : 'desc';
+$a6 = ($arrASC[5] == 'f') ? 'asc' : 'desc';
+$a7 = ($arrASC[6] == 'f') ? 'asc' : 'desc';
+$a8 = ($arrASC[7] == 'f') ? 'asc' : 'desc';
+$a9 = ($arrASC[8] == 'f') ? 'asc' : 'desc';
+?>
             <tr>
-                <th><a class="asc" href="#">No</a></th>
-                <th><a class="desc" href="#">제목</a></th>
-                <th><a class="desc" href="#">경력</a></th>
-                <th><a class="desc" href="#">고용형태</a></th>
-                <th><a class="desc" href="#">모집기간</a></th>
-                <th><a class="desc" href="#">부서</a></th>
-                <th><a class="desc" href="#">지원</a></th>
-                <th><a class="desc" href="#">전시</a></th>
-                <th><a class="desc" href="#">등록일자</a></th>
+                <th><a class="<?= $a1 ?>" id="o1" href="javascript:orderb('regdate', 'o1', 0);">No</a></th>
+                <th><a class="<?= $a2 ?>" id="o2" href="javascript:orderb('title', 'o2', 1);">제목</a></th>
+                <th><a class="<?= $a3 ?>" id="o3" href="javascript:orderb('career_types', 'o3', 2);">경력</a></th>
+                <th><a class="<?= $a4 ?>" id="o4" href="javascript:orderb('hire_types', 'o4', 3);">고용형태</a></th>
+                <th><a class="<?= $a5 ?>" id="o5" href="javascript:orderb('regdate', 'o5', 4);">모집기간</a></th>
+                <th><a class="<?= $a6 ?>" id="o6" href="javascript:orderb('hire_part', 'o6', 5);">부서</a></th>
+                <th><a class="<?= $a7 ?>" id="o7" href="javascript:orderb('applicants_cnt', 'o7', 6);">지원</a></th>
+                <th><a class="<?= $a8 ?>" id="o8" href="javascript:orderb('is_show', 'o8', 7);">전시</a></th>
+                <th><a class="<?= $a9 ?>" id="o9" href="javascript:orderb('regdate', 'o9', 8);">등록일자</a></th>
             </tr>
             </thead>
             <tbody>
+<?
+$totalCnt = $jobsService->listsCount($conn, $wParam);
+$result = $jobsService->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $rowCountPerPage);
+
+if($totalCnt > 0) {
+    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    while($row = mysql_fetch_array($result)) {
+        $bPage++;
+
+        if($row['is_always'] == 'N') {
+            $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
+            $eDate = $row['end_date_y'].'.'.$row['end_date_m'].'.'.$row['end_date_d'];
+            $seDate = $sDate.' ~<br />'.$eDate;
+        } else {
+            $seDate = '상시';
+        }
+?>
             <tr>
-                <td>10</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
+                <td><?= $bPage - 1 ?></td>
+                <td class="job_subject"><a href="javascript:goDetail('<?= $row['id'] ?>');"><?= $row['title'] ?></a></td>
+                <td><?= CommonUtils::getCareerTypes($row['career_types']) ?></td>
+                <td><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
+                <td><?= $seDate ?></td>
+                <td><?= CommonUtils::getHirePart($row['hire_part']) ?></td>
+                <td><?= $row['applicants_cnt'] ?></td>
+                <td><?= ($row['is_show'] == 'Y') ? 'YES' : 'NO'  ?></td>
+                <td><?= $row['regdate'] ?></td>
             </tr>
-            <tr>
-                <td>9</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>경력4년</td>
-                <td>계약직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>디자인실</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td class="job_subject"><strong class="current">[운영디자인] 면세점 디자이너를 모집합니다.</strong></td>
-                <td>무관</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>퍼블리싱팀</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>Y</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>N</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>N</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>N</td>
-                <td>2013.01.05</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td class="job_subject"><a href="job_posting_view.php">[운영디자인] 면세점 디자이너를 모집합니다.</a></td>
-                <td>신입</td>
-                <td>정규직</td>
-                <td>2013.01.01 ~<br />2013.03.30</td>
-                <td>기획실</td>
-                <td>15</td>
-                <td>N</td>
-                <td>2013.01.05</td>
-            </tr>
+<?
+    }
+}
+?>
             </tbody>
         </table>
     </div>
     <!-- //데이터 테이블 -->
 
-    <!-- 페이징 -->
-    <div class="paginate">
-        <a class="direction" href="#"><span>‹</span> 이전페이지</a>
-        <a href="#">11</a>
-        <strong>12</strong>
-        <a href="#">13</a>
-        <a href="#">14</a>
-        <a href="#">15</a>
-        <a href="#">16</a>
-        <a href="#">17</a>
-        <a href="#">18</a>
-        <a href="#">19</a>
-        <a href="#">20</a>
-        <a class="direction" href="#">다음페이지 <span>›</span></a>
-    </div>
-    <!-- //페이징 -->
+        <!-- 페이징 -->
+        <?
+        $divPage = (int) ($totalCnt / $rowCountPerPage);
+        $modPage = $totalCnt % $rowCountPerPage;
+
+        $totalPage = ($modPage == 0) ? $divPage : ($divPage + 1);
+        ?>
+        <div class="paginate">
+            <?
+            // Prev block
+            if($curPage > 1) {
+                echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orerBy=&curPage='.($curPage-1).'"><span>‹</span> 이전페이지</a>';
+            } else {
+                echo '<span>‹</span> 이전페이지';
+            }
+
+            $strPage = '';
+            for($k = 1; $k <= $totalPage; $k++) {
+                if($curPage == $k) {
+                    $strPage = '<a href=><strong>'.$k.'</strong></a>';
+                } else {
+                    $strPage = '<a href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.$k.'">'.$k.'</a>';
+                }
+
+                // 1, 2, 3, 4, 5, 6 ...
+                echo $strPage;
+            }
+
+            // Next block
+            if($curPage < $totalPage) {
+                echo '<a class="direction" href="'.$_SERVER[PHP_SELF].'?wParam=&orderBy=&curPage='.($curPage+1).'">다음페이지 <span>›</span></a>';
+            } else {
+                echo '다음페이지 <span>›</span>';
+            }
+            ?>
+            <!-- //페이징 -->
 </div>
 
 <!-- //본문 영역 -->

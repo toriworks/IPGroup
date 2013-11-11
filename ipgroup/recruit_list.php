@@ -441,14 +441,14 @@ $a9 = ($arrASC[8] == 'f') ? 'asc' : 'desc';
     </th>
     <th><a class="<?= $a1 ?>" id="o1" href="javascript:orderb('regdate', 'o1', 0);">No</a></th>
     <th><span class="hide">아이콘</span></th>
-    <th><a class="<?= $a2 ?>" id="o2" href="javascript:orderb('regdate', 'o2', 1);">이름</a></th>
-    <th><a class="<?= $a3 ?>" id="o3" href="javascript:orderb('regdate', 'o3', 2);">연락처</a></th>
-    <th><a class="<?= $a4 ?>" id="o4" href="javascript:orderb('regdate', 'o4', 3);">E-Mail</a></th>
-    <th><a class="<?= $a5 ?>" id="o5" href="javascript:orderb('regdate', 'o5', 4);">지원분야</a></th>
-    <th><a class="<?= $a6 ?>" id="o6" href="javascript:orderb('regdate', 'o6', 5);">경력</a></th>
-    <th><a class="<?= $a7 ?>" id="o7" href="javascript:orderb('regdate', 'o7', 6);">학력</a></th>
+    <th><a class="<?= $a2 ?>" id="o2" href="javascript:orderb('kor_name', 'o2', 1);">이름</a></th>
+    <th><a class="<?= $a3 ?>" id="o3" href="javascript:orderb('mobile_2', 'o3', 2);">연락처</a></th>
+    <th><a class="<?= $a4 ?>" id="o4" href="javascript:orderb('email', 'o4', 3);">E-Mail</a></th>
+    <th><a class="<?= $a5 ?>" id="o5" href="javascript:orderb('hire_part', 'o5', 4);">지원분야</a></th>
+    <th><a class="<?= $a6 ?>" id="o6" href="javascript:orderb('career_years', 'o6', 5);">경력</a></th>
+    <th><a class="<?= $a7 ?>" id="o7" href="javascript:orderb('school_type', 'o7', 6);">학력</a></th>
     <th><a class="<?= $a8 ?>" id="o8" href="javascript:orderb('regdate', 'o8', 7);">지원일</a></th>
-    <th><a class="<?= $a9 ?>" id="o9" href="javascript:orderb('regdate', 'o9', 8);">상태</a></th>
+    <th><a class="<?= $a9 ?>" id="o9" href="javascript:orderb('status', 'o9', 8);">상태</a></th>
 </tr>
 </thead>
 <tbody>

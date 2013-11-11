@@ -35,9 +35,9 @@ class JobsServiceImpl implements IJobsService {
         return $this->jobsDao->delete($conn, $obj);
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
-        return $this->jobsDao->lists($conn, $wParam, $orderBy, $curPage, $pageMax);
+        return $this->jobsDao->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax);
     }
 
     public function listsCount($conn, $wParam)

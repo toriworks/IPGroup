@@ -54,7 +54,7 @@ class JobsDaoImpl implements IJobsDao {
         return $resultOfQuery;
     }
 
-    public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)
+    public function lists($conn, $wParam, $orderBy, $orderDir, $curPage, $pageMax)
     {
         $sql = "SELECT id, title, start_date_y, start_date_m, start_date_d, end_date_y, end_date_m, end_date_d, is_always, career_types, career_years, how_many";
         $sql .= ", hire_types, school_types, hire_part, position, gender, old_types, how_old, descriptions, add_descriptions, keeper_name, keeper_contacts";
@@ -62,11 +62,15 @@ class JobsDaoImpl implements IJobsDao {
         $sql .= ", datediff(now(), concat(end_date_y, end_date_m, end_date_d)) as is_closed ";
         $sql .= " FROM jobs ";
         if(!empty($wParam)) {
-            $sql .= " WHERE ".$wParam;
+            $sql .= " WHERE 1=1 ".$wParam;
         }
         if(!empty($orderBy)) {
-            $sql .= " ORDER BY ".$orderBy;
+            if(empty($orderDir)) {
+                $orderDir = " DESC ";
+            }
+            $sql .= " ORDER BY ".$orderBy." ".$orderDir;
         }
+
         $sql = $sql." LIMIT ".(($curPage-1) * $pageMax)." , ".$pageMax;
 
         $result = mysql_query($sql) or die("JobsDaoImpl lists error : ".mysql_error());
@@ -77,7 +81,7 @@ class JobsDaoImpl implements IJobsDao {
     {
         $sql = "SELECT COUNT(0) cnt FROM jobs ";
         if($wParam != "") {
-            $sql .= "WHERE ".$wParam;
+            $sql .= "WHERE 1=1 ".$wParam;
         }
 
         $result = mysql_query($sql) or die("JobsDaoImpl listsCount error : ".mysql_error());

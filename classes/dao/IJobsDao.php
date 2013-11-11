@@ -9,7 +9,7 @@ interface IJobsDao {
     public function add( $conn, Jobs $obj );
     public function update( $conn, Jobs $obj );
     public function delete( $conn, Jobs $obj );
-    public function lists( $conn, $wParam, $orderBy, $curPage, $pageMax );
+    public function lists( $conn, $wParam, $orderBy, $ordeDir, $curPage, $pageMax );
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Jobs $obj);
