@@ -12,6 +12,10 @@ require_once('../classes/dao/WorkDaoImpl.php');
 require_once('../classes/service/WorkServiceImpl.php');
 require_once('../classes/domain/Work.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
+
 $conn = ConnectionFactory::create();
 $workDaoImpl = new WorkDaoImpl();
 $workServiceImpl = new WorkServiceImpl();
@@ -89,6 +93,15 @@ if($schText != '') {
     }
 }
 
+
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -154,7 +167,7 @@ if($schText != '') {
             form.curPage.value = 1;
             form.orderBy.value = ids;
             form.orderDirS.value = nOds;
-            form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.orderDir.value = (arrOds[idx] == 't') ? 'desc' : 'asc';
             form.submit();
         }
 
@@ -214,6 +227,15 @@ if($schText != '') {
             form.submit();
             //alert(sch_period + ':' + sch_date_type + ':' + sch_date_from + ':' + sch_date_to + ':' + sch_wtypes + ':' + sch_gubun + ':' + sch_text);
         }
+
+        $(document).ready(function(){
+            $("#sch_text ").bind("keydown", function(e) {
+                if (e.keyCode == 13) { // enter key
+                    goSearch();
+                    return false;
+                }
+            });
+        });
     </script>
 
 </head>
@@ -230,12 +252,12 @@ if($schText != '') {
     </p>
 
     <ul class="menu">
-        <li class="active"><a href="work_list.php">Work</a></li>
-        <li><a href="request_list.php">Request</a></li>
-        <li><a href="recruit_list.php">Recruit</a></li>
-        <li><a href="job_posting_list.php">Job Posting</a></li>
-        <li><a href="company_introduction.php">Company Introduction</a></li>
-        <li><a href="member_list.php">Member</a></li>
+        <? if(($keeper->getMenu1() & 1) > 0) { ?><li class="active"><a href="work_list.php">Work</a></li><? } ?>
+        <? if(($keeper->getMenu2() & 1) > 0) { ?><li><a href="request_list.php">Request</a></li><? } ?>
+        <? if(($keeper->getMenu3() & 1) > 0) { ?><li><a href="recruit_list.php">Recruit</a></li><? } ?>
+        <? if(($keeper->getMenu4() & 1) > 0) { ?><li><a href="job_posting_list.php">Job Posting</a></li><? } ?>
+        <? if(($keeper->getMenu5() & 1) > 0) { ?><li><a href="company_introduction.php">Company Introduction</a></li><? } ?>
+        <? if(($keeper->getMenu6() & 1) > 0) { ?><li><a href="member_list.php">Member</a></li><? } ?>
     </ul>
 </div>
 <?
@@ -321,7 +343,7 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage,
                 </select>
             </div>
             <div class="right">
-                <a class="txt_button" href="work_write.php">신규등록</a>
+                <?  if(($keeper->getMenu1() & 8) > 0) {  ?><a class="txt_button" href="work_write.php">신규등록</a><? } ?>
             </div>
         </div>
         <!-- //상단 영역 -->
@@ -339,6 +361,7 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage,
                 </colgroup>
                 <thead>
 <?
+//echo $orderDirS;
 $arrASC = explode('^', $orderDirS);
 $a1 = ($arrASC[0] == 'f') ? 'asc' : 'desc';
 $a2 = ($arrASC[1] == 'f') ? 'asc' : 'desc';
@@ -358,16 +381,21 @@ $a6 = ($arrASC[5] == 'f') ? 'asc' : 'desc';
                 </thead>
                 <tbody>
 <?
+// 권한에서 리스트 권한이 있는 경우에만 출력됨
+if(($keeper->getMenu1() & 2) > 0) {
+
+
 if($totalCnt > 0) {
-    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    //$bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = $totalCnt - (($curPage - 1) * $rowCountPerPage) + 1;
     $idx = 0;
     while($row = mysql_fetch_array($result)) {
-        $bPage++;
+        $bPage--;
         $idx = $row['id'];
 ?>
                 <tr>
-                    <td><?= $bPage - 1 ?></td>
-                    <td class="title"><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['name'] ?></a></td>
+                    <td><?= $bPage ?></td>
+                    <td class="title"><? if(($keeper->getMenu1() & 4) > 0) { ?><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['name'] ?></a><? } else { ?><?= $row['name'] ?><? } ?></td>
                     <td><?= $row['regdate'] ?></td>
                     <td><?= $row['moddate'] ?></td>
                     <td><?= $row['keeper_id'] ?></td>
@@ -423,6 +451,9 @@ if($curPage < $totalPage) {
         <!-- //페이징 -->
     </div>
 
+<?
+}
+?>
     <!-- //본문 영역 -->
 </div>
 </div>

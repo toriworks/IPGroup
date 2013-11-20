@@ -13,4 +13,5 @@ interface IJobsService {
     public function listsCount( $conn, $wParam );
 
     public function detail($conn, Jobs $obj);
+    public function addCount($conn, Jobs $obj);
 }

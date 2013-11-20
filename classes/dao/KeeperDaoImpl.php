@@ -34,6 +34,8 @@ class KeeperDaoImpl implements IKeeperDao {
         $resultOfQuery = 0;
         $sql = "DELETE FROM keeper WHERE id='".$obj->getId()."'";
 
+        echo $sql;
+
         $resultOfQuery = mysql_query($sql, $conn) or die("KeeperDaoImple delete error : ".mysql_error());
         return $resultOfQuery;
     }

@@ -103,4 +103,12 @@ class JobsDaoImpl implements IJobsDao {
         $result = mysql_query($sql) or die("JobsDaoImpl detail error : ".mysql_error());
         return $result;
     }
+
+    public function addCount($conn, Jobs $obj)
+    {
+        $sql = "UPDATE jobs SET applicants_cnt = applicants_cnt+1 WHERE id='".$obj->getId()."'";
+
+        $result = mysql_query($sql) or die("JobsDaoImpl addCount error : ".mysql_error());
+        return $result;
+    }
 }

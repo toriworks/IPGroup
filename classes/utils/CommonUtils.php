@@ -5,13 +5,23 @@
  * Time: 오후 7:48
  */
 
+/**
+ * 일반적인 유틸리티 클래스
+ * 사용예) CommonUtils::getProjectTyeps(sth.)
+ */
 class CommonUtils {
 
+    /**
+     * 프로젝트 타입에 대한 BitAnd 연산결과로 나온 문자열을 얻는다.
+     * @param $types 프로젝트 타입
+     * @return string 프로젝트 타입에 대응하는 문자열
+     */
     public static function getProjectTypes($types) {
-// 유형선택을 문자열로 변경
-        $wtypes = (int) $types;
+        // 리턴할 문자열
         $strWT = '';
 
+        // 숫자형으로 변환한 프로젝트 타입
+        $wtypes = (int) ('0' + $types);
         if(($wtypes & 1) == 1) {
             $strWT .= 'Project ';
         }
@@ -37,6 +47,11 @@ class CommonUtils {
         return $strWT;
     }
 
+    /**
+     * 구인유형 문자열을 얻는다.
+     * @param $cd 구인유형
+     * @return string 구인유형 코드에 대응하는 문자열
+     */
     public static function getHireTypes($cd) {
         $strHT = '';
 
@@ -58,6 +73,11 @@ class CommonUtils {
         return $strHT;
     }
 
+    /**
+     * 구인분야 문자열을 얻는다.
+     * @param $cd 구인분야
+     * @return string 구인분야 코드에 대응하는 문자열
+     */
     public static function getHirePart($cd) {
         $strHP = '';
 
@@ -75,6 +95,11 @@ class CommonUtils {
         return $strHP;
     }
 
+    /**
+     * 직급 문자열을 얻는다.
+     * @param $cd 직급
+     * @return string 직급 코드에 대응하는 문자열
+     */
     public static function getPosition($cd) {
         $strHT = '';
 
@@ -100,6 +125,11 @@ class CommonUtils {
         return $strHT;
     }
 
+    /**
+     * 경력 문자열을 얻는다.
+     * @param $cd 경력
+     * @return string 경력 코드에 대응하는 문자열
+     */
     public static function getCareerTypes($cd) {
         $strCT = '';
 
@@ -113,6 +143,11 @@ class CommonUtils {
         return $strCT;
     }
 
+    /**
+     * 학력 문자열을 얻는다.
+     * @param $cd 학력
+     * @return string 학력 코드에 대응하는 문자열
+     */
     public static function getSchoolTypes($cd) {
         $strST = '';
 
@@ -133,6 +168,11 @@ class CommonUtils {
         return $strST;
     }
 
+    /**
+     * 성별 문자열을 얻는다.
+     * @param $cd 성별
+     * @return string 성별 코드에 대응하는 문자열
+     */
     public static function getGender($cd) {
         $strG = '';
 
@@ -149,6 +189,11 @@ class CommonUtils {
         return $strG;
     }
 
+    /**
+     * 지원상태 문자열을 얻는다.
+     * @param $cd 지원상태
+     * @return string 지원상태 코드에 대응하는 문자열
+     */
     public static function getRecruitStatus($cd) {
         $strRS = '';
 
@@ -167,6 +212,11 @@ class CommonUtils {
         return $strRS;
     }
 
+    /**
+     * 경력결과 문자열을 얻는다.
+     * @param $cd 경력결과
+     * @return string 경력결과 코드에 대응하는 문자열
+     */
     public static function getRecruitStatusStyle($cd) {
         $strRS = '';
 
@@ -185,6 +235,12 @@ class CommonUtils {
         return $strRS;
     }
 
+    /**
+     * 학력수준 문자열을 얻는다.
+     * 유사한 메소드로 getSchoolTypes()가 있으나, 이 메소드는 Recruit에서만 사용
+     * @param $cd 학력수준
+     * @return string 학력수준 코드에 대응하는 문자열
+     */
     public static function getSchoolTypes4Recruit($cd) {
         $strST = '';
 

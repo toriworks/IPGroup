@@ -15,6 +15,10 @@ require_once('../classes/domain/Jobs.php');
 
 require_once('../classes/utils/CommonUtils.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
+
 $conn = ConnectionFactory::create();
 $jobsDaoImpl = new JobsDaoImpl();
 $jobsServiceImpl = new JobsServiceImpl();
@@ -160,15 +164,17 @@ if($schHirePartR > 0) {
 
 // 검색어
 if($schText != '') {
-    if($schGubun == 'P') {
-        $wParam .= " AND name LIKE '%".$schText."%' ";
-    } else if($schGubun == 'C') {
-        $wParam .= " AND client_name LIKE '%".$schText."%' ";
-    } else {
-        $wParam .= " AND url LIKE '%".$schText."%' ";
-    }
+    $wParam .= " AND title LIKE '%".$schText."%' ";
 }
 
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -334,6 +340,14 @@ if($schText != '') {
             form.submit();
         }
 
+        $(document).ready(function(){
+            $("#sch_text ").bind("keydown", function(e) {
+                if (e.keyCode == 13) { // enter key
+                    goSearch();
+                    return false;
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -349,12 +363,12 @@ if($schText != '') {
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.php">Work</a></li>
-        <li><a href="request_list.php">Request</a></li>
-        <li><a href="recruit_list.php">Recruit</a></li>
-        <li class="active"><a href="job_posting_list.php">Job Posting</a></li>
-        <li><a href="company_introduction.php">Company Introduction</a></li>
-        <li><a href="member_list.php">Member</a></li>
+        <? if(($keeper->getMenu1() & 1) > 0) { ?><li><a href="work_list.php">Work</a></li><? } ?>
+        <? if(($keeper->getMenu2() & 1) > 0) { ?><li><a href="request_list.php">Request</a></li><? } ?>
+        <? if(($keeper->getMenu3() & 1) > 0) { ?><li><a href="recruit_list.php">Recruit</a></li><? } ?>
+        <? if(($keeper->getMenu4() & 1) > 0) { ?><li class="active"><a href="job_posting_list.php">Job Posting</a></li><? } ?>
+        <? if(($keeper->getMenu5() & 1) > 0) { ?> <li><a href="company_introduction.php">Company Introduction</a></li><? } ?>
+        <? if(($keeper->getMenu6() & 1) > 0) { ?><li><a href="member_list.php">Member</a></li><? } ?>
     </ul>
 </div>
 
@@ -453,8 +467,8 @@ if($schText != '') {
         </select>
     </div>
     <div class="right">
-        <a class="txt_button" href="javascript:del_checked();">삭제</a>
-        <a class="txt_button" href="job_posting_write.php">신규등록</a>
+        <?  if(($keeper->getMenu4() & 32) > 0) {  ?><a class="txt_button" href="javascript:del_checked();">삭제</a><? } ?>
+        <?  if(($keeper->getMenu4() & 8) > 0) {  ?><a class="txt_button" href="job_posting_write.php">신규등록</a><? } ?>
     </div>
 </div>
 <!-- //상단 영역 -->
@@ -516,13 +530,17 @@ $a9 = ($arrASC[8] == 'f') ? 'asc' : 'desc';
         </thead>
         <tbody>
 <?
+// 권한에서 리스트 권한이 있는 경우에만 출력됨
+if(($keeper->getMenu4() & 2) > 0) {
+
+
 $totalCnt = $jobsServiceImpl->listsCount($conn, $wParam);
 $result = $jobsServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage, $rowCountPerPage);
 
 if($totalCnt > 0) {
-    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = $totalCnt - (($curPage - 1) * $rowCountPerPage) + 1;
     while($row = mysql_fetch_array($result)) {
-        $bPage++;
+        $bPage--;
 
         if($row['is_always'] == 'N') {
             $sDate = $row['start_date_y'].'.'.$row['start_date_m'].'.'.$row['start_date_d'];
@@ -534,8 +552,8 @@ if($totalCnt > 0) {
 ?>
         <tr>
             <td class="check"><input type="checkbox" id="check_v" name="check_v" value="<?= $row['id'] ?>" /></td>
-            <td><?= $bPage - 1 ?></td>
-            <td class="job_subject"><a href="javascript:goDetail('<?= $row['id'] ?>');"><?= $row['title'] ?></a></td>
+            <td><?= $bPage ?></td>
+            <td class="job_subject"><? if(($keeper->getMenu4() & 4) > 0) { ?><a href="javascript:goDetail('<?= $row['id'] ?>');"><?= $row['title'] ?></a><? } else { ?><?= $row['title'] ?><? } ?></td>
             <td><?= CommonUtils::getCareerTypes($row['career_types']) ?></td>
             <td><?= CommonUtils::getHireTypes($row['hire_types']) ?></td>
             <td><?= $seDate ?>
@@ -591,7 +609,9 @@ if($totalCnt > 0) {
         ?>
         <!-- //페이징 -->
     </div>
-
+<?
+}
+?>
 <!-- //본문 영역 -->
 </div>
 </div>

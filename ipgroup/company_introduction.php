@@ -12,6 +12,9 @@ require_once('../classes/dao/AttachesDaoImpl.php');
 require_once('../classes/service/AttachesServiceImpl.php');
 require_once('../classes/domain/Attaches.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
 
 $conn = ConnectionFactory::create();
 $attachesDaoImpl = new AttachesDaoImpl();
@@ -38,6 +41,15 @@ if($row != null) {
     $original_filename = $row['original_filename'];
     $transfer_filename = $row['transfer_filename'];
 }
+
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -80,12 +92,12 @@ if($row != null) {
         </p>
 
         <ul class="menu">
-            <li><a href="work_list.php">Work</a></li>
-            <li><a href="request_list.php">Request</a></li>
-            <li><a href="recruit_list.php">Recruit</a></li>
-            <li><a href="job_posting_list.php">Job Posting</a></li>
-            <li class="active"><a href="company_introduction.php">Company Introduction</a></li>
-            <li><a href="member_list.php">Member</a></li>
+            <? if(($keeper->getMenu1() & 1) > 0) { ?><li><a href="work_list.php">Work</a></li><? } ?>
+            <? if(($keeper->getMenu2() & 1) > 0) { ?><li><a href="request_list.php">Request</a></li><? } ?>
+            <? if(($keeper->getMenu3() & 1) > 0) { ?><li><a href="recruit_list.php">Recruit</a></li><? } ?>
+            <? if(($keeper->getMenu4() & 1) > 0) { ?><li><a href="job_posting_list.php">Job Posting</a></li><? } ?>
+            <? if(($keeper->getMenu5() & 1) > 0) { ?><li class="active"><a href="company_introduction.php">Company Introduction</a></li><? } ?>
+            <? if(($keeper->getMenu6() & 1) > 0) { ?><li><a href="member_list.php">Member</a></li><? } ?>
         </ul>
     </div>
 
@@ -131,7 +143,7 @@ if($row != null) {
 
                 <div class="button_area">
                     <div class="center">
-                        <a class="txt_button" href="javascript:enroll_ci();">등록하기</a>
+                        <? if(($keeper->getMenu5() & 8) > 0) { ?><a class="txt_button" href="javascript:enroll_ci();">등록하기</a><? } ?>
                     </div>
                 </div>
             </div>

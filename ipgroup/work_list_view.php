@@ -16,6 +16,10 @@ require_once('../classes/domain/Work.php');
 require_once('../classes/dao/AttachesDaoImpl.php');
 require_once('../classes/service/AttachesServiceImpl.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
+
 
 $conn = ConnectionFactory::create();
 $workDaoImpl = new WorkDaoImpl();
@@ -67,6 +71,16 @@ $end_date = ($oy != '') ? $ey.'.'.$em.'.'.$ed : '';
 // 유형선택을 문자열로 변경
 $wtypes = (int) $row['wtypes'];
 $strWT = CommonUtils::getProjectTypes($wtypes);
+
+
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -131,7 +145,7 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
             form.curPage.value = 1;
             form.orderBy.value = ids;
             form.orderDirS.value = nOds;
-            form.orderDir.value = (arrOds[idx] == 't') ? 'asc' : 'desc';
+            form.orderDir.value = (arrOds[idx] == 't') ? 'desc' : 'asc';
             form.submit();
         }
 
@@ -191,11 +205,11 @@ $strWT = CommonUtils::getProjectTypes($wtypes);
 
 <div class="button_area">
     <div class="left">
-        <a class="txt_button" href="javascript:del_data('<?=  $work_id ?>');">삭제하기</a>
+        <? if(($keeper->getMenu1() & 32) > 0) { ?><a class="txt_button" href="javascript:del_data('<?=  $work_id ?>');">삭제하기</a><? } ?>
     </div>
     <div class="right">
         <a class="txt_button" href="javascript:goList();">리스트 가기</a>
-        <a class="txt_button" href="work_revise.php?work_id=<?= $work_id ?>&order_by=<?= $orderBy ?>&order_dir=<?= $orderDir ?>wParam=<?= $wParam ?>">수정하기</a>
+        <? if(($keeper->getMenu1() & 16) > 0) { ?><a class="txt_button" href="work_revise.php?work_id=<?= $work_id ?>&order_by=<?= $orderBy ?>&order_dir=<?= $orderDir ?>wParam=<?= $wParam ?>">수정하기</a><? } ?>
     </div>
 </div>
 
@@ -378,7 +392,7 @@ if($orderDir == '') {
 
 $orderDirS = $_REQUEST['orderDirS'];
 if($orderDirS == '') {
-    $orderDirS = 'f^f^f^f^f^f^';
+    $orderDirS = 't^t^t^t^t^t^';
 }
 
 $curPage = $_REQUEST['curPage'];
@@ -460,7 +474,7 @@ $result = $workServiceImpl->lists($conn, $wParam, $orderBy, $orderDir, $curPage,
             </select>
         </div>
         <div class="right">
-            <a class="txt_button" href="work_write.php">신규등록</a>
+            <?  if(($keeper->getMenu1() & 8) > 0) {  ?><a class="txt_button" href="work_write.php">신규등록</a><? } ?>
         </div>
     </div>
     <!-- //상단 영역 -->
@@ -497,16 +511,20 @@ $a6 = ($arrASC[5] == 'f') ? 'asc' : 'desc';
             </thead>
             <tbody>
 <?
+// 권한에서 리스트 권한이 있는 경우에만 출력됨
+if(($keeper->getMenu1() & 2) > 0) {
+
 if($totalCnt > 0) {
-    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    //$bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = $totalCnt - (($curPage - 1) * $rowCountPerPage) + 1;
     $idx = 0;
     while($row = mysql_fetch_array($result)) {
-        $bPage++;
+        $bPage--;
         $idx = $row['id'];
 ?>
                     <tr>
-                        <td><?= $bPage - 1 ?></td>
-                        <td class="title"><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['name'] ?></a></td>
+                        <td><?= $bPage ?></td>
+                        <td class="title"><? if(($keeper->getMenu1() & 4) > 0) { ?><a href="javascript:goDetail('<?= $idx ?>');"><?= $row['name'] ?></a><? } else { ?><?= $row['name'] ?><? } ?></td>
                         <td><?= $row['regdate'] ?></td>
                         <td><?= $row['moddate'] ?></td>
                         <td><?= $row['keeper_id'] ?></td>
@@ -562,6 +580,9 @@ if($curPage < $totalPage) {
 ?>
         <!-- //페이징 -->
     </div>
+<?
+}
+?>
 
 <!-- //본문 영역 -->
 </div>

@@ -16,8 +16,8 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#keepr_id').focus();
-            $("#keepr_id ").bind("keydown", function(e) {
+            $('#keeper_id').focus();
+            $("#keeper_id ").bind("keydown", function(e) {
                 if (e.keyCode == 13) { // enter key
                     try_login();
                     return false;

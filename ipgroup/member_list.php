@@ -12,10 +12,23 @@ require_once('../classes/dao/KeeperDaoImpl.php');
 require_once('../classes/service/KeeperServiceImpl.php');
 require_once('../classes/domain/Keeper.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
+
 $conn = ConnectionFactory::create();
 $keeperDaoImpl = new KeeperDaoImpl();
 $keeperServiceImpl = new KeeperServiceImpl();
 $keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -31,11 +44,6 @@ $keeperServiceImpl->setKeeperDao($keeperDaoImpl);
     <script type="text/javascript" src="./js/admin.js"></script>
     <script type="text/javascript" src="./js/message.js"></script>
     <script type="text/javascript" src="./js/login.js"></script>
-    <script type="text/javascript">
-        orderBySetting = function(idObj) {
-
-        }
-    </script>
 </head>
 <body>
 
@@ -50,12 +58,12 @@ $keeperServiceImpl->setKeeperDao($keeperDaoImpl);
         </p>
 
         <ul class="menu">
-            <li><a href="work_list.php">Work</a></li>
-            <li><a href="request_list.php">Request</a></li>
-            <li><a href="recruit_list.php">Recruit</a></li>
-            <li><a href="job_posting_list.php">Job Posting</a></li>
-            <li><a href="company_introduction.php">Company Introduction</a></li>
-            <li class="active"><a href="member_list.php">Member</a></li>
+            <? if(($keeper->getMenu1() & 1) > 0) { ?><li><a href="work_list.php">Work</a></li><? } ?>
+            <? if(($keeper->getMenu2() & 1) > 0) { ?><li><a href="request_list.php">Request</a></li><? } ?>
+            <? if(($keeper->getMenu3() & 1) > 0) { ?><li><a href="recruit_list.php">Recruit</a></li><? } ?>
+            <? if(($keeper->getMenu4() & 1) > 0) { ?><li><a href="job_posting_list.php">Job Posting</a></li><? } ?>
+            <? if(($keeper->getMenu5() & 1) > 0) { ?><li><a href="company_introduction.php">Company Introduction</a></li><? } ?>
+            <? if(($keeper->getMenu6() & 1) > 0) { ?> <li class="active"><a href="member_list.php">Member</a></li><? } ?>
         </ul>
     </div>
 <?
@@ -86,7 +94,7 @@ $result = $keeperServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCoun
                 <!-- 상단 영역 -->
                 <div class="area_top">
                     <div class="right">
-                        <a class="txt_button" href="member_write.php">신규등록</a>
+                        <? if(($keeper->getMenu6() & 8) > 0) { ?><a class="txt_button" href="member_write.php">신규등록</a><? } ?>
                     </div>
                 </div>
                 <!-- //상단 영역 -->
@@ -112,12 +120,16 @@ $result = $keeperServiceImpl->lists($conn, $wParam, $orderBy, $curPage, $rowCoun
                         </thead>
                         <tbody>
 <?
+// 권한에서 리스트 권한이 있는 경우에만 출력됨
+if(($keeper->getMenu6() & 2) > 0) {
+
+
 if($totalCnt > 0) {
-    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = $totalCnt - (($curPage - 1) * $rowCountPerPage) + 1;
 
     $authTypeS = '';
     while($row = mysql_fetch_array($result)) {
-        $bPage++;
+        $bPage--;
 
         if($row['auth_types'] == 'Y') {
             $authTypeS = '사용자 세팅';
@@ -130,8 +142,8 @@ if($totalCnt > 0) {
         }
 ?>
                         <tr>
-                            <td><?= $bPage - 1 ?></td>
-                            <td><a href="member_view.php?mid=<?= $row['id'] ?>"><?= $row['id'] ?></a></td>
+                            <td><?= $bPage ?></td>
+                            <td><? if(($keeper->getMenu6() & 4) > 0) { ?><a href="member_view.php?mid=<?= $row['id'] ?>"><?= $row['id'] ?></a><? } else { ?><?= $row['id'] ?><? } ?></td>
                             <td><?= $row['kor_name'] ?></td>
                             <td><?= $authTypeS ?></td>
                             <td><?= $row['regdate'] ?></td>
@@ -183,7 +195,9 @@ if($curPage < $totalPage) {
                 </div>
                 <!-- //페이징 -->
             </div>
-
+<?
+}
+?>
             <!-- //본문 영역 -->
         </div>
     </div>

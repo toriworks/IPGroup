@@ -32,7 +32,7 @@ class KeeperServiceImpl implements IKeeperService {
 
     public function delete($conn, Keeper $obj)
     {
-        // TODO: Implement delete() method.
+        return $this->keeperDao->delete($conn, $obj);
     }
 
     public function lists($conn, $wParam, $orderBy, $curPage, $pageMax)

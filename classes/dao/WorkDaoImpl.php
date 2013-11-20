@@ -17,7 +17,7 @@ class WorkDaoImpl implements IWorkDao {
         $sql = "INSERT INTO work (id, regdate, moddate, keeper_id, mod_id, is_shop, thumb_types, thumb_title, thumb_sub_title";
         $sql .= ", open_date_y, open_date_m, open_date_d, wtypes, name, client_name";
         $sql .= ", start_date_y, start_date_m, start_date_d, end_date_y, end_date_m, end_date_d, url, descriptions) ";
-        $sql .= " VALUES ('".$obj->getId()."', now(), '', '".$obj->getKeeperId()."', '".$obj->getModId()."', '".$obj->getIsShop()."', '".$obj->getThumbTypes()."', '".$obj->getThumbTitle()."'";
+        $sql .= " VALUES ('".$obj->getId()."', now(), now(), '".$obj->getKeeperId()."', '".$obj->getModId()."', '".$obj->getIsShop()."', '".$obj->getThumbTypes()."', '".$obj->getThumbTitle()."'";
         $sql .= ", '".$obj->getThumbSubTitle()."', '".$obj->getOpenDateY()."', '".$obj->getOpenDateM()."', '".$obj->getOpenDateD()."'";
         $sql .= ", ".$obj->getWtypes().", '".$obj->getName()."', '".$obj->getClientName()."'";
         $sql .= ", '".$obj->getStartDateY()."', '".$obj->getStartDateM()."', '".$obj->getStartDateD()."', '".$obj->getEndDateY()."', '".$obj->getEndDateM()."', '".$obj->getEndDateD()."'";

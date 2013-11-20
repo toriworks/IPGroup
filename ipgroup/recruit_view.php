@@ -28,6 +28,10 @@ require_once('../classes/domain/Attaches.php');
 
 require_once('../classes/utils/CommonUtils.php');
 
+require_once('../classes/dao/KeeperDaoImpl.php');
+require_once('../classes/service/KeeperServiceImpl.php');
+require_once('../classes/domain/Keeper.php');
+
 $conn = ConnectionFactory::create();
 $applicantsDaoImpl = new ApplicantsDaoImpl();
 $applicantsServiceImpl = new ApplicantsServiceImpl();
@@ -74,6 +78,15 @@ $resultC = $appCServiceImpl->lists($conn, $wParamC, $orderByC, 1, 10);
 
 // 첨부파일 정보
 $aResult = $attachesServiceImpl->lists($conn, $id);
+
+// 메뉴 관련 권한 얻기
+$keeperDaoImpl = new KeeperDaoImpl();
+$keeperServiceImpl = new KeeperServiceImpl();
+$keeperServiceImpl->setKeeperDao($keeperDaoImpl);
+$keeper = new Keeper();
+$keeper->setId($_COOKIE["keeper_id"]);
+
+$keeper = $keeperServiceImpl->detail($conn, $keeper);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -220,12 +233,12 @@ $aResult = $attachesServiceImpl->lists($conn, $id);
     </p>
 
     <ul class="menu">
-        <li><a href="work_list.php">Work</a></li>
-        <li><a href="request_list.php">Request</a></li>
-        <li class="active"><a href="recruit_list.php">Recruit</a></li>
-        <li><a href="job_posting_list.php">Job Posting</a></li>
-        <li><a href="company_introduction.php">Company Introduction</a></li>
-        <li><a href="member_list.php">Member</a></li>
+        <? if(($keeper->getMenu1() & 1) > 0) { ?><li><a href="work_list.php">Work</a></li><? } ?>
+        <? if(($keeper->getMenu2() & 1) > 0) { ?><li><a href="request_list.php">Request</a></li><? } ?>
+        <? if(($keeper->getMenu3() & 1) > 0) { ?><li class="active"><a href="recruit_list.php">Recruit</a></li><? } ?>
+        <? if(($keeper->getMenu4() & 1) > 0) { ?><li><a href="job_posting_list.php">Job Posting</a></li><? } ?>
+        <? if(($keeper->getMenu5() & 1) > 0) { ?><li><a href="company_introduction.php">Company Introduction</a></li><? } ?>
+        <? if(($keeper->getMenu6() & 1) > 0) { ?><li><a href="member_list.php">Member</a></li><? } ?>
     </ul>
 </div>
 
@@ -238,11 +251,11 @@ $aResult = $attachesServiceImpl->lists($conn, $id);
 
 <div class="button_area">
     <div class="left">
-        <a class="txt_button" href="javascript:del_checked();">삭제하기</a>
+        <?  if(($keeper->getMenu3() & 32) > 0) {  ?><a class="txt_button" href="javascript:del_checked();">삭제하기</a><? } ?>
     </div>
     <div class="right">
         <a class="txt_button" href="recruit_list.php">리스트 가기</a>
-        <a class="txt_button" href="javascript:save_memos();">저장하기</a>
+        <?  if(($keeper->getMenu3() & 16) > 0) {  ?><a class="txt_button" href="javascript:save_memos();">저장하기</a><? } ?>
     </div>
 </div>
 
@@ -431,10 +444,13 @@ if($row['wish_pay'] != '') {
                     <ul class="fileinfo">
 <?
 while($aRow = mysql_fetch_array($aResult)) {
+    $filename   = $aRow['transfer_filename'];
+    $ofilename  = $aRow['original_filename'];
+    $category   = 'RC';
 ?>
                         <li>
                             <span class="filename"><?= $aRow['original_filename'] ?></span>
-                            <a href="/uploaded/recruit/<?= $aRow['transfer_filename'] ?>" target="_blank">[다운로드]</a>
+                            <a href="/download.php?filename=<?= $filename ?>&ofilename=<?= $ofilename ?>&category=<?= $category ?>" target="_blank">[다운로드]</a>
                         </li>
 <?
 }
@@ -650,20 +666,23 @@ $a9 = ($arrASC[8] == 'f') ? 'asc' : 'desc';
         </thead>
         <tbody>
 <?
+// 권한에서 리스트 권한이 있는 경우에만 출력됨
+if(($keeper->getMenu3() & 2) > 0) {
+
 if($totalCnt > 0) {
-    $bPage = (($curPage - 1) * $rowCountPerPage) + 1;
+    $bPage = $totalCnt - (($curPage - 1) * $rowCountPerPage) + 1;
     while($row = mysql_fetch_array($result)) {
-        $bPage++;
+        $bPage--;
 ?>
         <tr>
-            <td><?= $bPage - 1 ?></td>
+            <td><?= $bPage ?></td>
             <td>
                 <? if($row['original_filename'] != "") { ?>
                     <img src="./images/save.png" alt="첨부파일" title="첨부파일" />
                 <? } ?>
                 <? if($row['is_old'] < IS_OLD_TERM) { ?><img src="./images/new-message.png" alt="신규항목" title="신규항목" /><? } ?>
             </td>
-            <td class="name"><a href="javascript:goDetail('<?= $row['id'] ?>','<?= $row['jobs_id'] ?>');"><?= $row['kor_name'] ?></a></td>
+            <td class="name"><? if(($keeper->getMenu3() & 4) > 0) { ?><a href="javascript:goDetail('<?= $row['id'] ?>','<?= $row['jobs_id'] ?>');"><?= $row['kor_name'] ?></a><? } else { ?><?= $row['kor_name'] ?><? } ?></td>
             <td><?= $row['tel_1'] ?>-<?= $row['tel_2'] ?>-<?= $row['tel_3'] ?><br />/ <?= $row['mobile_1'] ?>-<?= $row['mobile_2'] ?>-<?= $row['mobile_3'] ?></td>
             <td><?= $row['email'] ?></td>
             <td><?= CommonUtils::getRecruitStatus($row['status']) ?></td>
@@ -719,6 +738,9 @@ if($totalCnt > 0) {
         <!-- //페이징 -->
 </div>
 
+ <?
+ }
+ ?>
 <!-- //본문 영역 -->
 </div>
 </div>

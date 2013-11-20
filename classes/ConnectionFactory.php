@@ -1,13 +1,18 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: toriworks
+ * User: Hyoseok Kim(toriworks@gmail.com)
  * Date: 2013. 10. 26.
  * Time: 오전 1:33
- * To change this template use File | Settings | File Templates.
  */
 
+/**
+ * 데이터베이스 커넥션을 관리하는 클래스
+ * 호스팅 업체마다 connection을 맺는 방법의 지원 메소드가 다를 수 있다.
+ * cafe24인 경우에 mysql_pconnect를 지원하지 않는다.
+ */
 class ConnectionFactory {
+    //
+    // 데이터베이스 접속 정보 설정
     static $SERVERS = array(
         array(
             'host' => 'localhost',
@@ -17,6 +22,7 @@ class ConnectionFactory {
         )
     );
 
+    // 코드에서 지원하는 커넥션 풀을 통해서 커넥션 객체를 얻음
     public static function create() {
         $cons = array();
         for ($i = 0, $n = count(ConnectionFactory::$SERVERS); $i < $n; $i++) {

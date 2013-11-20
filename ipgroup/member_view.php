@@ -25,6 +25,7 @@ $keeper->setId($mid);
 
 // 데이터 얻기
 $ko = $keeperServiceImpl->detail($conn, $keeper);
+$keeper = $ko;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -126,6 +127,15 @@ $ko = $keeperServiceImpl->detail($conn, $keeper);
       form.action = "member_revise_post.php";
       form.submit();
     }
+
+    del_member = function() {
+        var mid = '<?= $mid ?>';
+        if(confirm("정말 삭제하시겠습니까?")) {
+            location.href = "./member_delete_post.php?mid=" + mid;
+        } else {
+            return;
+        }
+    }
   </script>
 </head>
 <body>
@@ -160,9 +170,12 @@ $ko = $keeperServiceImpl->detail($conn, $keeper);
       <div class="section">
         <!-- 상단 영역 -->
         <div class="area_top">
+            <div class="left">
+                <? if(($keeper->getMenu6() & 32) > 0) { ?><a class="txt_button" href="javascript:del_member();">삭제하기</a><? } ?>
+            </div>
           <div class="right">
             <a class="txt_button" href="member_list.php">취소</a>
-            <a class="txt_button" href="javascript:enroll_member();">수정하기</a>
+              <? if(($keeper->getMenu6() & 16) > 0) { ?><a class="txt_button" href="javascript:enroll_member();">수정하기</a><? } ?>
           </div>
         </div>
         <!-- //상단 영역 -->
